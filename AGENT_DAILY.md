@@ -6,8 +6,9 @@ Jeden przebieg = jedno zadanie z backlogu, przetestowane i zapisane. Zmieniasz t
 - `dotnet --version` (wymagany .NET 8 SDK). Brak: `sudo apt-get update; sudo apt-get install -y dotnet-sdk-8.0`
   (błąd repozytorium docker w `apt-get update` ignoruj). NuGet jest zablokowany i niepotrzebny (`nuget.config`).
 - Python 3 + Playwright (Chromium w `/opt/pw-browsers`) do `make snapshot`.
-- Gałąź robocza: `dev`. Nigdy nie commituj na `main`.
-- `bash tools/sync_remote.sh` — łączy z GitHubem, jeśli sesja ma dostęp (scala `github/dev` lub przy pierwszym
+- Gałąź robocza: `claude/dev` (sesje Claude zawsze mogą wypychać gałęzie `claude/*`). Nigdy nie commituj na `main` —
+  Maciek scala `claude/dev` → `main` przez pull request po sprawdzeniu w Studio.
+- `bash tools/sync_remote.sh` — łączy z GitHubem, jeśli sesja ma dostęp (scala `github/claude/dev` lub przy pierwszym
   kontakcie `github/main`), i wypisuje `REMOTE=github` albo `REMOTE=none`. Zapamiętaj wynik na krok 7.
 
 ## 1. Wczytaj stan (tylko te pliki)
@@ -43,8 +44,8 @@ Sprawdź: nic nie nachodzi na siebie, podpisy mieszczą się, stany i KPI wyglą
 - `python3 tools/ctx.py --write` (indeks w CONTEXT.md). Zmiana architektury → popraw CONTEXT.md.
 
 ## 7. Zapis
-- `git add -A && git commit -m "daily: <zadanie>"` na `dev`.
-- `REMOTE=github` → `git push -u github dev` (zawsze tylko `dev`). `REMOTE=none` → pomiń push, zanotuj w raporcie.
+- `git add -A && git commit -m "daily: <zadanie>"` na `claude/dev`.
+- `REMOTE=github` → `git push -u github claude/dev` (zawsze tylko ta gałąź). `REMOTE=none` → pomiń push, zanotuj w raporcie.
 - `make bundle` (kopia całej historii do canvasu).
 
 ## 8. Publikacja podglądu

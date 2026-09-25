@@ -2,7 +2,7 @@
 
 Wymaga Optix Studio 1.4+ (NetSolution na .NET 6 lub 8). Kod używa C# 10, więc zadziała na obu.
 
-1. Sklonuj repo i przełącz się na gałąź `dev`.
+1. Sklonuj repo i przełącz się na gałąź `claude/dev`.
 2. W Studio utwórz nowy projekt `OptixDemoFactory` w folderze `optix/` repozytorium
    (wynik: `optix/OptixDemoFactory/OptixDemoFactory.optix`).
 3. Zamknij Studio. W pliku `optix/OptixDemoFactory/ProjectFiles/NetSolution/OptixDemoFactory.csproj`

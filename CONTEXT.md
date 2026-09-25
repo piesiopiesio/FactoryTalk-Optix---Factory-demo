@@ -125,5 +125,5 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `tools/gen_preview.py` — Packs design/data/{layout,trace}.json into design/canvas/project/data/preview.json (columnar, compact) for the Design canvas.
 - `tools/gen_status.py` — Builds design/canvas/project/data/status.json (checks, tests, KPIs, backlog, journal, context) for the Status artboard.
 - `tools/snapshot.py` — Renders PNG snapshots (hall + line) from preview.json via headless Chromium so the agent can look at its own UI.
-- `tools/sync_remote.sh` — Connects the local repo to GitHub when this session can reach it; merges remote state into dev. Prints REMOTE=github|none.
+- `tools/sync_remote.sh` — Connects the local repo to GitHub when this session can reach it; merges remote state into claude/dev. Prints REMOTE=github|none.
 <!-- index:end -->
