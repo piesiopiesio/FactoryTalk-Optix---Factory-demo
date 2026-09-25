@@ -4,6 +4,12 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 `[user]` = od użytkownika (agent nie usuwa), `[agent]` = propozycja agenta, `(blocked)` = wstrzymane.
 
 ## Next
+<!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
+- [ ] [S] [studio] ISAStyleSheet z Template Library jako styl projektu — szare przyciski/zakładki/siatki zgodne z ISA-101; usunąć ręczne kolory przycisków z `Ui.Button`
+- [ ] [M] [studio] Alarmy Optix: AlarmBanner w nagłówku + zakładka „Alarmy” (AlarmGrid + FilteredAlarmHistoryGrid) + AlarmsEventLogger (historia w bazie); potwierdzanie zamiast AutoAcknowledge
+- [ ] [M] [studio] Trendy: DataLogger (OEE, przepustowość, zbiornik, zapełnienie taśm co 1 s) + AdvancedTrend na zakładce „Trendy”
+- [ ] [M] [studio] Użytkownicy: LoginForm + UsernameLabel w nagłówku, role Operator / Utrzymanie ruchu (Start/Stop vs Kasuj awarie), IdleTimeoutLogic
+- [ ] [S] [studio] Stop linii z potwierdzeniem (ConfirmationDialog) albo DelayedButton „przytrzymaj, aby zatrzymać”
 - [ ] [S] Separator tysięcy po polsku w Optix (dziś „1,612”) — locale projektu `pl-PL` albo format w StringFormatter
 - [ ] [S] Ekran `Alarmy` w Optix — AlarmGrid (albo lista z historią) dla `Alarms/Factory`, zakładka w `MainNav`
 - [ ] [S] Kliknięcie kafla linii na hali przełącza zakładkę na ekran linii
@@ -20,6 +26,12 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] Potwierdzanie alarmów — stan niepotwierdzony (miganie ramki) i potwierdzony (stała ramka) w podglądzie i Optix
 
 ## Later
+- [ ] [L] Model stanów PackML (ISA-TR88) dla linii: Stopped/Idle/Execute/Suspended/Held/Aborted + ikony „States” z Template Library
+- [ ] [M] [studio] Raport zmianowy PDF (moduł Report; wzór: FactoryTalk-Optix/Training_Reports) — OEE, produkcja, awarie
+- [ ] [M] [studio] Pareto przestojów z historii alarmów (wzór: FactoryTalk-Optix/Optix_Sample_ParetoAlarmChart)
+- [ ] [M] [studio] Receptury SKU przez RecipesEditor/RecipeX (łączy się z pozycją „SKU 0,5 L / 1,5 L”)
+- [ ] [S] [studio] Zegar w nagłówku (ClockLogic) i powiadomienie „toast” o nowej awarii (wzór: Optix_Sample_ToastNotification)
+- [ ] [L] Sterownik zamiast symulacji: RA EtherNet/IP + Logix Emulate (tagi PLC w miejsce SimulationLogic, ta sama warstwa UI)
 - [ ] [M] LineScreen oparty o alias (jeden ekran dla wielu linii; Optix 1.8 `SetDynamicLinkToAlias`)
 - [ ] [M] Faceplate w Optix (okno dialogowe z sygnałami stacji) generowany przez FactoryBuilder
 - [ ] [M] Strefa Magazyn: palety z paletyzatora trafiają do regału (AGV jako taśma logiczna)
