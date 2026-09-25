@@ -1,17 +1,22 @@
 {
   "v": 3,
-  "createdOnFiles": { "v": 1, "at": "2026-09-25T15:37:03Z" },
-  "title": "Optix Demo Factory — podgląd",
-  "launch": { "view": "canvas" },
-  "pages": [],
+  "attachments": {},
   "boards": {
-    "Main.dc.html": { "x": 0, "y": 0, "w": 1600, "h": 900, "title": "Hala", "is_interactive": true },
-    "Line1.dc.html": { "x": 1680, "y": 0, "w": 1600, "h": 900, "title": "Linia pakująca 1", "is_interactive": true },
-    "Status.dc.html": { "x": 3360, "y": 0, "w": 1000, "h": 900, "title": "Stan projektu", "is_interactive": true }
+    "Main.dc.html": { "x": 0, "y": 0, "w": 1600, "h": 900, "title": "Hala (poziom 1)", "is_interactive": true },
+    "Line1.dc.html": { "x": 1680, "y": 0, "w": 1600, "h": 900, "title": "Linia pakująca 1 (poziom 2)", "is_interactive": true },
+    "Status.dc.html": { "x": 3360, "y": 0, "w": 1000, "h": 900, "title": "Stan projektu (poziom 4)", "is_interactive": true },
+    "Artboard-kqba.dc.html": { "h": 600, "title": "Artboard 1", "w": 800, "x": 4440, "y": 0 }
   },
-  "order": ["Main.dc.html", "Line1.dc.html", "Status.dc.html"],
+  "createdOnFiles": {
+    "at": "2026-09-25T15:39:18.045Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": { "view": "canvas" },
   "notes": {
     "heading": { "x": 0, "y": -300, "text": "Optix Demo Factory — podgląd ekranów z symulacji C#", "kind": "title1", "maxW": 4360 }
   },
-  "designSystems": []
+  "order": ["Artboard-kqba.dc.html", "Main.dc.html", "Line1.dc.html", "Status.dc.html"],
+  "pages": [],
+  "title": "Optix Demo Factory — podgląd"
 }

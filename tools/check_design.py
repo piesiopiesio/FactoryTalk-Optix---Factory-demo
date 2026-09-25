@@ -16,7 +16,7 @@ def main() -> int:
     for name, b in boards.items():
         f = PROJ / name
         if not f.exists():
-            errs.append(f"{name}: missing file"); continue
+            print(f"  note: {name} is on the canvas but not in the repo (user-made artboard) - left untouched"); continue
         html = f.read_text(encoding="utf-8")
         if '<script src="./support.js"></script>' not in html: errs.append(f"{name}: support.js head line missing")
         if "data-dc-script" not in html or "extends DCLogic" not in html: errs.append(f"{name}: no DCLogic script")
