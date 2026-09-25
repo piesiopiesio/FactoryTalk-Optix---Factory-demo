@@ -7,8 +7,8 @@ Jeden przebieg = jedno zadanie z backlogu, przetestowane i zapisane. Zmieniasz t
   (błąd repozytorium docker w `apt-get update` ignoruj). NuGet jest zablokowany i niepotrzebny (`nuget.config`).
 - Python 3 + Playwright (Chromium w `/opt/pw-browsers`) do `make snapshot`.
 - Gałąź robocza: `dev`. Nigdy nie commituj na `main`.
-- `bash tools/sync_remote.sh` — łączy z GitHubem, jeśli sesja ma dostęp (scala `origin/dev` lub przy pierwszym
-  kontakcie `origin/main`), i wypisuje `REMOTE=github` albo `REMOTE=none`. Zapamiętaj wynik na krok 7.
+- `bash tools/sync_remote.sh` — łączy z GitHubem, jeśli sesja ma dostęp (scala `github/dev` lub przy pierwszym
+  kontakcie `github/main`), i wypisuje `REMOTE=github` albo `REMOTE=none`. Zapamiętaj wynik na krok 7.
 
 ## 1. Wczytaj stan (tylko te pliki)
 `CONTEXT.md`, `BACKLOG.md`, 3 najnowsze wpisy `JOURNAL.md`, `design/data/trace-summary.json`,
@@ -44,7 +44,7 @@ Sprawdź: nic nie nachodzi na siebie, podpisy mieszczą się, stany i KPI wyglą
 
 ## 7. Zapis
 - `git add -A && git commit -m "daily: <zadanie>"` na `dev`.
-- `REMOTE=github` → `git push -u origin dev` (zawsze tylko `dev`). `REMOTE=none` → pomiń push, zanotuj w raporcie.
+- `REMOTE=github` → `git push -u github dev` (zawsze tylko `dev`). `REMOTE=none` → pomiń push, zanotuj w raporcie.
 - `make bundle` (kopia całej historii do canvasu).
 
 ## 8. Publikacja podglądu
