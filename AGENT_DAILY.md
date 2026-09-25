@@ -49,7 +49,9 @@ Sprawdź: nic nie nachodzi na siebie, podpisy mieszczą się, stany i KPI wyglą
 
 ## 8. Publikacja podglądu
 Canvas: `https://claude.ai/artifact/5UbGvx3SZaw2ncuJ9pPdrE`, root = `design/canvas` (ścieżki `project/...`).
-- Zawsze: `project/data/preview.json`, `project/data/status.json`, `project/data/repo.bundle.b64`.
+- Zawsze: `project/data/preview.json`, `project/data/status.json`, `project/data/repo.bundle.b64`
+  (`contentType: text/plain` dla `.b64`). Narzędzie odrzuca publikację pliku, którego w tej sesji nie odczytałeś:
+  najpierw `read` z `path` dla każdego z nich (duże pliki zapisują się na dysk, nie trafiają do kontekstu).
 - Artboard `.dc.html` tylko gdy go zmieniłeś — najpierw odczytaj jego wersję z canvasu (użytkownik mógł edytować) i scal.
 - `project/canvas.json` tylko przy dodaniu/przesunięciu artboardu (odczytaj, zmień tylko swoje klucze).
 
