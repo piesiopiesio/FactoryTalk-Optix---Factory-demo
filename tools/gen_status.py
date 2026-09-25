@@ -16,7 +16,7 @@ def git(*args: str) -> str:
 
 def backlog_next(limit: int = 5) -> list[str]:
     text = (ROOT / "BACKLOG.md").read_text(encoding="utf-8")
-    section = text.split("## Next", 1)[-1].split("\n## ", 1)[0]
+    section = text.split("\n## Next\n", 1)[-1].split("\n## ", 1)[0]
     items = re.findall(r"^- \[ \] (.+)$", section, flags=re.M)
     return [re.sub(r"`", "", i) for i in items[:limit]]
 
