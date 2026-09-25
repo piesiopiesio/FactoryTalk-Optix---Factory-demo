@@ -1,4 +1,4 @@
-// @summary: Regenerates the HMI from factory.json: HallScreen, one LineScreen_<id> per line, and the MainWindow chrome/tabs.
+// @summary: Regenerates the HMI from factory.json: HallScreen, LineScreen_<id> per line, Alarms/Trends screens, MainWindow chrome/tabs.
 #region Using directives
 using System;
 using System.Collections.Generic;
@@ -39,6 +39,14 @@ public static class ScreenGenerator
             LinePanel.Build(screen, spec, line, hall.Id);
             tabs.Add((spec.Name, screen));
         }
+
+        var alarms = NewScreen(screens, N.AlarmsScreen);
+        LibraryViews.Alarms(alarms);
+        tabs.Add(("Alarmy", alarms));
+        var trends = NewScreen(screens, N.TrendsScreen);
+        LibraryViews.Trends(trends);
+        tabs.Add(("Trendy", trends));
+
         WindowGenerator.Build(window, hall, tabs);
     }
 
@@ -46,7 +54,8 @@ public static class ScreenGenerator
     public static void Clean(IUANode screens)
     {
         foreach (var s in screens.Children.ToList())
-            if (s.BrowseName == N.HallScreen || s.BrowseName.StartsWith(N.LineScreenPrefix)) s.Delete();
+            if (s.BrowseName == N.HallScreen || s.BrowseName == N.AlarmsScreen || s.BrowseName == N.TrendsScreen
+                || s.BrowseName.StartsWith(N.LineScreenPrefix)) s.Delete();
     }
 
     static IUANode NewScreen(IUANode folder, string name)

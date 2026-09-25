@@ -2,6 +2,13 @@
 
 Najnowszy wpis na górze. Maks. 14 wpisów; starsze w `docs/archive/`.
 
+## 2026-09-26 (noc, sesja z Maćkiem przy Studio)
+- Przegląd bibliotek: wbudowana Template Library 1.7.5.13 (~45 widgetów, grafiki, skrypty, 4 style), 134 repo FactoryTalk-Optix,
+  biblioteki urządzeń i pakiet OEE+PackML z Innovation Center. Rekomendacje w BACKLOG (znacznik [studio]).
+- Wdrożone: ISA Style Sheet (zakładki/przyciski szare), AlarmBanner, zakładka Alarmy (AlarmGrid + historia z AlarmsEventLogger1
+  na EmbeddedDatabase1), zakładka Trendy (AdvancedTrend na DataLogger1). Alarmy teraz potwierdza operator (bez AutoAck).
+- Test: awarie widoczne w banerze i siatce, Acknowledge All działa, historia zapisuje zdarzenia, trend rysuje 16 piór.
+
 ## 2026-09-25 (wieczór, sesja z Maćkiem przy Studio)
 - ftx-mcp podłączone (most 1.0.7, emulator, CDP). Kod eksportowany `tools/export_optix.py` do `Factory_demo/ProjectFiles`;
   kompilacja na prawdziwym Optix 1.7 przez `optix_build_check` (0 błędów). Stuby dopasowane do sprawdzonego API.

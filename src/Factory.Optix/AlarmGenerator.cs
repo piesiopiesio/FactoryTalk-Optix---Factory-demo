@@ -1,4 +1,4 @@
-// @summary: One DigitalAlarm per equipment in Alarms/Factory, linked to Model/Factory/<path>/faultActive.
+// @summary: One DigitalAlarm per equipment in Alarms/Factory, linked to Model/Factory/<path>/faultActive; operator acknowledges.
 #region Using directives
 using UAManagedCore;
 using FTOptix.HMIProject;
@@ -19,8 +19,8 @@ public static class AlarmGenerator
                 var alarm = InformationModel.MakeObject<DigitalAlarm>($"{line.Id}_{eq.Id}_Fault");
                 alarm.InputValueVariable.SetDynamicLink(source);
                 alarm.Message = $"{line.Name} / {eq.Name}: awaria";
-                alarm.AutoAcknowledge = true;
-                alarm.AutoConfirm = true;
+                alarm.AutoAcknowledge = false;   // operator acknowledges in the Alarms tab (ISA-18.2)
+                alarm.AutoConfirm = false;
                 folder.Add(alarm);
             }
     }

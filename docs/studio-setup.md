@@ -32,12 +32,22 @@ Pliki w `NetSolution/Factory` są generowane — edytuj `src/` w repo.
   wykonuje je co 100 ms i kasuje (handshake jak w PLC).
 - Ctrl+S w Studio uruchamia kompilację NetSolution (po wgraniu plików). Execute działa na ostatniej udanej kompilacji.
 
+## Elementy dodane raz w Studio (Template Library, 2026-09-25)
+Wstawione przeciągnięciem z okna Libraries (ikona książek na pasku) — Build ich nie tworzy, tylko używa:
+- `UI/ISAStyleSheet1` (ISA Style Sheet) — styl obu presentation engine (`StyleSheet` w Native i Web).
+- `UI/AlarmBanner`, `UI/AlarmGrid`, `UI/AlarmHistoryGridWithFilter` (typy), `UI/AdvancedTrend/*` (folder z `AdvancedTrendMain`).
+- `DataStores/EmbeddedDatabase1`, `Loggers/AlarmsEventLogger1` (Store = EmbeddedDatabase1),
+  `Loggers/DataLogger1` (Store = EmbeddedDatabase1, co 1 s; zmienne dopisuje `LoggerGenerator`).
+Brak któregoś elementu = Build pomija ten fragment i pisze ostrzeżenie w Output (nazwy w `OptixNames.Lib*`).
+
 ## Co generuje Build (wszystko z `factory.json`)
 - `Model/Templates/Factory/*` — typy (stacje, Conveyor, Line, Hall) ze zmiennymi `[Signal]` + `stateColor`.
 - `Model/Factory/Hall`, `Model/Factory/L1/<stacja|taśma>` — instancje.
 - `Alarms/Factory/*` — DigitalAlarm na `faultActive` każdego urządzenia.
 - `UI/Screens/HallScreen` (poziom 1) i `UI/Screens/LineScreen_<id>` (poziom 2: schemat, tabela stacji, panel KPI + komendy + awarie).
-- W `UI/MainWindow`: `Background`, `Header` (średnie OEE, linie w pracy, lampka awarii), `MainNav` (zakładki).
+- `UI/Screens/AlarmsScreen` (AlarmGrid z potwierdzaniem + historia z filtrem czasu) i `UI/Screens/TrendsScreen` (AdvancedTrend na DataLogger1).
+- `Loggers/DataLogger1/VariablesToLog`: KPI linii, własne sygnały stacji (zbiornik, moment…), zapełnienie taśm.
+- W `UI/MainWindow`: `Background`, `Header` (średnie OEE, linie w pracy, AlarmBanner, lampka awarii), `MainNav` (zakładki).
 Wszystko inne (np. `UI/Custom`, własne ekrany) Build zostawia w spokoju.
 
 ## Weryfikacja

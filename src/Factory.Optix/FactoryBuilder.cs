@@ -37,6 +37,7 @@ public class FactoryBuilder : BaseNetLogic
             var types = TypeGenerator.Build(NodeUtil.ResetFolder(templates, "Factory"));
             ModelGenerator.Build(NodeUtil.ResetFolder(model, N.ModelFolder), hall, types);
             ModelGenerator.EnsureSimulationLogic(model);
+            LoggerGenerator.Build(hall);
 
             var alarms = Project.Current.Get("Alarms");
             if (alarms != null) AlarmGenerator.Build(NodeUtil.ResetFolder(alarms, N.AlarmsFolder), hall);

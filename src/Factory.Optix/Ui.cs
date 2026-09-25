@@ -64,7 +64,7 @@ public static class Ui
         return l;
     }
 
-    /// <summary>Neutral gray command button (style guide: no color unless it means something), min. 40 px high.</summary>
+    /// <summary>Command button, min. 40 px high; colors come from the project style sheet (ISAStyleSheet1).</summary>
     public static Button Button(IUANode parent, string name, string text, double x, double y, double w, double h = 44)
     {
         var b = InformationModel.Make<Button>(name);
@@ -75,8 +75,6 @@ public static class Ui
         b.Height = (float)Math.Max(40, h);
         b.FontSize = 15;
         b.FontFamily = Font;
-        b.BackgroundColor = new Color(OptixNames.ButtonArgb);
-        b.TextColor = new Color(OptixNames.TitleArgb);
         parent.Add(b);
         return b;
     }

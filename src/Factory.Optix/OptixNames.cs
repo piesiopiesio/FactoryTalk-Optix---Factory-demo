@@ -18,6 +18,12 @@ public static class OptixNames
     /// <summary>Children of MainWindow owned by FactoryBuilder; everything else in the window is left alone.</summary>
     public static readonly string[] WindowParts = { "Background", "Header", "MainNav" };
     public const string ManifestFile = "factory.json";        // ProjectFiles/factory.json
+    public const string AlarmsScreen = "AlarmsScreen", TrendsScreen = "TrendsScreen";   // generated
+
+    // Template Library items imported once in Studio (docs/studio-setup.md). Missing -> that part is skipped with a warning.
+    public const string LibAlarmBanner = "UI/AlarmBanner", LibAlarmGrid = "UI/AlarmGrid",
+        LibAlarmHistory = "UI/AlarmHistoryGridWithFilter", LibTrend = "UI/AdvancedTrend/AdvancedTrendMain",
+        DataLogger = "Loggers/DataLogger1", AlarmLogger = "Loggers/AlarmsEventLogger1";
     public const string StateColorVar = "stateColor";
     /// <summary>HMI -> simulation command variables (PLC-style: HMI sets true, SimulationLogic executes and clears).
     /// Buttons use the built-in VariableCommands.Set, so no NetLogic method nodes are needed.</summary>

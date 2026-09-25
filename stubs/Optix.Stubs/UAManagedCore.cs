@@ -44,6 +44,7 @@ namespace UAManagedCore
         IUAObject GetObject(string path);
         void Add(IUANode child);
         void Delete();
+        void SetAlias(string aliasName, NodeId target);
     }
 
     public interface IUAReferences { void AddReference(NodeId referenceType, IUANode target); }
@@ -63,6 +64,13 @@ namespace UAManagedCore
         UAValue Value { get; set; }
         NodeId DataType { get; }
         event EventHandler<VariableChangeEventArgs> VariableChange;
+    }
+
+    /// <summary>Real Optix exposes these without an FTOptix.* using (checked on 1.7); stubbed here in the root namespace.</summary>
+    public static class DynamicLinkExtensions
+    {
+        public static void SetDynamicLink(this IUAVariable target, IUAVariable source, DynamicLinkMode mode = DynamicLinkMode.Read) { }
+        public static void SetConverter(this IUAVariable target, IUANode converter) { }
     }
 
     public static class Log

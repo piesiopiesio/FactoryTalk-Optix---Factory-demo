@@ -30,7 +30,9 @@ public static class WindowGenerator
         window.Add(header);
 
         Ui.Text(header, "Title", hall.Name, 20, 14, 22, N.TitleArgb, bold: true);
-        Ui.Text(header, "Subtitle", "FactoryTalk Optix · dane z symulacji", 320, 20, 14, N.UnitsArgb);
+        Ui.Text(header, "Subtitle", "dane z symulacji", 250, 22, 13, N.UnitsArgb);
+        // Template Library AlarmBanner: newest active alarm, rotates when several are active.
+        LibraryViews.Instance(header, "AlarmBanner", N.LibAlarmBanner, 420, 8, 580, 40);
         var hallPath = hall.Id;
         Ui.Text(header, "OeeCaption", "Średnie OEE", 1040, 20, 14, N.TitleArgb);
         Ui.Value(header, "Oee", "{0} %", 1140, 16, 20, N.ModelVar(hallPath, nameof(FM.Hall.AverageOee)));

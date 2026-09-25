@@ -5,13 +5,11 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
-- [ ] [S] [studio] ISAStyleSheet z Template Library jako styl projektu — szare przyciski/zakładki/siatki zgodne z ISA-101; usunąć ręczne kolory przycisków z `Ui.Button`
-- [ ] [M] [studio] Alarmy Optix: AlarmBanner w nagłówku + zakładka „Alarmy” (AlarmGrid + FilteredAlarmHistoryGrid) + AlarmsEventLogger (historia w bazie); potwierdzanie zamiast AutoAcknowledge
-- [ ] [M] [studio] Trendy: DataLogger (OEE, przepustowość, zbiornik, zapełnienie taśm co 1 s) + AdvancedTrend na zakładce „Trendy”
+- [ ] [S] Priorytety alarmów (Severity wg ISA-18.2: kurtyna/awaria napędu wyżej niż brak etykiet) w `AlarmGenerator`
+- [ ] [S] Czytelne nazwy piór trendu (dziś `L1_oee`) — np. `L1 OEE`, bez psucia nazw kolumn w bazie
 - [ ] [M] [studio] Użytkownicy: LoginForm + UsernameLabel w nagłówku, role Operator / Utrzymanie ruchu (Start/Stop vs Kasuj awarie), IdleTimeoutLogic
 - [ ] [S] [studio] Stop linii z potwierdzeniem (ConfirmationDialog) albo DelayedButton „przytrzymaj, aby zatrzymać”
 - [ ] [S] Separator tysięcy po polsku w Optix (dziś „1,612”) — locale projektu `pl-PL` albo format w StringFormatter
-- [ ] [S] Ekran `Alarmy` w Optix — AlarmGrid (albo lista z historią) dla `Alarms/Factory`, zakładka w `MainNav`
 - [ ] [S] Kliknięcie kafla linii na hali przełącza zakładkę na ekran linii
 - [ ] [M] Cykl uzupełniania zbiornika napełniarki — stan `Maintenance` + zdarzenie `LowTank` w przebiegu, test
 - [ ] [S] Wymiana rolki etykiet — przestój `Maintenance` etykieciarki, widoczny w OEE i zdarzeniach
@@ -49,6 +47,8 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 ## Blocked
 
 ## Done
+- [x] 2026-09-26 Pakiet bibliotek 1: ISAStyleSheet, AlarmBanner w nagłówku, zakładka Alarmy (aktywne z Ack/Confirm + historia
+  z EmbeddedDatabase), zakładka Trendy (AdvancedTrend, 16 zmiennych w DataLogger1) — sprawdzone w emulatorze
 - [x] 2026-09-25 Pierwsze uruchomienie w Studio (Factory_demo, Optix 1.7.5.13): FactoryBuilder generuje typy, model, alarmy,
   ekrany Hala/Linia 1 z nagłówkiem i zakładkami; emulator: dane na żywo, Start/Stop, Czas ×10, awarie + Kasuj — sprawdzone
 - [x] 2026-09-25 Płynna animacja taśm w `Line1` — odtwarzanie 10 fps, interpolacja kinematyczna (prędkość, podziałka), test kolejności pozycji

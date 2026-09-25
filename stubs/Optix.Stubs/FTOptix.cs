@@ -71,12 +71,6 @@ namespace FTOptix.Core
 
 namespace FTOptix.CoreBase
 {
-    public static class DynamicLinkExtensions
-    {
-        public static void SetDynamicLink(this IUAVariable target, IUAVariable source, DynamicLinkMode mode = DynamicLinkMode.Read) { }
-        public static void SetConverter(this IUAVariable target, IUANode converter) { }
-    }
-
     public static class ReferenceTypes { public static readonly NodeId HasSource = new(2, 1); }
     public static class Objects { public static readonly NodeId VariableCommands = new(2, 2); }
 
@@ -156,6 +150,12 @@ namespace FTOptix.UI
 }
 
 namespace FTOptix.NativeUI { internal static class Placeholder { } }
+
+namespace FTOptix.DataLogger
+{
+    public interface VariableToLog : IUAVariable { }
+    public interface DataLogger : IUAObject { }
+}
 
 namespace FTOptix.Alarm
 {
