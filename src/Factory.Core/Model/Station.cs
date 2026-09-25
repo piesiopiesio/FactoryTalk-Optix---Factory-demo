@@ -27,7 +27,7 @@ public abstract class Station : Equipment
     [Signal] public long Processed { get; private set; }
     [Signal] public long Good { get; private set; }
     [Signal] public long Reject { get; private set; }
-    [Signal(Unit = "s")] public double CycleTimeS => CycleS / Math.Max(0.01, SpeedPct / 100.0);
+    [Signal(Unit = "s", Label = "Takt")] public double CycleTimeS => CycleS / Math.Max(0.01, SpeedPct / 100.0);
     [Signal(Unit = "%", Decimals = 0)] public double Progress => progress * 100;
 
     /// <summary>Bottles held inside the station (in process, waiting to leave, or collected into a batch).</summary>

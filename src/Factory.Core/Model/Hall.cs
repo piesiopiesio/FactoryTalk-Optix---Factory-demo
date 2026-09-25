@@ -13,5 +13,6 @@ public sealed class Hall
     public IReadOnlyList<Line> Lines { get; init; } = Array.Empty<Line>();
 
     [Signal] public int ActiveLines => Lines.Count(l => l.State != MachineState.Stopped);
+    [Signal] public int ActiveFaults => Lines.Sum(l => l.ActiveFaults);
     [Signal(Unit = "%", Decimals = 1)] public double AverageOee => Lines.Count == 0 ? 0 : Lines.Average(l => l.Oee);
 }

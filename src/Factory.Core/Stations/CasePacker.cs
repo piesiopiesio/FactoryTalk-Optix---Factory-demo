@@ -9,7 +9,7 @@ namespace Factory.Core.Stations;
 [StationType("casepacker")]
 public sealed class CasePacker : Station
 {
-    [Signal] public int UnitsInCase { get; private set; }
+    [Signal(Label = "W kartonie")] public int UnitsInCase { get; private set; }
     protected override int HeldUnits => UnitsInCase;
 
     protected override string[] FaultCatalog => new[] { "Brak kartonów", "Zacięcie klapy kartonu", "Błąd kleju" };

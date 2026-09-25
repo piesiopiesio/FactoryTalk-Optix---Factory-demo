@@ -11,3 +11,4 @@ optix/**/ProjectFiles/NetSolution/bin/
 optix/**/ProjectFiles/NetSolution/obj/
 *.user
 .vs/
+dist/

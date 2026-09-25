@@ -10,10 +10,14 @@ public sealed class SignalAttribute : Attribute
     public string? Unit { get; init; }
     /// <summary>Decimals shown in UI and kept in trace (rounding).</summary>
     public int Decimals { get; init; } = 2;
+    /// <summary>Operator label (Polish) shown on faceplates; defaults to the property name.</summary>
+    public string? Label { get; init; }
 }
 
-public sealed record SignalInfo(string Name, string? Unit, int Decimals, Type Type, PropertyInfo Property)
+public sealed record SignalInfo(string Name, string? Unit, int Decimals, Type Type, PropertyInfo Property, string? Label = null)
 {
+    public string Caption => Label ?? Name;
+
     public object Read(object owner)
     {
         var v = Property.GetValue(owner)!;
@@ -42,7 +46,7 @@ public static class Signals
                 .SelectMany(c => c.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
                 .Select(p => (p, a: p.GetCustomAttribute<SignalAttribute>()))
                 .Where(x => x.a != null)
-                .Select(x => new SignalInfo(x.p.Name, x.a!.Unit, x.a.Decimals, x.p.PropertyType, x.p))
+                .Select(x => new SignalInfo(x.p.Name, x.a!.Unit, x.a.Decimals, x.p.PropertyType, x.p, x.a.Label))
                 .ToList();
             Cache[t] = list;
             return list;

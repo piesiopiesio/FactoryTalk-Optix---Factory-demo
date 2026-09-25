@@ -19,6 +19,7 @@ public abstract class Equipment
     public bool Commanded { get; private set; }
 
     [Signal] public MachineState State { get; private set; } = MachineState.Stopped;
+    [Signal] public string StateText => StatePalette.Label(State);
     [Signal] public bool FaultActive => State == MachineState.Faulted;
     [Signal] public int FaultCode { get; private set; }
     [Signal] public string FaultText => FaultCode == 0 ? "" : $"{Name}: {Describe(FaultCode)}";

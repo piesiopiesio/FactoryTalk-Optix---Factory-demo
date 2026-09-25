@@ -1,7 +1,14 @@
-// @summary: Stubs for UAManagedCore (nodes, variables, values, NodeId, Log, Color) - only members our code uses.
+// @summary: Stubs for UAManagedCore (nodes, variables, values, NodeId, Log) - only members our code uses; shapes verified against Optix 1.7.
 namespace UAManagedCore
 {
-    public sealed class NodeId { public NodeId(int ns, uint id) { Ns = ns; Id = id; } public int Ns { get; } public uint Id { get; } }
+    public sealed class NodeId
+    {
+        public NodeId(int ns, uint id) { NamespaceIndex = ns; Id = id; }
+        public int NamespaceIndex { get; }
+        public uint Id { get; }
+        public static NodeId Empty { get; } = new(0, 0);
+        public static NodeId Random(int namespaceIndex) => new(namespaceIndex, 0);
+    }
 
     public sealed class UAValue
     {
@@ -13,6 +20,7 @@ namespace UAManagedCore
         public static implicit operator UAValue(long v) => new(v);
         public static implicit operator UAValue(double v) => new(v);
         public static implicit operator UAValue(string v) => new(v);
+        public static implicit operator UAValue(NodeId v) => new(v);
     }
 
     public sealed class LocalizedText { public LocalizedText(string text) { Text = text; } public string Text { get; } }
@@ -27,12 +35,24 @@ namespace UAManagedCore
         NodeId NodeId { get; }
         IUANode Owner { get; }
         IEnumerable<IUANode> Children { get; }
+        IUAReferences Refs { get; }
+        IContext Context { get; }
         IUANode Get(string path);
         T Get<T>(string path) where T : class, IUANode;
         IUAVariable GetVariable(string path);
+        IUAVariable GetOrCreateVariable(string browseName);
         IUAObject GetObject(string path);
         void Add(IUANode child);
         void Delete();
+    }
+
+    public interface IUAReferences { void AddReference(NodeId referenceType, IUANode target); }
+
+    public interface IContext { INodeFactory NodeFactory { get; } }
+
+    public interface INodeFactory
+    {
+        IUAVariable MakeVariable(NodeId nodeId, string browseName, NodeId dataType, NodeId variableType, bool addToCache, object value);
     }
 
     public interface IUAObject : IUANode { }
@@ -43,13 +63,6 @@ namespace UAManagedCore
         UAValue Value { get; set; }
         NodeId DataType { get; }
         event EventHandler<VariableChangeEventArgs> VariableChange;
-    }
-
-    public struct Color
-    {
-        public Color(uint argb) { ARGB = argb; }
-        public Color(byte a, byte r, byte g, byte b) { ARGB = (uint)(a << 24 | r << 16 | g << 8 | b); }
-        public uint ARGB { get; }
     }
 
     public static class Log
@@ -64,6 +77,9 @@ namespace UAManagedCore.OpcUa
 {
     public static class DataTypes
     {
-        public static readonly NodeId Boolean = new(0, 1), Int32 = new(0, 6), UInt32 = new(0, 7), Int64 = new(0, 8), Double = new(0, 11), String = new(0, 12);
+        public static readonly NodeId BaseDataType = new(0, 24), Boolean = new(0, 1), Int32 = new(0, 6), UInt32 = new(0, 7),
+            Int64 = new(0, 8), Double = new(0, 11), String = new(0, 12), NodeId = new(0, 17);
     }
+
+    public static class VariableTypes { public static readonly UAManagedCore.NodeId BaseDataVariableType = new(0, 63); }
 }

@@ -1,32 +1,45 @@
-# Konfiguracja w FactoryTalk Optix Studio (jednorazowo)
+# Konfiguracja w FactoryTalk Optix Studio
 
-Wymaga Optix Studio 1.4+ (NetSolution na .NET 6 lub 8). Kod używa C# 10, więc zadziała na obu.
-Projekt Maćka: `Factory_demo`, Optix Studio 1.7.5.13 (ProductVersion 1.7), utworzony z wbudowanym Git Studio.
+Projekt Maćka: `Factory_demo`, Optix Studio 1.7.5.13 (NetSolution net8.0), folder
+`Documents\Rockwell Automation\FactoryTalk Optix\Projects\Factory_demo` (lokalny git Studio, bez remote).
 
-1. Sklonuj repo i przełącz się na gałąź `claude/dev`.
-2. Przenieś (albo utwórz w Studio) projekt `Factory_demo` do folderu `optix/` repozytorium
-   (wynik: `optix/Factory_demo/Factory_demo.optix`). Lokalny `.git` utworzony przez Studio w folderze projektu
-   usuń albo pomiń — historią zarządza repo nadrzędne.
-3. Zamknij Studio. W pliku `optix/Factory_demo/ProjectFiles/NetSolution/Factory_demo.csproj`
-   dodaj przed `</Project>`:
+## Jak kod trafia do Studio (Plan B — obowiązujący)
+Repo nie jest sklonowane na komputerze Maćka, więc kod kopiujemy:
 
-```xml
-<ItemGroup>
-  <Compile Include="..\..\..\..\src\Factory.Core\**\*.cs"
-           Exclude="..\..\..\..\src\Factory.Core\obj\**;..\..\..\..\src\Factory.Core\bin\**"
-           LinkBase="FactoryCore" />
-  <Compile Include="..\..\..\..\src\Factory.Optix\*.cs" LinkBase="FactoryOptix" />
-</ItemGroup>
-```
+1. `python3 tools/export_optix.py` → `dist/optix/` w układzie projektu Optix:
+   - `ProjectFiles/NetSolution/Factory/Core/**` (czysty C#) i `.../Factory/Optix/*` (NetLogic),
+   - `ProjectFiles/factory.json`.
+2. Sesja Claude połączona z komputerem wgrywa te pliki do folderu projektu (narzędzie commit plików).
+   NetSolution to projekt SDK: kompiluje każdy `.cs` w folderze — `.csproj` się nie edytuje.
+3. `optix_build_check` (ftx-mcp) kompiluje kopię NetSolution na prawdziwych bibliotekach Optix 1.7.
+   Stuby w `stubs/Optix.Stubs` odwzorowują tylko sprawdzone tam API.
 
-4. Otwórz projekt. W `UI/Screens` utwórz ekrany `HallScreen` i `LineScreen`; w każdym Panel `FactoryContent`
-   (wyrównanie Stretch/Stretch). Dodaj je do nawigacji w `MainWindow`.
-5. W folderze NetLogic projektu dodaj **design-time** NetLogic o nazwie `FactoryBuilder`,
-   a w `Model` **runtime** NetLogic `SimulationLogic`. Studio utworzy puste pliki `.cs` o tych nazwach
-   w NetSolution — usuń je (klasy przychodzą z linków `FactoryOptix`).
-6. Uruchom metodę `FactoryBuilder.Build` (prawy klik na NetLogic → Execute). Skopiuje `factory.json` z repo do
-   `ProjectFiles` i wygeneruje typy, instancje, alarmy i zawartość ekranów.
-7. Uruchom emulator. Zapisz zrzuty ekranu w `docs/studio/` i uwagi w `docs/studio/feedback.md`, potem commit.
+Pliki w `NetSolution/Factory` są generowane — edytuj `src/` w repo.
 
-Plan B, gdy Studio nadpisze `.csproj`: skopiuj pliki z `src/Factory.Core` i `src/Factory.Optix` do NetSolution
-(skrypt w backlogu), ale źródłem prawdy zostaje `src/`.
+## Węzły w projekcie
+- `NetLogic/FactoryBuilder` — design-time NetLogic. Utworzony w Studio (prawy klik NetLogic → New → Design-time NetLogic
+  → Rename), bo tylko wtedy Studio dopisuje węzły metod (menu Execute). Klasa: `NetSolution/FactoryBuilder.cs`.
+  **Build** uruchamia się w Studio: prawy klik → Execute Build (wątek UI Studio; wywołanie przez most ftx-mcp
+  z wątku HTTP może zamknąć Studio).
+- `Model/SimulationLogic` — runtime NetLogic, tworzy go Build, jeśli brakuje. Klasa: `NetSolution/SimulationLogic.cs`.
+
+## Pułapki (sprawdzone 2026-09-25)
+- Klasa NetLogic musi leżeć w `NetSolution/<NazwaWęzła>.cs`; inaczej Studio dopisze tam szablon → duplikat klasy.
+- Typy w projekcie mają sufiks `Type` (`LineType`, `FillerType`…): Studio generuje globalne klasy proxy o nazwie typu,
+  a proxy `Line`/`Hall` przesłoniłoby klasy Core i zepsuło kompilację.
+- Przyciski NIE wołają metod NetLogic (węzeł utworzony z kodu nie ma węzłów metod). Ustawiają bity poleceń
+  (`cmdStart`/`cmdStop`/`cmdReset`, `Hall/timeScale`) wbudowanym `VariableCommands.Set`; `SimulationLogic`
+  wykonuje je co 100 ms i kasuje (handshake jak w PLC).
+- Ctrl+S w Studio uruchamia kompilację NetSolution (po wgraniu plików). Execute działa na ostatniej udanej kompilacji.
+
+## Co generuje Build (wszystko z `factory.json`)
+- `Model/Templates/Factory/*` — typy (stacje, Conveyor, Line, Hall) ze zmiennymi `[Signal]` + `stateColor`.
+- `Model/Factory/Hall`, `Model/Factory/L1/<stacja|taśma>` — instancje.
+- `Alarms/Factory/*` — DigitalAlarm na `faultActive` każdego urządzenia.
+- `UI/Screens/HallScreen` (poziom 1) i `UI/Screens/LineScreen_<id>` (poziom 2: schemat, tabela stacji, panel KPI + komendy + awarie).
+- W `UI/MainWindow`: `Background`, `Header` (średnie OEE, linie w pracy, lampka awarii), `MainNav` (zakładki).
+Wszystko inne (np. `UI/Custom`, własne ekrany) Build zostawia w spokoju.
+
+## Weryfikacja
+Emulator (F5 / `optix_emulator restart`) → podgląd w Chrome przez CDP (`optix_observe screenshot`).
+Emulator: `http://localhost:8081` (Web presentation engine z SetupProject). Log: `optix_emulator action=log`.

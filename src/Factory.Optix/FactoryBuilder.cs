@@ -1,4 +1,4 @@
-// @summary: Design-time NetLogic: Build() regenerates types, Model/Factory instances, alarms and screen content from factory.json.
+// @summary: Design-time NetLogic: Build() regenerates types, Model/Factory, alarms, screens and window tabs from factory.json; Clean() removes them.
 #region Using directives
 using System;
 using UAManagedCore;
@@ -10,10 +10,12 @@ using FTOptix.CoreBase;
 using FTOptix.Core;
 using FTOptix.NetLogic;
 #endregion
+using N = OptixNames;
 
 public class FactoryBuilder : BaseNetLogic
 {
-    /// <summary>Idempotent: everything under */Factory is deleted and rebuilt. Hand-made UI lives in UI/Custom.</summary>
+    /// <summary>Idempotent: generated nodes are deleted and rebuilt. Hand-made UI lives in UI/Custom (untouched).
+    /// Run from Studio: right-click NetLogic/FactoryBuilder -> Execute Build (must run on Studio's UI thread).</summary>
     [ExportMethod]
     public void Build()
     {
@@ -23,35 +25,42 @@ public class FactoryBuilder : BaseNetLogic
             var (manifest, hall) = ManifestSource.Load();
             var model = Project.Current.Get("Model");
 
-            model.Get(OptixNames.ModelFolder)?.Delete();                // instances before their types
-            var templates = NodeUtil.EnsureFolder(model, OptixNames.TypesFolder);
+            // Screens and window tabs link to model variables: remove them before the model is replaced.
+            var window = Project.Current.Get(N.MainWindow);
+            if (window != null) WindowGenerator.Clear(window);
+            var screens = Project.Current.Get(N.ScreensFolder);
+            if (screens != null) ScreenGenerator.Clean(screens);
+            Project.Current.Get("Alarms/" + N.AlarmsFolder)?.Delete();
+
+            model.Get(N.ModelFolder)?.Delete();                        // instances before their types
+            var templates = NodeUtil.EnsureFolder(model, N.TypesFolder);
             var types = TypeGenerator.Build(NodeUtil.ResetFolder(templates, "Factory"));
-            ModelGenerator.Build(NodeUtil.ResetFolder(model, OptixNames.ModelFolder), hall, types);
+            ModelGenerator.Build(NodeUtil.ResetFolder(model, N.ModelFolder), hall, types);
+            ModelGenerator.EnsureSimulationLogic(model);
 
             var alarms = Project.Current.Get("Alarms");
-            if (alarms != null) AlarmGenerator.Build(NodeUtil.ResetFolder(alarms, OptixNames.AlarmsFolder), hall);
+            if (alarms != null) AlarmGenerator.Build(NodeUtil.ResetFolder(alarms, N.AlarmsFolder), hall);
             else Log.Warning("FactoryBuilder", "No Alarms folder in project; alarms skipped");
 
             ScreenGenerator.Build(manifest, hall);
-            Log.Info("FactoryBuilder", $"Built {hall.Lines.Count} line(s), {types.Count} types from {ManifestSource.FilePath}");
+            Log.Info("FactoryBuilder", $"Built {hall.Lines.Count} line(s), {types.Count} types, screens + tabs from {ManifestSource.FilePath}");
         }
         catch (Exception ex)
         {
-            Log.Error("FactoryBuilder", "Build failed: " + ex.Message);
+            Log.Error("FactoryBuilder", "Build failed: " + ex);
         }
     }
 
     [ExportMethod]
     public void Clean()
     {
-        Project.Current.Get("Model/" + OptixNames.ModelFolder)?.Delete();
-        Project.Current.Get("Model/" + OptixNames.TypesFolder + "/Factory")?.Delete();
-        Project.Current.Get("Alarms/" + OptixNames.AlarmsFolder)?.Delete();
-        foreach (var path in new[] { OptixNames.HallContent, OptixNames.LineContent })
-        {
-            var content = Project.Current.Get(path);
-            if (content != null) NodeUtil.ClearChildren(content);
-        }
-        Log.Info("FactoryBuilder", "Generated nodes removed");
+        var window = Project.Current.Get(N.MainWindow);
+        if (window != null) WindowGenerator.Clear(window);
+        var screens = Project.Current.Get(N.ScreensFolder);
+        if (screens != null) ScreenGenerator.Clean(screens);
+        Project.Current.Get("Alarms/" + N.AlarmsFolder)?.Delete();
+        Project.Current.Get("Model/" + N.ModelFolder)?.Delete();
+        Project.Current.Get("Model/" + N.TypesFolder + "/Factory")?.Delete();
+        Log.Info("FactoryBuilder", "Generated nodes removed (Model/SimulationLogic kept)");
     }
 }

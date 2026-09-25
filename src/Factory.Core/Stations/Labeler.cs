@@ -11,7 +11,7 @@ public sealed class Labeler : Station
 {
     double stock = double.NaN;
 
-    [Signal(Unit = "%", Decimals = 1)] public double LabelStock => double.IsNaN(stock) ? 100 : 100 * stock / Param("rollLabels", 6000);
+    [Signal(Unit = "%", Decimals = 1, Label = "Etykiety")] public double LabelStock => double.IsNaN(stock) ? 100 : 100 * stock / Param("rollLabels", 6000);
 
     protected override string[] FaultCatalog => new[] { "Zerwana taśma etykiet", "Błąd czujnika etykiety" };
 

@@ -2,7 +2,7 @@
 DOTNET ?= dotnet
 MIN ?= 30
 
-.PHONY: check build test sim preview lint snapshot ctx bundle clean
+.PHONY: check build test sim preview lint snapshot ctx bundle clean optix
 
 check: build test sim preview lint ctx
 	@echo "CHECK OK"
@@ -32,6 +32,10 @@ ctx:
 
 snapshot:
 	python3 tools/snapshot.py
+
+# Copy for the Optix project (Plan B, docs/studio-setup.md): dist/optix/ProjectFiles/...
+optix:
+	python3 tools/export_optix.py
 
 # Backup for sessions without GitHub access: whole history as base64 text inside the Design canvas.
 bundle:

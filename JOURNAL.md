@@ -2,6 +2,16 @@
 
 Najnowszy wpis na górze. Maks. 14 wpisów; starsze w `docs/archive/`.
 
+## 2026-09-25 (wieczór, sesja z Maćkiem przy Studio)
+- ftx-mcp podłączone (most 1.0.7, emulator, CDP). Kod eksportowany `tools/export_optix.py` do `Factory_demo/ProjectFiles`;
+  kompilacja na prawdziwym Optix 1.7 przez `optix_build_check` (0 błędów). Stuby dopasowane do sprawdzonego API.
+- Nowa warstwa ekranów: `Ui`, `HallView` (mini-mapa stacji), `LineView`, `StationTable`, `LinePanel`, `WindowGenerator`.
+  Core: `StateText` (stan tekstem), `Hall.ActiveFaults`, `[Signal(Label=…)]` dla podpisów.
+- Pułapki znalezione w Studio (opis w docs/studio-setup.md): klasa NetLogic w katalogu głównym NetSolution, sufiks `Type`
+  dla typów (proxy Studio przesłaniały `Line`/`Hall`), węzeł NetLogic z kodu nie ma metod → polecenia jako bity + `VariableCommands.Set`.
+- Test w emulatorze: dane płyną, Stop/Start, ×10, awaria FEED → lista awarii + lampka w nagłówku → Kasuj działa.
+- Następne: locale pl-PL (separator tysięcy), ekran Alarmy, klik kafla linii → zakładka.
+
 ## 2026-09-25
 - Zadanie: płynna animacja taśm w `Line1`. Odtwarzanie tyka co 100 ms (10 fps) z ułamkiem klatki `sub`; kropki przesuwane regułą `Conveyor.Step` (prędkość × SpeedPct, limit = poprzednia − podziałka), tylko w stanie Praca/Zablokowana.
 - `layout.json` eksportuje `pitchM` i `speedMps` taśm; nowy test `BeltPositionsAreHeadFirstAndPitched` (14/14). Sprawdzenie w node na całym przebiegu: 16 200 klatek pośrednich, 0 naruszeń podziałki/zakresu.

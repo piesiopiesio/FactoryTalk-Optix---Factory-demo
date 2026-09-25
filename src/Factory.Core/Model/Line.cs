@@ -26,6 +26,7 @@ public sealed class Line
     public IEnumerable<Equipment> Equipment => Stations.Cast<Equipment>().Concat(Conveyors);
 
     [Signal] public MachineState State { get; private set; }
+    [Signal] public string StateText => StatePalette.Label(State);
     [Signal(Unit = "%", Decimals = 1)] public double Oee => Availability * Performance * Quality / 10000.0;
     [Signal(Unit = "%", Decimals = 1)] public double Availability { get; private set; }
     [Signal(Unit = "%", Decimals = 1)] public double Performance { get; private set; }

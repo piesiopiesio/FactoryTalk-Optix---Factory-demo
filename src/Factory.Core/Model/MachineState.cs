@@ -22,4 +22,15 @@ public static class StatePalette
     };
 
     public static string Hex(MachineState s) => "#" + (Argb(s) & 0xFFFFFF).ToString("X6");
+
+    /// <summary>Operator text for a state (style guide: state is never shown by color alone).</summary>
+    public static string Label(MachineState s) => s switch
+    {
+        MachineState.Running => "Praca",
+        MachineState.Starved => "Brak materiału",
+        MachineState.Blocked => "Zablokowana",
+        MachineState.Faulted => "Awaria",
+        MachineState.Maintenance => "Obsługa",
+        _ => "Zatrzymana",
+    };
 }

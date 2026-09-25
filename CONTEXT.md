@@ -18,11 +18,12 @@ factory.json ──FactoryLoader──▶ Hall (Core) ──SimEngine.Tick(0.1s)
 ## Warstwy i zasady (niezmienniki)
 1. `src/Factory.Core` = czysty C# (C# 10, .NET 8 BCL, zero NuGet). NIGDY `using FTOptix.*` w Core.
 2. `src/Factory.Optix` = jedyne miejsce z API Optix. Kompiluje się w chmurze na `stubs/Optix.Stubs`,
-   a w Studio przez linki w `.csproj` NetSolution (docs/studio-setup.md). Stuby = tylko używane członki.
+   a w Studio jako kopia z `tools/export_optix.py` (docs/studio-setup.md). Stuby = tylko członki sprawdzone na Optix 1.7.
 3. Właściwość z `[Signal]` = zmienna Optix (camelCase) + kolumna w trace + wiersz w faceplate. Bez dodatkowego kodu.
 4. Podgląd nie ma logiki symulacji: artboardy tylko odtwarzają `data/preview.json`.
 5. Generowane (nie edytuj ręcznie): Optix `Model/Factory`, `Model/Templates/Factory`, `Alarms/Factory`,
-   `UI/Screens/*/FactoryContent`; repo `design/canvas/project/data/*`, `design/data/*`.
+   `UI/Screens/HallScreen`, `UI/Screens/LineScreen_*`, `UI/MainWindow/{Background,Header,MainNav}`, `NetSolution/Factory/**`;
+   repo `design/canvas/project/data/*`, `design/data/*`, `dist/`.
 6. Pliki Studio (`optix/**/*.yaml`) należą do Studio. Agent ich nie edytuje.
 7. Jedna klasa = jeden plik ≤ 250 linii, pierwsza linia `// @summary: …`.
 8. Determinizm: seed z `factory.json`; te same wejścia = ten sam przebieg (test `SameSeedSameRun`).
@@ -42,11 +43,17 @@ factory.json ──FactoryLoader──▶ Hall (Core) ──SimEngine.Tick(0.1s)
 2. `factory.json`: wpis w `stations` (id, type, name, pos [x,y], cycleS, fault, params) + taśmy `from`/`to`.
 3. `make check`. FactoryBuilder i podgląd podchwycą stację automatycznie.
 
-## Optix (ścieżki w projekcie)
-- `Model/Factory/{Hall|L1|L1/FILL}/<signal>` + `stateColor` (UInt32 ARGB).
-- NetLogic runtime `SimulationLogic` w `Model` (poza folderem generowanym): Start/StopLine, ResetFault, SetTimeScale.
-- NetLogic design-time `FactoryBuilder`: `Build()` (kopiuje repo `factory.json` do ProjectFiles), `Clean()`.
-- Ekrany ręczne raz: `UI/Screens/HallScreen` i `LineScreen`, każdy z Panelem `FactoryContent`.
+## Optix (ścieżki w projekcie `Factory_demo`, Studio 1.7.5.13)
+- `Model/Factory/{Hall|L1|L1/FILL}/<signal>` + `stateColor` (UInt32 ARGB). `[Signal(Label=…)]` = podpis na ekranie.
+  Typy: `Model/Templates/Factory/<Klasa>Type` (sufiks obowiązkowy — proxy Studio przesłania klasy Core).
+- Polecenia HMI = bity `cmdStart/cmdStop/cmdReset` (linia), `cmdReset` (urządzenie), `Hall/timeScale`; przyciski
+  `VariableCommands.Set`, wykonuje `CommandBits` w runtime NetLogic `Model/SimulationLogic` (tworzy go Build).
+- NetLogic design-time `NetLogic/FactoryBuilder`: `Build()` generuje model, alarmy, ekrany i zakładki; `Clean()`.
+  Build uruchamia się w Studio (prawy klik → Execute), NIE przez most ftx-mcp (wątek HTTP może zamknąć Studio).
+- Widoki: `HallView` (poziom 1 + mini-mapa), `LineView` (schemat), `StationTable`, `LinePanel` (KPI, komendy, awarie),
+  `WindowGenerator` (nagłówek + NavigationPanel). Widgety tylko przez `Ui.cs`.
+- Pętla ze Studio (sesja połączona z komputerem): `export_optix.py` → wgranie plików → `optix_build_check` →
+  Execute Build → `optix_emulator restart` → `optix_observe screenshot`.
 
 ## Styl HMI (skrót; pełne zasady: docs/hmi-style.md)
 Rockwell Process HMI Style Guide / ISA-101: tło `#E0E0E0`, obrys urządzeń `#A0A0A4`, wnętrze = tło, dane `#475CA7`,
@@ -100,28 +107,36 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Core/Stations/Palletizer.cs` — Line sink: stacks cases on pallets; a full pallet triggers a timed pallet change (Maintenance).
 - `src/Factory.Core/Stations/VisionInspector.cs` — Inspects every bottle; anything not filled, capped, labeled and defect-free is rejected.
 - `src/Factory.Optix/AlarmGenerator.cs` — One DigitalAlarm per equipment in Alarms/Factory, linked to Model/Factory/<path>/faultActive.
+- `src/Factory.Optix/CommandBits.cs` — Runtime side of HMI commands: polls cmdStart/cmdStop/cmdReset bits and Hall/timeScale, executes on SimEngine, clears bits.
 - `src/Factory.Optix/Factory.Optix.csproj` — Cloud compile check of the NetLogic layer against stubs. In Studio these .cs files are linked into NetSolution instead.
-- `src/Factory.Optix/FactoryBuilder.cs` — Design-time NetLogic: Build() regenerates types, Model/Factory instances, alarms and screen content from factory.json.
+- `src/Factory.Optix/FactoryBuilder.cs` — Design-time NetLogic: Build() regenerates types, Model/Factory, alarms, screens and window tabs from factory.json; Clean() removes them.
+- `src/Factory.Optix/HallView.cs` — Level 1 screen (HallScreen): zones, one tile per line with state, KPIs and a live mini-map of its stations.
+- `src/Factory.Optix/LinePanel.cs` — Right-hand panel of a line screen: state, OEE/KPIs, line commands (start/stop/reset/time) and the active fault list.
+- `src/Factory.Optix/LineView.cs` — Level 2 line diagram (LineScreen_<id>): belts with occupancy bars and station tiles (state, counts, own signals, progress).
 - `src/Factory.Optix/ManifestSource.cs` — Loads ProjectFiles/factory.json inside Optix (builds the Core Hall); design-time sync copies the repo-root manifest in.
-- `src/Factory.Optix/ModelGenerator.cs` — Builds Model/Factory: Hall object + one object per line with its stations and conveyors (paths match SimEngine.Nodes()).
-- `src/Factory.Optix/NodeUtil.cs` — Small node helpers for generators: ensure/reset folders, clear children, typed UI element factories.
+- `src/Factory.Optix/ModelGenerator.cs` — Builds Model/Factory (Hall + lines with stations and conveyors, paths match SimEngine.Nodes()) and ensures Model/SimulationLogic.
+- `src/Factory.Optix/NodeUtil.cs` — Small node helpers for generators: ensure/reset folders, clear children, delete by name.
 - `src/Factory.Optix/OptixBinder.cs` — Runtime bridge: writes changed [Signal] values (+ stateColor) from SimEngine into Model/Factory variables.
-- `src/Factory.Optix/OptixNames.cs` — Optix-side naming: project paths, camelCase variable names, .NET -> OPC UA data type mapping, UI colors.
-- `src/Factory.Optix/ScreenGenerator.cs` — Fills HallScreen/LineScreen FactoryContent panels: zones, line tiles, stations and belts at manifest positions (x1.2).
-- `src/Factory.Optix/SimulationLogic.cs` — Runtime NetLogic (Model/Factory/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, exposes commands.
-- `src/Factory.Optix/TypeGenerator.cs` — Creates one Optix ObjectType per Core class (stations, Conveyor, Line, Hall) with a variable per [Signal].
+- `src/Factory.Optix/OptixNames.cs` — Optix-side naming: project paths, camelCase variable names, .NET -> OPC UA data type mapping, UI colors, screen scale.
+- `src/Factory.Optix/ScreenGenerator.cs` — Regenerates the HMI from factory.json: HallScreen, one LineScreen_<id> per line, and the MainWindow chrome/tabs.
+- `src/Factory.Optix/SimulationLogic.cs` — Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits.
+- `src/Factory.Optix/StationTable.cs` — Station table under the line diagram: one row per station (state, good/reject, cycle, speed, progress, fault message).
+- `src/Factory.Optix/TypeGenerator.cs` — Creates one Optix ObjectType per Core class (FillerType, ConveyorType, LineType, HallType...) with a variable per [Signal].
+- `src/Factory.Optix/Ui.cs` — Widget factory for generated screens (pixels): boxes, labels, buttons, bindings, formatters, click -> NetLogic method.
+- `src/Factory.Optix/WindowGenerator.cs` — MainWindow chrome owned by the builder: background, header (plant KPIs + fault annunciator) and NavigationPanel tabs.
 - `src/Sim.Cli/Checks.cs` — Behavior checks on a finished run: KPI targets, faults present, no dead station, bottle conservation.
 - `src/Sim.Cli/LayoutExport.cs` — Writes design/data/layout.json (zones, line rects, station + belt rects) so the preview never re-implements geometry.
 - `src/Sim.Cli/Program.cs` — CLI entry: `Sim.Cli [--manifest factory.json] [--minutes 30] [--frame 2] [--out design/data]`; exit 1 if a check fails.
 - `src/Sim.Cli/Sim.Cli.csproj` — Console runner: simulates the hall, writes design/data/trace.json + trace-summary.json, checks KPI targets.
 - `src/Sim.Cli/TraceRecorder.cs` — Samples all [Signal] values + belt positions every frame into a compact columnar trace.
-- `stubs/Optix.Stubs/FTOptix.cs` — Stubs for FTOptix.* namespaces (NetLogic base + tasks, Project, InformationModel, UI items, alarms, ResourceUri).
-- `stubs/Optix.Stubs/UAManagedCore.cs` — Stubs for UAManagedCore (nodes, variables, values, NodeId, Log, Color) - only members our code uses.
+- `stubs/Optix.Stubs/FTOptix.cs` — Stubs for FTOptix.* namespaces (NetLogic, Project, InformationModel, UI widgets, converters, events, alarms) - verified against Optix 1.7 build.
+- `stubs/Optix.Stubs/UAManagedCore.cs` — Stubs for UAManagedCore (nodes, variables, values, NodeId, Log) - only members our code uses; shapes verified against Optix 1.7.
 - `tests/Factory.Tests/CoreTests.cs` — Tests for manifest validation, conveyor/flow behavior, determinism, KPIs, signals and palette.
 - `tests/Factory.Tests/Fixtures.cs` — Test helpers: repo paths, loading the real factory.json, building small ad-hoc lines.
 - `tests/Factory.Tests/TestRunner.cs` — Minimal test harness: discovers static methods marked [Test], runs them, prints PASS/FAIL, exit code.
 - `tools/check_design.py` — Static lint of the Design canvas: canvas.json <-> artboards, required head line, hole syntax, sizes, data files.
 - `tools/ctx.py` — Context budget guard + file index: `--check` enforces token/line limits, `--write` refreshes the index in CONTEXT.md.
+- `tools/export_optix.py` — Plan B deploy: copies src/Factory.Core + src/Factory.Optix + factory.json into an Optix project layout (dist/optix).
 - `tools/gen_preview.py` — Packs design/data/{layout,trace}.json into design/canvas/project/data/preview.json (columnar, compact) for the Design canvas.
 - `tools/gen_status.py` — Builds design/canvas/project/data/status.json (checks, tests, KPIs, backlog, journal, context) for the Status artboard.
 - `tools/snapshot.py` — Renders PNG snapshots (hall + line) from preview.json via headless Chromium so the agent can look at its own UI.

@@ -11,8 +11,8 @@ public sealed class Palletizer : Station
 {
     double changeLeftS;
 
-    [Signal] public int CasesOnPallet { get; private set; }
-    [Signal] public int Pallets { get; private set; }
+    [Signal(Label = "Na palecie")] public int CasesOnPallet { get; private set; }
+    [Signal(Label = "Palety")] public int Pallets { get; private set; }
 
     protected override string[] FaultCatalog => new[] { "Kurtyna świetlna naruszona", "Brak pustych palet" };
 

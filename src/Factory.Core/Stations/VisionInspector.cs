@@ -9,7 +9,7 @@ namespace Factory.Core.Stations;
 [StationType("vision")]
 public sealed class VisionInspector : Station
 {
-    [Signal(Unit = "%", Decimals = 2)] public double RejectRate => Processed == 0 ? 0 : 100.0 * Reject / Processed;
+    [Signal(Unit = "%", Decimals = 2, Label = "Odrzuty")] public double RejectRate => Processed == 0 ? 0 : 100.0 * Reject / Processed;
 
     protected override string[] FaultCatalog => new[] { "Kamera nie odpowiada", "Brudny obiektyw" };
 

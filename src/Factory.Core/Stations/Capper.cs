@@ -9,7 +9,7 @@ namespace Factory.Core.Stations;
 [StationType("capper")]
 public sealed class Capper : Station
 {
-    [Signal(Unit = "Nm")] public double Torque { get; private set; }
+    [Signal(Unit = "Nm", Label = "Moment")] public double Torque { get; private set; }
 
     protected override string[] FaultCatalog => new[] { "Brak nakrętek", "Przeciążenie głowicy" };
 

@@ -1,9 +1,10 @@
-// @summary: Builds Model/Factory: Hall object + one object per line with its stations and conveyors (paths match SimEngine.Nodes()).
+// @summary: Builds Model/Factory (Hall + lines with stations and conveyors, paths match SimEngine.Nodes()) and ensures Model/SimulationLogic.
 #region Using directives
 using System;
 using System.Collections.Generic;
 using UAManagedCore;
 using FTOptix.HMIProject;
+using FTOptix.NetLogic;
 #endregion
 using FM = Factory.Core.Model;
 
@@ -19,5 +20,15 @@ public static class ModelGenerator
                 lineObj.Add(InformationModel.MakeObject(eq.Id, types[eq.GetType()].NodeId));
             root.Add(lineObj);   // add the finished subtree once (faster, fewer async calls)
         }
+    }
+
+    /// <summary>Runtime NetLogic node bound by name to class SimulationLogic. Created once, never deleted by Build.</summary>
+    public static IUANode EnsureSimulationLogic(IUANode model)
+    {
+        var existing = model.Get(OptixNames.SimLogic);
+        if (existing != null) return existing;
+        var logic = InformationModel.MakeObject(OptixNames.SimLogic, FTOptix.NetLogic.ObjectTypes.NetLogic);
+        model.Add(logic);
+        return logic;
     }
 }

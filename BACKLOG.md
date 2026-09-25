@@ -4,6 +4,9 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 `[user]` = od użytkownika (agent nie usuwa), `[agent]` = propozycja agenta, `(blocked)` = wstrzymane.
 
 ## Next
+- [ ] [S] Separator tysięcy po polsku w Optix (dziś „1,612”) — locale projektu `pl-PL` albo format w StringFormatter
+- [ ] [S] Ekran `Alarmy` w Optix — AlarmGrid (albo lista z historią) dla `Alarms/Factory`, zakładka w `MainNav`
+- [ ] [S] Kliknięcie kafla linii na hali przełącza zakładkę na ekran linii
 - [ ] [M] Cykl uzupełniania zbiornika napełniarki — stan `Maintenance` + zdarzenie `LowTank` w przebiegu, test
 - [ ] [S] Wymiana rolki etykiet — przestój `Maintenance` etykieciarki, widoczny w OEE i zdarzeniach
 - [ ] [S] Artboard `Alarms` — lista zdarzeń z czasem, stacją, czasem trwania; link z `Line1`
@@ -23,7 +26,6 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [M] Strefa Media: sprężone powietrze i energia per linia (kWh/1000 butelek)
 - [ ] [M] Druga linia (procesowa: mieszalnik + CIP) w hali
 - [ ] [M] Rozgałęzienia taśm (bufor boczny, odrzut z wizyjnej na osobną taśmę)
-- [ ] [S] Formatowanie liczb w Optix (StringFormatter) dla OEE i liczników
 - [ ] [M] Serwer OPC UA + MQTT publikujący KPI hali
 - [ ] [M] Faceplate z zakładkami Home / Diagnostyka / Ustawienia / Alarmy (przewodnik HMI), rozmiar = kontrolki × 50 + 10
 - [ ] [S] Sparkline OEE i wydajności na poziomie 1 (hala), bar graph poziomu zbiornika z limitami
@@ -35,5 +37,7 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 ## Blocked
 
 ## Done
+- [x] 2026-09-25 Pierwsze uruchomienie w Studio (Factory_demo, Optix 1.7.5.13): FactoryBuilder generuje typy, model, alarmy,
+  ekrany Hala/Linia 1 z nagłówkiem i zakładkami; emulator: dane na żywo, Start/Stop, Czas ×10, awarie + Kasuj — sprawdzone
 - [x] 2026-09-25 Płynna animacja taśm w `Line1` — odtwarzanie 10 fps, interpolacja kinematyczna (prędkość, podziałka), test kolejności pozycji
 - [x] 2026-09-25 Szkielet: Core + 7 stacji + taśmy, Sim.Cli, testy, warstwa Optix na stubach, podgląd Design (Hala, Linia 1, Status)

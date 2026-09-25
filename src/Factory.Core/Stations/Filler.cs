@@ -11,8 +11,8 @@ public sealed class Filler : Station
 {
     double tankL = double.NaN;
 
-    [Signal(Unit = "ml", Decimals = 1)] public double FillMl { get; private set; }
-    [Signal(Unit = "%", Decimals = 1)] public double TankLevel => double.IsNaN(tankL) ? 0 : 100 * tankL / Param("tankL", 800);
+    [Signal(Unit = "ml", Decimals = 1, Label = "Napełnienie")] public double FillMl { get; private set; }
+    [Signal(Unit = "%", Decimals = 1, Label = "Zbiornik")] public double TankLevel => double.IsNaN(tankL) ? 0 : 100 * tankL / Param("tankL", 800);
 
     protected override string[] FaultCatalog => new[] { "Zacięcie butelki w karuzeli", "Błąd zaworu nalewaka", "Niskie ciśnienie CO2" };
 

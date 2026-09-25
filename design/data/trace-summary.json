@@ -7,6 +7,7 @@
       "name": "Linia pakująca 1",
       "kpi": {
         "State": 4,
+        "StateText": "Awaria",
         "Oee": 74.6,
         "Availability": 89.1,
         "Performance": 84.6,

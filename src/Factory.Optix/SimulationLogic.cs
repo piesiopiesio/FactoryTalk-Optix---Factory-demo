@@ -1,4 +1,4 @@
-// @summary: Runtime NetLogic (Model/Factory/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, exposes commands.
+// @summary: Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits.
 #region Using directives
 using System;
 using UAManagedCore;
@@ -21,8 +21,8 @@ public class SimulationLogic : BaseNetLogic
     readonly object sync = new object();
     FS.SimEngine engine;
     OptixBinder binder;
+    CommandBits commands;
     PeriodicTask tick;
-    int timeScale = 1;
 
     public override void Start()
     {
@@ -30,7 +30,9 @@ public class SimulationLogic : BaseNetLogic
         {
             var (_, hall) = ManifestSource.Load();
             engine = new FS.SimEngine(hall);
-            binder = new OptixBinder(Project.Current.Get("Model/" + OptixNames.ModelFolder), engine);
+            var root = Project.Current.Get("Model/" + OptixNames.ModelFolder);
+            binder = new OptixBinder(root, engine);
+            commands = new CommandBits(root, engine);
             tick = new PeriodicTask(Step, PeriodMs, LogicObject);
             tick.Start();
             Log.Info("SimulationLogic", $"Started {hall.Lines.Count} line(s), seed {hall.Seed}");
@@ -51,26 +53,17 @@ public class SimulationLogic : BaseNetLogic
     {
         lock (sync)
         {
-            for (var i = 0; i < timeScale; i++) engine.Tick(Dt);
-            binder.PublishChanged();
-        }
-    }
-
-    [ExportMethod] public void StartLine(string lineId) => Command(lineId, FM.Cmd.Start);
-    [ExportMethod] public void StopLine(string lineId) => Command(lineId, FM.Cmd.Stop);
-    [ExportMethod] public void ResetFault(string equipmentPath) => Command(equipmentPath, FM.Cmd.Reset);
-
-    /// <summary>1..20 simulated seconds per real second.</summary>
-    [ExportMethod] public void SetTimeScale(int scale)
-    {
-        lock (sync) timeScale = Math.Max(1, Math.Min(20, scale));
-    }
-
-    void Command(string target, FM.Cmd cmd)
-    {
-        lock (sync)
-        {
-            if (engine == null || !engine.Command(target, cmd)) Log.Warning("SimulationLogic", $"Unknown target '{target}' for {cmd}");
+            try
+            {
+                commands.Execute(engine);
+                var n = commands.TimeScale;
+                for (var i = 0; i < n; i++) engine.Tick(Dt);
+                binder.PublishChanged();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("SimulationLogic", "Step failed: " + ex.Message);
+            }
         }
     }
 }
