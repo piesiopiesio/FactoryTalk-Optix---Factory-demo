@@ -123,7 +123,7 @@ button{font-family:inherit}
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { d: null, i: 0, playing: false, speed: 10, sel: 'L1/FILL', err: '' };
+    this.state = { d: null, i: 0, sub: 0, playing: false, speed: 10, sel: 'L1/FILL', err: '' };
   }
 
   componentDidMount() {
@@ -135,16 +135,29 @@ class Component extends DCLogic {
 
   componentWillUnmount() { clearInterval(this.timer); }
 
+  // Playback at 10 fps: i = recorded frame, sub = 0..1 fraction towards the next frame (belts are interpolated).
   run(speed) {
     clearInterval(this.timer);
-    const frameMs = this.state.d ? this.state.d.meta.frameS * 1000 : 2000;
+    const TICK_MS = 100;
     this.timer = setInterval(() => {
       const d = this.state.d;
       if (!d) return;
-      const next = this.state.i + 1;
-      if (next >= d.frames.length) { clearInterval(this.timer); this.setState({ playing: false }); return; }
-      this.setState({ i: next });
-    }, Math.max(20, frameMs / speed));
+      const pos = this.state.i + this.state.sub + (TICK_MS / 1000) * speed / d.meta.frameS;
+      const last = d.frames.length - 1;
+      if (pos >= last) { clearInterval(this.timer); this.setState({ i: last, sub: 0, playing: false }); return; }
+      const i = Math.floor(pos);
+      this.setState({ i: i, sub: pos - i });
+    }, TICK_MS);
+  }
+
+  // Kinematic in-between of one recorded frame (same rule as Conveyor.Step: travel, capped by the item ahead minus pitch).
+  // Items entering or leaving between frames appear at the next recorded frame.
+  beltAt(c, pos, state, mps, dt) {
+    const moving = state === 1 || state === 3;
+    if (!moving || dt <= 0 || !c.lengthM) return pos;
+    const travel = mps * dt / c.lengthM, pitch = (c.pitchM || 0) / c.lengthM;
+    let limit = 1;
+    return pos.map(q => { const n = Math.max(q, Math.min(q + travel, limit)); limit = n - pitch; return n; });
   }
 
   renderVals() {
@@ -156,7 +169,7 @@ class Component extends DCLogic {
       toggle: () => {
         if (!s.d) return;
         if (s.playing) { clearInterval(this.timer); this.setState({ playing: false }); return; }
-        if (s.i >= s.d.frames.length - 1) this.setState({ i: 0 });
+        if (s.i >= s.d.frames.length - 1) this.setState({ i: 0, sub: 0 });
         this.setState({ playing: true });
         this.run(s.speed);
       },
@@ -165,7 +178,7 @@ class Component extends DCLogic {
         label: '×' + v, fill: v === s.speed ? '#FFFFFF' : '#C6C6C6',
         pick: () => { this.setState({ speed: v }); if (s.playing) this.run(v); }
       })),
-      scrub: e => this.setState({ i: Number(e.target.value) }),
+      scrub: e => this.setState({ i: Number(e.target.value), sub: 0 }),
     };
     if (!d) {
       return Object.assign(base, { banner: { border: '#A0A0A4', fill: '#E0E0E0', count: '0', text: '' }, line: {}, kpis: [], belts: [], stations: [], sel: { signals: [] }, events: [], clock: '0:00', total: '0:00', last: 0, index: 0, seed: '' });
@@ -177,6 +190,7 @@ class Component extends DCLogic {
     const colorOf = st => pal[names[st]] || '#808080';
     const frame = d.frames[s.i];
     const t = frame[0];
+    const dtSub = s.sub * d.meta.frameS;
     const idx = {};
     d.nodes.forEach((n, k) => { idx[n.path] = k; });
     const val = (path, sig) => { const k = idx[path]; return frame[1][k][d.nodes[k].signals.indexOf(sig)]; };
@@ -221,7 +235,7 @@ class Component extends DCLogic {
       const p = 'L1/' + c.id;
       const state = val(p, 'State');
       const [x, y, w, h] = c.rect;
-      const pos = d.belts[s.i][d.beltPaths.indexOf(p)] || [];
+      const pos = this.beltAt(c, d.belts[s.i][d.beltPaths.indexOf(p)] || [], state, val(p, 'SpeedMps') * val(p, 'SpeedPct') / 100, dtSub);
       const inner = { w: w - 6, h: h - 6 };
       const dots = pos.map(q => {
         if (c.dir === 'right') return { x: q * (inner.w - 8), y: (inner.h - 8) / 2 };
@@ -266,7 +280,7 @@ class Component extends DCLogic {
       banner: banner,
       line: { stateName: pl[names[lineState]], product: L.product.name },
       kpis: kpis, belts: belts, stations: stations, sel: sel, events: events,
-      clock: mmss(t), total: mmss(d.frames[d.frames.length - 1][0]), last: d.frames.length - 1, index: s.i, seed: d.meta.seed,
+      clock: mmss(t + dtSub), total: mmss(d.frames[d.frames.length - 1][0]), last: d.frames.length - 1, index: s.i, seed: d.meta.seed,
     });
   }
 }

@@ -164,6 +164,8 @@
           "from": "FEED",
           "to": "FILL",
           "lengthM": 3,
+          "pitchM": 0.08,
+          "speedMps": 0.4,
           "rect": [
             210,
             275,
@@ -177,6 +179,8 @@
           "from": "FILL",
           "to": "CAP",
           "lengthM": 2,
+          "pitchM": 0.08,
+          "speedMps": 0.4,
           "rect": [
             570,
             275,
@@ -190,6 +194,8 @@
           "from": "CAP",
           "to": "LAB",
           "lengthM": 2.5,
+          "pitchM": 0.08,
+          "speedMps": 0.4,
           "rect": [
             930,
             275,
@@ -203,6 +209,8 @@
           "from": "LAB",
           "to": "VIS",
           "lengthM": 3,
+          "pitchM": 0.08,
+          "speedMps": 0.45,
           "rect": [
             1205,
             340,
@@ -216,6 +224,8 @@
           "from": "VIS",
           "to": "PACK",
           "lengthM": 4,
+          "pitchM": 0.08,
+          "speedMps": 0.45,
           "rect": [
             930,
             605,
@@ -229,6 +239,8 @@
           "from": "PACK",
           "to": "PAL",
           "lengthM": 5,
+          "pitchM": 0.45,
+          "speedMps": 0.3,
           "rect": [
             570,
             605,

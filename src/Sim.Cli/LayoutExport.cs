@@ -22,7 +22,7 @@ public static class LayoutExport
             {
                 var (a, b) = (l.Stations.Single(s => s.Id == c.From), l.Stations.Single(s => s.Id == c.To));
                 var dir = Layout.IsHorizontal(a, b) ? (a.Pos[0] < b.Pos[0] ? "right" : "left") : (a.Pos[1] < b.Pos[1] ? "down" : "up");
-                return new { c.Id, c.From, c.To, c.LengthM, rect = R(Layout.Conveyor(a, b)), dir };
+                return new { c.Id, c.From, c.To, c.LengthM, c.PitchM, c.SpeedMps, rect = R(Layout.Conveyor(a, b)), dir };
             }),
         }),
     };

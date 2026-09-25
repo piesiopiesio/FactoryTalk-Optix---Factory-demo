@@ -2,6 +2,13 @@
 
 Najnowszy wpis na górze. Maks. 14 wpisów; starsze w `docs/archive/`.
 
+## 2026-09-25 (przebieg dzienny)
+- Zadanie: płynna animacja taśm w `Line1`. Odtwarzanie tyka co 100 ms (10 fps) z ułamkiem klatki `sub`; kropki przesuwane regułą `Conveyor.Step` (prędkość × SpeedPct, limit = poprzednia − podziałka), tylko w stanie Praca/Zablokowana.
+- `layout.json` eksportuje `pitchM` i `speedMps` taśm; nowy test `BeltPositionsAreHeadFirstAndPitched` (14/14). Sprawdzenie w node na całym przebiegu: 16 200 klatek pośrednich, 0 naruszeń podziałki/zakresu.
+- Założenie: klatki co 2 s nie pozwalają śledzić pojedynczych butelek (ruch 0,8 m/klatkę ≫ podziałka 0,08 m), więc interpolacja jest kinematyczna, a butelki wchodzące/wychodzące pojawiają się dopiero w następnej klatce (propozycja w Later).
+- KPI (30 min, seed 42): OEE 74,6 %, średnio 71,6 butelki/min (96/min w ostatniej minucie), 9 awarii. GitHub niedostępny → tylko kopia w canvasie.
+- Następne: cykl uzupełniania zbiornika napełniarki (`LowTank`, `Maintenance`).
+
 ## 2026-09-25
 - Start projektu: manifest `factory.json`, rdzeń symulacji (7 stacji, 6 taśm, OEE), `Sim.Cli`, 13 testów.
 - Warstwa Optix (FactoryBuilder, SimulationLogic, OptixBinder) kompiluje się na stubach; czeka na test w Studio.

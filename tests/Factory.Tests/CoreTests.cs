@@ -46,6 +46,26 @@ public static class FlowTests
         Assert.Equal(MachineState.Blocked, Fixtures.St(e, "T/A").State, "feeder state");
     }
 
+    [Test] public static void BeltPositionsAreHeadFirstAndPitched()
+    {
+        // The preview interpolates belt dots between frames assuming head-first order and pitch spacing.
+        var e = Fixtures.Engine();
+        for (var k = 0; k < 60; k++)
+        {
+            e.Run(10);
+            foreach (var c in e.Hall.Lines.SelectMany(l => l.Conveyors))
+            {
+                var q = c.Positions().ToArray();
+                var gap = c.PitchM / c.LengthM - 0.002;
+                for (var i = 0; i < q.Length; i++)
+                {
+                    Assert.True(q[i] >= 0 && q[i] <= 1, $"{c.Path}: position {q[i]} outside 0..1");
+                    if (i > 0) Assert.True(q[i - 1] - q[i] >= gap, $"{c.Path}: gap {q[i - 1] - q[i]:0.000} < pitch {gap:0.000}");
+                }
+            }
+        }
+    }
+
     [Test] public static void StoppedFeederStarvesDownstream()
     {
         var e = new SimEngine(FactoryLoader.Build(Fixtures.Tiny()));
