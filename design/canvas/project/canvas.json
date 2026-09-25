@@ -1,0 +1,17 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-09-25T15:37:03Z" },
+  "title": "Optix Demo Factory — podgląd",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 1600, "h": 900, "title": "Hala", "is_interactive": true },
+    "Line1.dc.html": { "x": 1680, "y": 0, "w": 1600, "h": 900, "title": "Linia pakująca 1", "is_interactive": true },
+    "Status.dc.html": { "x": 3360, "y": 0, "w": 1000, "h": 900, "title": "Stan projektu", "is_interactive": true }
+  },
+  "order": ["Main.dc.html", "Line1.dc.html", "Status.dc.html"],
+  "notes": {
+    "heading": { "x": 0, "y": -300, "text": "Optix Demo Factory — podgląd ekranów z symulacji C#", "kind": "title1", "maxW": 4360 }
+  },
+  "designSystems": []
+}

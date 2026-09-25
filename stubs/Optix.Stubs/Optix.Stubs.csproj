@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- @summary: Compile-only stand-ins for the FTOptix API surface used by src/Factory.Optix. Never shipped to Studio. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NoWarn>CS0067;CS8981</NoWarn>
+  </PropertyGroup>
+</Project>
