@@ -1,11 +1,13 @@
 # Konfiguracja w FactoryTalk Optix Studio (jednorazowo)
 
 Wymaga Optix Studio 1.4+ (NetSolution na .NET 6 lub 8). Kod używa C# 10, więc zadziała na obu.
+Projekt Maćka: `Factory_demo`, Optix Studio 1.7.5.13 (ProductVersion 1.7), utworzony z wbudowanym Git Studio.
 
 1. Sklonuj repo i przełącz się na gałąź `claude/dev`.
-2. W Studio utwórz nowy projekt `OptixDemoFactory` w folderze `optix/` repozytorium
-   (wynik: `optix/OptixDemoFactory/OptixDemoFactory.optix`).
-3. Zamknij Studio. W pliku `optix/OptixDemoFactory/ProjectFiles/NetSolution/OptixDemoFactory.csproj`
+2. Przenieś (albo utwórz w Studio) projekt `Factory_demo` do folderu `optix/` repozytorium
+   (wynik: `optix/Factory_demo/Factory_demo.optix`). Lokalny `.git` utworzony przez Studio w folderze projektu
+   usuń albo pomiń — historią zarządza repo nadrzędne.
+3. Zamknij Studio. W pliku `optix/Factory_demo/ProjectFiles/NetSolution/Factory_demo.csproj`
    dodaj przed `</Project>`:
 
 ```xml

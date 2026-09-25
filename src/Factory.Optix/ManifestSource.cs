@@ -12,7 +12,7 @@ public static class ManifestSource
     /// <summary>ProjectFiles/factory.json: what runtime (and a deployed panel) reads.</summary>
     public static string FilePath => ResourceUri.FromProjectRelativePath(OptixNames.ManifestFile).Uri;
 
-    /// <summary>Repo layout: optix/OptixDemoFactory/ProjectFiles -> ../../../factory.json is the source of truth.</summary>
+    /// <summary>Repo layout: optix/Factory_demo/ProjectFiles -> ../../../factory.json is the source of truth.</summary>
     public static string RepoPath => Path.GetFullPath(Path.Combine(Path.GetDirectoryName(FilePath) ?? ".", "..", "..", "..", OptixNames.ManifestFile));
 
     /// <summary>Design time only: copy the repo manifest into ProjectFiles when it is newer.</summary>
