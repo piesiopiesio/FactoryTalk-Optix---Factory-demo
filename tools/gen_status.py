@@ -23,7 +23,7 @@ def backlog_next(limit: int = 5) -> list[str]:
 
 def journal(limit: int = 3) -> list[dict]:
     text = (ROOT / "JOURNAL.md").read_text(encoding="utf-8")
-    entries = re.findall(r"^## (\d{4}-\d{2}-\d{2})\n(.*?)(?=^## |\Z)", text, flags=re.M | re.S)
+    entries = re.findall(r"^## (\d{4}-\d{2}-\d{2}[^\n]*)\n(.*?)(?=^## |\Z)", text, flags=re.M | re.S)  # "## 2026-09-26 (przebieg dzienny)"
     return [{"date": d, "text": "\n".join(l.lstrip("- ").strip() for l in body.strip().splitlines() if l.strip())} for d, body in entries[:limit]]
 
 
@@ -41,7 +41,8 @@ def main() -> int:
         "updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
         "commit": git("rev-parse", "--short", "HEAD"),
-        "source": "github" if git("remote") not in ("", "?") else "lokalna kopia",
+        # Only the "github" remote counts; a clone restored from the canvas bundle has origin = the bundle file.
+        "source": "github" if "github" in git("remote").split() else "kopia z canvasu",
         "tests": tests(),
         "checks": summary["checks"],
         "kpi": {"oee": line["kpi"]["Oee"], "throughput": line["kpi"]["ThroughputPerMin"]},

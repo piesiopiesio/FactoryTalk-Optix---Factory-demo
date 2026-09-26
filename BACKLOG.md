@@ -6,8 +6,8 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
 - [ ] [S] Czytelne nazwy piór trendu (dziś `L1_oee`) — np. `L1 OEE`, bez psucia nazw kolumn w bazie
-- [ ] [M] [studio] Użytkownicy: LoginForm + UsernameLabel w nagłówku, role Operator / Utrzymanie ruchu (Start/Stop vs Kasuj awarie), IdleTimeoutLogic
-- [ ] [S] [studio] Stop linii z potwierdzeniem (ConfirmationDialog) albo DelayedButton „przytrzymaj, aby zatrzymać”
+- [ ] [M] [studio] Użytkownicy: LoginForm + UsernameLabel w nagłówku, role Operator / Utrzymanie ruchu (Start/Stop vs Kasuj awarie), IdleTimeoutLogic — **w toku** (kod lokalnie w sesji Studio, czeka na włączony PC)
+- [ ] [S] [studio] Stop linii z potwierdzeniem (ConfirmationDialog) albo DelayedButton „przytrzymaj, aby zatrzymać” — **w toku** (razem z pozycją wyżej)
 - [ ] [S] Separator tysięcy po polsku w Optix (dziś „1,612”) — locale projektu `pl-PL` albo format w StringFormatter
 - [ ] [S] Kliknięcie kafla linii na hali przełącza zakładkę na ekran linii
 - [ ] [M] Cykl uzupełniania zbiornika napełniarki — stan `Maintenance` + zdarzenie `LowTank` w przebiegu, test
