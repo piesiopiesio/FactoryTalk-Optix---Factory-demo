@@ -115,7 +115,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Optix/AlarmGenerator.cs` — One DigitalAlarm per equipment in Alarms/Factory, linked to Model/Factory/<path>/faultActive; Severity from priority 1-4; operator acknowledges.
 - `src/Factory.Optix/CommandBits.cs` — Runtime side of HMI commands: polls cmdStart/cmdStop/cmdReset bits and Hall/timeScale, executes on SimEngine, clears bits.
 - `src/Factory.Optix/Factory.Optix.csproj` — Cloud compile check of the NetLogic layer against stubs. In Studio these .cs files are linked into NetSolution instead.
-- `src/Factory.Optix/FactoryBuilder.cs` — Design-time NetLogic: Build() regenerates types, Model/Factory, alarms, screens and window tabs from factory.json; Clean() removes them.
+- `src/Factory.Optix/FactoryBuilder.cs` — Design-time NetLogic: Build() regenerates types, Model/Factory, alarms, screens, tabs from factory.json + demo accounts; Clean() removes them.
 - `src/Factory.Optix/HallView.cs` — Level 1 screen (HallScreen): zones, one tile per line with state, KPIs and a live mini-map of its stations.
 - `src/Factory.Optix/LibraryViews.cs` — Screens built from Template Library widgets: Alarms (AlarmGrid + history), Trends (AdvancedTrend), Login (LoginForm).
 - `src/Factory.Optix/LinePanel.cs` — Right-hand panel of a line screen: state, OEE/KPIs, commands (Start, Stop with confirmation, reset, time) by user role, active fault list.
@@ -127,11 +127,11 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Optix/OptixBinder.cs` — Runtime bridge: writes changed [Signal] values (+ stateColor) from SimEngine into Model/Factory variables.
 - `src/Factory.Optix/OptixNames.cs` — Optix-side naming: project paths, camelCase variable names, .NET -> OPC UA data type mapping, UI colors, screen scale.
 - `src/Factory.Optix/ScreenGenerator.cs` — Regenerates the HMI from factory.json: HallScreen, LineScreen_<id> per line, Alarms/Trends/Login screens, MainWindow chrome/tabs.
-- `src/Factory.Optix/SecurityGenerator.cs` — Demo accounts: groups Operatorzy/UtrzymanieRuchu and users from <project>/demo-users.json (test passwords, not in the repo).
-- `src/Factory.Optix/SimulationLogic.cs` — Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits.
+- `src/Factory.Optix/SecurityGenerator.cs` — Demo accounts: design time creates groups Operatorzy/UtrzymanieRuchu + users from demo-users.json; runtime sets their test passwords.
+- `src/Factory.Optix/SimulationLogic.cs` — Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits, sets demo passwords.
 - `src/Factory.Optix/StationTable.cs` — Station table under the line diagram: one row per station (state, good/reject, cycle, speed, progress, fault message).
 - `src/Factory.Optix/TypeGenerator.cs` — Creates one Optix ObjectType per Core class (FillerType, ConveyorType, LineType, HallType...) with a variable per [Signal].
-- `src/Factory.Optix/Ui.cs` — Widget factory for generated screens (pixels): boxes, labels, buttons, bindings, formatters, click -> NetLogic method.
+- `src/Factory.Optix/Ui.cs` — Widget factory for generated screens (pixels): boxes, labels, buttons, bindings, formatters, click -> set variable.
 - `src/Factory.Optix/WindowGenerator.cs` — MainWindow chrome owned by the builder: background, header (plant KPIs + fault annunciator) and NavigationPanel tabs.
 - `src/Sim.Cli/Checks.cs` — Behavior checks on a finished run: KPI targets, faults present, no dead station, bottle conservation.
 - `src/Sim.Cli/LayoutExport.cs` — Writes design/data/layout.json (zones, line rects, station + belt rects) so the preview never re-implements geometry.
