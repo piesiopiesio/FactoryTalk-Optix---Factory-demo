@@ -9,7 +9,7 @@ namespace FTOptix.NetLogic
     {
         public IUAObject LogicObject { get; }
         public IUANode Owner { get; }
-        public NetLogicSession Session { get; }
+        public FTOptix.Core.Session Session { get; }
         public virtual void Start() { }
         public virtual void Stop() { }
     }
@@ -22,14 +22,8 @@ namespace FTOptix.NetLogic
     }
 
     public static class ObjectTypes { public static readonly NodeId NetLogic = new(3, 1); }
-
-    /// <summary>Real type name differs; only these members are used (checked in Template Library LoginForm logic).</summary>
-    public sealed class NetLogicSession
-    {
-        public FTOptix.Core.User User { get; }
-        public FTOptix.Core.ChangePasswordResult ChangePassword(string userName, string newPassword, string oldPassword) => new();
-    }
 }
+
 
 namespace FTOptix.HMIProject
 {
@@ -60,6 +54,11 @@ namespace FTOptix.Core
     public static class ReferenceTypes { public static readonly NodeId HasGroup = new(6, 1); }
     public enum ChangePasswordResultCode { Success, WrongOldPassword, PasswordAlreadyUsed, PasswordTooShort, UserNotFound, UnsupportedOperation }
     public sealed class ChangePasswordResult { public ChangePasswordResultCode ResultCode { get; } }
+    public sealed class Session
+    {
+        public User User { get; }
+        public ChangePasswordResult ChangePassword(string userName, string newPassword, string oldPassword) => new();
+    }
 
     public struct Color
     {

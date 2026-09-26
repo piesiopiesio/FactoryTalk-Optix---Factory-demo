@@ -1,4 +1,4 @@
-// @summary: Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits.
+// @summary: Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits, sets demo passwords.
 #region Using directives
 using System;
 using UAManagedCore;
@@ -41,6 +41,8 @@ public class SimulationLogic : BaseNetLogic
         {
             Log.Error("SimulationLogic", "Start failed: " + ex.Message);
         }
+        try { SecurityGenerator.ApplyPasswords(Session); }   // demo accounts (ProjectFiles/demo-users.json)
+        catch (Exception ex) { Log.Warning("SimulationLogic", "Demo passwords not set: " + ex.Message); }
     }
 
     public override void Stop()

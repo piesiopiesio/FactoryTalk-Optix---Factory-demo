@@ -1,4 +1,4 @@
-// @summary: Design-time NetLogic: Build() regenerates types, Model/Factory, alarms, screens and window tabs from factory.json; Clean() removes them.
+// @summary: Design-time NetLogic: Build() regenerates types, Model/Factory, alarms, screens, tabs from factory.json + demo accounts; Clean() removes them.
 #region Using directives
 using System;
 using UAManagedCore;
@@ -45,6 +45,9 @@ public class FactoryBuilder : BaseNetLogic
 
             ScreenGenerator.Build(manifest, hall);
             Log.Info("FactoryBuilder", $"Built {hall.Lines.Count} line(s), {types.Count} types, screens + tabs from {ManifestSource.FilePath}");
+            // Studio adds method nodes (Execute menu) only for methods present when the node was created,
+            // so demo accounts are also (idempotently) created by Build.
+            CreateDemoUsers();
         }
         catch (Exception ex)
         {
@@ -52,19 +55,12 @@ public class FactoryBuilder : BaseNetLogic
         }
     }
 
-    /// <summary>Groups Operatorzy/UtrzymanieRuchu + users and test passwords from demo-users.json (project root).</summary>
+    /// <summary>Groups Operatorzy/UtrzymanieRuchu + users from demo-users.json (project root); passwords are set at runtime start.</summary>
     [ExportMethod]
     public void CreateDemoUsers()
     {
-        try
-        {
-            foreach (var (name, password) in SecurityGenerator.Build())
-            {
-                var result = Session.ChangePassword(name, password, string.Empty);
-                Log.Info("FactoryBuilder", $"User {name}: password {result.ResultCode}");
-            }
-        }
-        catch (Exception ex) { Log.Error("FactoryBuilder", "CreateDemoUsers failed: " + ex); }
+        try { SecurityGenerator.Build(); }
+        catch (Exception ex) { Log.Error("FactoryBuilder", "CreateDemoUsers failed: " + ex.Message); }
     }
 
     [ExportMethod]
