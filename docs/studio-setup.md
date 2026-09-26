@@ -37,12 +37,16 @@ Pliki w `NetSolution/Factory` są generowane — edytuj `src/` w repo.
 - Nowa metoda [ExportMethod] trafia do menu Execute dopiero po Ctrl+S w Studio; sama zmiana pliku (auto-kompilacja) nie dodaje węzła metody.
 - `Session.ChangePassword` nie działa w Studio (brak obsługi metody) — hasła kont ustawia runtime.
 - Czarne zrzuty ekranu (widać tylko pasek zadań) po starcie PC: Win+Ctrl+Shift+B (restart sterownika grafiki).
+- Sterowanie ekranem: nie wywoływać „open application” dla działającego Studio (otwiera drugą instancję);
+  ikona obok książek („Open .NET Solution”) uruchamia VS Code.
 
 ## Elementy dodane raz w Studio (Template Library, 2026-09-25)
 Wstawione przeciągnięciem z okna Libraries (ikona książek na pasku) — Build ich nie tworzy, tylko używa:
 - `UI/ISAStyleSheet1` (ISA Style Sheet) — styl obu presentation engine (`StyleSheet` w Native i Web).
 - `UI/AlarmBanner`, `UI/AlarmGrid`, `UI/AlarmHistoryGridWithFilter` (typy), `UI/AdvancedTrend/*` (folder z `AdvancedTrendMain`).
 - `UI/LoginForm/*` (folder z typem `LoginForm`), `UI/UsernameLabel` (typ) — dodane 2026-09-26.
+- GraphicElements do faceplate'ów stacji: `UI/Bottle1`, `UI/Carton`, `UI/PalletBoxSide`, `UI/PhotoEyeSensorSide` (2026-09-26).
+  Okno Libraries: ikona książek na pasku narzędzi (x≈314 przy 1456×819), wyszukiwarka po nazwie wyświetlanej („Bottle”, „Pallet Box”).
 - `DataStores/EmbeddedDatabase1`, `Loggers/AlarmsEventLogger1` (Store = EmbeddedDatabase1),
   `Loggers/DataLogger1` (Store = EmbeddedDatabase1, co 1 s; zmienne dopisuje `LoggerGenerator`).
 Brak któregoś elementu = Build pomija ten fragment i pisze ostrzeżenie w Output (nazwy w `OptixNames.Lib*`).

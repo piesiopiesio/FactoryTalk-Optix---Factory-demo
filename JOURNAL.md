@@ -2,6 +2,13 @@
 
 Najnowszy wpis na górze. Maks. 14 wpisów; starsze w `docs/archive/`.
 
+## 2026-09-26 (południe, sesja przy Studio)
+- Faceplate stacji (poziom 3): klik w kafel stacji → ramka nad schematem (`StationDetail`), zamykana „Zamknij”; `Line/selectedStation`.
+- Grafiki z Template Library (GraphicElements): Bottle1, Carton, PalletBoxSide, PhotoEyeSensorSide — płasko (nakładki 3D ukryte),
+  ruch tylko z danymi: poziom w butelce = napełnienie, głowica zakręcarki schodzi z postępem cyklu, etykieta owija się,
+  linia skanu wizyjnej, karton = butelki w kartonie, stos na palecie = kartony. „Kasuj awarię” w faceplacie tylko dla UR.
+- Budżet kontekstu źródeł podniesiony do 68k (warstwa Optix urosła; rdzeń nadal 12k).
+
 ## 2026-09-26 (przedpołudnie, sesja przy Studio)
 - Logowanie i role gotowe i sprawdzone w emulatorze (podgląd CDP): bez logowania przyciski linii nieaktywne; `operator` — Start/Stop/tempo,
   „Kasuj awarie” wyłączone; `serwis` — także kasowanie. Stop otwiera nakładkę Zatrzymaj/Anuluj (`stopRequest`), obie ścieżki działają.

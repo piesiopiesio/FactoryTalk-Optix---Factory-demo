@@ -24,13 +24,17 @@ public static class OptixNames
     public const string LibAlarmBanner = "UI/AlarmBanner", LibAlarmGrid = "UI/AlarmGrid",
         LibAlarmHistory = "UI/AlarmHistoryGridWithFilter", LibTrend = "UI/AdvancedTrend/AdvancedTrendMain",
         DataLogger = "Loggers/DataLogger1", AlarmLogger = "Loggers/AlarmsEventLogger1",
-        LibLoginForm = "UI/LoginForm/LoginForm", LibUsernameLabel = "UI/UsernameLabel", UsersFolder = "Security/Users";
+        LibLoginForm = "UI/LoginForm/LoginForm", LibUsernameLabel = "UI/UsernameLabel", UsersFolder = "Security/Users",
+        // GraphicElements (Template Library) used in station faceplates
+        LibBottle = "UI/Bottle1", LibCarton = "UI/Carton", LibPallet = "UI/PalletBoxSide", LibPhotoEye = "UI/PhotoEyeSensorSide";
     public const string StateColorVar = "stateColor";
     /// <summary>HMI -> simulation command variables (PLC-style: HMI sets true, SimulationLogic executes and clears).
     /// Buttons use the built-in VariableCommands.Set, so no NetLogic method nodes are needed.</summary>
     public const string CmdStart = "cmdStart", CmdStop = "cmdStop", CmdReset = "cmdReset", TimeScale = "timeScale";
     /// <summary>Line flag: Stop pressed, confirmation shown (HMI-only state; cleared by Yes/Cancel and at runtime start).</summary>
     public const string StopRequest = "stopRequest";
+    /// <summary>Line: station faceplate shown on the line screen (1..n = station index, 0 = none).</summary>
+    public const string SelectedStation = "selectedStation";
 
     // Rockwell Process HMI Style Guide (docs/hmi-style.md, design/theme.json).
     public const uint BackgroundArgb = 0xFFE0E0E0, GroupArgb = 0xFFE8E8E8, LineArgb = 0xFFA0A0A4, TitleArgb = 0xFF3F3F3F,

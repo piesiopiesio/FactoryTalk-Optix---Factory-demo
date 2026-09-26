@@ -37,6 +37,7 @@ public static class ScreenGenerator
             LineView.Build(screen, spec, line);
             StationTable.Build(screen, spec);
             LinePanel.Build(screen, spec, line, hall.Id);
+            StationDetail.Build(screen, spec, line);   // last: drawn on top of the diagram
             tabs.Add((spec.Name, screen));
         }
 

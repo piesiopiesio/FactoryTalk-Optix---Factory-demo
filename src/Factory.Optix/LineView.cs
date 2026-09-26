@@ -18,7 +18,8 @@ public static class LineView
 
         var byId = spec.Stations.ToDictionary(s => s.Id);
         foreach (var c in spec.Conveyors) Belt(screen, spec.Id, c, byId[c.From], byId[c.To]);
-        foreach (var s in spec.Stations) Tile(screen, spec.Id, s, line.Stations.First(x => x.Id == s.Id));
+        for (var i = 0; i < spec.Stations.Count; i++)
+            Tile(screen, spec.Id, spec.Stations[i], line.Stations.First(x => x.Id == spec.Stations[i].Id), i + 1);
     }
 
     static void Belt(IUANode screen, string lineId, FX.ConveyorSpec c, FX.StationSpec from, FX.StationSpec to)
@@ -37,7 +38,7 @@ public static class LineView
         Ui.Value(screen, "BeltInfo_" + c.Id, c.Id + "  {0} szt.", lx, ly, 13, N.ModelVar(path, nameof(FM.Conveyor.ItemsOnBelt)));
     }
 
-    static void Tile(IUANode screen, string lineId, FX.StationSpec s, FM.Station station)
+    static void Tile(IUANode screen, string lineId, FX.StationSpec s, FM.Station station, int k)
     {
         var r = FX.Layout.Station(s);
         double w = N.L(r.W), h = N.L(r.H);
@@ -59,5 +60,6 @@ public static class LineView
                 N.ModelVar(path, own[i].Name));
 
         Ui.Bar(tile, "Progress", 4, h - 7, w - 8, 4, false, N.LineArgb, N.ModelVar(path, nameof(FM.Station.Progress)));
+        StationDetail.ClickTarget(tile, w, h, lineId, k);   // click -> station faceplate
     }
 }

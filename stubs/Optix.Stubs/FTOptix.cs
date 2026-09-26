@@ -99,7 +99,9 @@ namespace FTOptix.UI
         float Height { get; set; }
         IUAVariable HeightVariable { get; }
         float LeftMargin { get; set; }
+        IUAVariable LeftMarginVariable { get; }
         float TopMargin { get; set; }
+        IUAVariable TopMarginVariable { get; }
         bool Visible { get; set; }
         bool Enabled { get; set; }
         IUAVariable VisibleVariable { get; }

@@ -129,6 +129,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Optix/ScreenGenerator.cs` — Regenerates the HMI from factory.json: HallScreen, LineScreen_<id> per line, Alarms/Trends/Login screens, MainWindow chrome/tabs.
 - `src/Factory.Optix/SecurityGenerator.cs` — Demo accounts: design time creates groups Operatorzy/UtrzymanieRuchu + users from demo-users.json; runtime sets their test passwords.
 - `src/Factory.Optix/SimulationLogic.cs` — Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits, sets demo passwords.
+- `src/Factory.Optix/StationDetail.cs` — Level 3 station faceplate on the line screen: tile click opens it; Template Library graphic moved only by live signals.
 - `src/Factory.Optix/StationTable.cs` — Station table under the line diagram: one row per station (state, good/reject, cycle, speed, progress, fault message).
 - `src/Factory.Optix/TypeGenerator.cs` — Creates one Optix ObjectType per Core class (FillerType, ConveyorType, LineType, HallType...) with a variable per [Signal].
 - `src/Factory.Optix/Ui.cs` — Widget factory for generated screens (pixels): boxes, labels, buttons, bindings, formatters, click -> set variable.

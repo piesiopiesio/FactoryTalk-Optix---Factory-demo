@@ -40,6 +40,9 @@ public class AccessLogic : BaseNetLogic
             if (panel.Get("FaultList") is IUANode list)
                 foreach (var row in list.Children)
                     if (row.Get("Reset") is Item reset) reset.Enabled = level >= AccessLevels.Maintenance;
+            if (panel.Owner != null)   // station faceplates on the same screen: reset = maintenance
+                foreach (var detail in panel.Owner.Children.Where(c => c.BrowseName.StartsWith("Detail_")))
+                    if (detail.Get("Reset") is Item reset) reset.Enabled = level >= AccessLevels.Maintenance;
             if (panel.Get("AccessInfo") is Label info) info.Text = "Uprawnienia: " + AccessLevels.Describe(level);
         }
         catch (Exception ex)
