@@ -18,16 +18,19 @@ public static class OptixNames
     /// <summary>Children of MainWindow owned by FactoryBuilder; everything else in the window is left alone.</summary>
     public static readonly string[] WindowParts = { "Background", "Header", "MainNav" };
     public const string ManifestFile = "factory.json";        // ProjectFiles/factory.json
-    public const string AlarmsScreen = "AlarmsScreen", TrendsScreen = "TrendsScreen";   // generated
+    public const string AlarmsScreen = "AlarmsScreen", TrendsScreen = "TrendsScreen", LoginScreen = "LoginScreen";   // generated
 
     // Template Library items imported once in Studio (docs/studio-setup.md). Missing -> that part is skipped with a warning.
     public const string LibAlarmBanner = "UI/AlarmBanner", LibAlarmGrid = "UI/AlarmGrid",
         LibAlarmHistory = "UI/AlarmHistoryGridWithFilter", LibTrend = "UI/AdvancedTrend/AdvancedTrendMain",
-        DataLogger = "Loggers/DataLogger1", AlarmLogger = "Loggers/AlarmsEventLogger1";
+        DataLogger = "Loggers/DataLogger1", AlarmLogger = "Loggers/AlarmsEventLogger1",
+        LibLoginForm = "UI/LoginForm/LoginForm", LibUsernameLabel = "UI/UsernameLabel", UsersFolder = "Security/Users";
     public const string StateColorVar = "stateColor";
     /// <summary>HMI -> simulation command variables (PLC-style: HMI sets true, SimulationLogic executes and clears).
     /// Buttons use the built-in VariableCommands.Set, so no NetLogic method nodes are needed.</summary>
     public const string CmdStart = "cmdStart", CmdStop = "cmdStop", CmdReset = "cmdReset", TimeScale = "timeScale";
+    /// <summary>Line flag: Stop pressed, confirmation shown (HMI-only state; cleared by Yes/Cancel and at runtime start).</summary>
+    public const string StopRequest = "stopRequest";
 
     // Rockwell Process HMI Style Guide (docs/hmi-style.md, design/theme.json).
     public const uint BackgroundArgb = 0xFFE0E0E0, GroupArgb = 0xFFE8E8E8, LineArgb = 0xFFA0A0A4, TitleArgb = 0xFF3F3F3F,

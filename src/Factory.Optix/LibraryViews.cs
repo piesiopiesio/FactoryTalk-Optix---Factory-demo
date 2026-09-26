@@ -1,4 +1,4 @@
-// @summary: Screens built from Template Library widgets: Alarms (AlarmGrid + filtered history) and Trends (AdvancedTrend on DataLogger1).
+// @summary: Screens built from Template Library widgets: Alarms (AlarmGrid + history), Trends (AdvancedTrend), Login (LoginForm).
 #region Using directives
 using System;
 using UAManagedCore;
@@ -52,5 +52,23 @@ public static class LibraryViews
         var trend = Instance(screen, "Trend", N.LibTrend, 24, 50, 1872, 900);
         var logger = Project.Current.Get(N.DataLogger);
         if (trend != null && logger != null) trend.GetVariable("Logger").Value = logger.NodeId;
+    }
+
+    /// <summary>Login tab: Template Library LoginForm (login / logout / change password) on Security/Users + role legend.</summary>
+    public static void Login(IUANode screen)
+    {
+        Ui.Background(screen, "Background", N.BackgroundArgb);
+        Ui.Text(screen, "Title", "Logowanie", 24, 14, 20, N.TitleArgb, bold: true);
+        var box = Ui.Box(screen, "FormGroup", 24, 50, 360, 360, N.GroupArgb, N.LineArgb);
+        var form = Instance(box, "LoginForm", N.LibLoginForm, 30, 30, 300, 300);
+        var users = Project.Current.Get(N.UsersFolder);
+        if (form != null && users != null) form.GetVariable("Users").Value = users.NodeId;
+
+        var roles = Ui.Box(screen, "Roles", 408, 50, 560, 200, N.GroupArgb, N.LineArgb);
+        Ui.Text(roles, "Title", "Uprawnienia", 16, 12, 16, N.TitleArgb, bold: true);
+        Ui.Text(roles, "None", "Bez logowania: tylko podgląd (przyciski linii nieaktywne).", 16, 48, 14, N.TitleArgb);
+        Ui.Text(roles, "Operator", "Operator (grupa Operatorzy): Start, Stop z potwierdzeniem, tempo symulacji.", 16, 80, 14, N.TitleArgb);
+        Ui.Text(roles, "Maintenance", "Utrzymanie ruchu (grupa UtrzymanieRuchu): jak operator + kasowanie awarii.", 16, 112, 14, N.TitleArgb);
+        Ui.Text(roles, "Accounts", "Konta demo: operator, serwis (hasła w pamięci projektu Claude).", 16, 156, 13, N.UnitsArgb);
     }
 }

@@ -45,6 +45,10 @@ public static class WindowGenerator
         Ui.Text(header, "FaultsCaption", "Awarie", 1596, 20, 14, N.TitleArgb);
         Ui.Value(header, "Faults", "{0}", 1660, 16, 20, N.ModelVar(hallPath, nameof(FM.Hall.ActiveFaults)));
 
+        // Template Library UsernameLabel: {Session}/User name ("Anonymous" until someone logs in on the Logowanie tab).
+        Ui.Text(header, "UserCaption", "Użytkownik", 1720, 4, 12, N.UnitsArgb);
+        LibraryViews.Instance(header, "UserName", N.LibUsernameLabel, 1720, 22, 180, 26);
+
         var nav = InformationModel.Make<NavigationPanel>("MainNav");
         nav.HorizontalAlignment = HorizontalAlignment.Stretch;
         nav.VerticalAlignment = VerticalAlignment.Stretch;

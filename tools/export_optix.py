@@ -17,7 +17,7 @@ import argparse, pathlib, shutil
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 # Classes bound by name to NetLogic nodes. Studio looks for NetSolution/<NodeName>.cs and writes a template
 # (duplicate class -> build error) when it is missing, so these go to the NetSolution root.
-NETLOGIC_ROOT = {"FactoryBuilder.cs", "SimulationLogic.cs"}
+NETLOGIC_ROOT = {"FactoryBuilder.cs", "SimulationLogic.cs", "AccessLogic.cs"}
 HEADER = "// GENERATED COPY of {src} (tools/export_optix.py). Edit the repo, not this file.\n"
 
 

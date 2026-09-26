@@ -47,7 +47,11 @@ namespace UAManagedCore
         void SetAlias(string aliasName, NodeId target);
     }
 
-    public interface IUAReferences { void AddReference(NodeId referenceType, IUANode target); }
+    public interface IUAReferences
+    {
+        void AddReference(NodeId referenceType, IUANode target);
+        IEnumerable<IUAObject> GetObjects(NodeId referenceType, bool includeSubtypes);
+    }
 
     public interface IContext { INodeFactory NodeFactory { get; } }
 

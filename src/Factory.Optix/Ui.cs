@@ -1,7 +1,8 @@
-// @summary: Widget factory for generated screens (pixels): boxes, labels, buttons, bindings, formatters, click -> NetLogic method.
+// @summary: Widget factory for generated screens (pixels): boxes, labels, buttons, bindings, formatters, click -> set variable.
 #region Using directives
 using System;
 using System.Globalization;
+using System.Linq;
 using UAManagedCore;
 using OpcUa = UAManagedCore.OpcUa;
 using FTOptix.HMIProject;
@@ -125,39 +126,21 @@ public static class Ui
         return bar;
     }
 
-    /// <summary>MouseClick -> call an [ExportMethod] on a model object (same structure Studio writes for Events).</summary>
-    public static void OnClick(IUANode widget, IUANode target, string method, params (string Name, NodeId Type, object Value)[] args)
-    {
-        var eh = InformationModel.MakeObject<FTOptix.CoreBase.EventHandler>("OnMouseClick");
-        widget.Add(eh);
-        eh.GetOrCreateVariable("ListenEventType").Value = FTOptix.UI.ObjectTypes.MouseClickEvent;
-        var mc = InformationModel.MakeObject("MethodContainer1");
-        eh.MethodsToCall.Add(mc);
-        var objPtr = InformationModel.MakeVariable<NodePointer>("ObjectPointer", OpcUa.DataTypes.NodeId);
-        objPtr.Value = target.NodeId;
-        mc.Add(objPtr);
-        var methodName = InformationModel.MakeVariable("Method", OpcUa.DataTypes.String);
-        methodName.Value = method;
-        mc.Add(methodName);
-        var inputArgs = InformationModel.MakeObject("InputArguments");
-        mc.Add(inputArgs);
-        foreach (var a in args)
-        {
-            var v = inputArgs.Context.NodeFactory.MakeVariable(NodeId.Random(inputArgs.NodeId.NamespaceIndex),
-                a.Name, a.Type, OpcUa.VariableTypes.BaseDataVariableType, false, a.Value);
-            inputArgs.Add(v);
-        }
-    }
-
-    /// <summary>MouseClick -> built-in VariableCommands.Set(variable, value): the Studio "Set variable value" action.</summary>
+    /// <summary>MouseClick -> built-in VariableCommands.Set(variable, value): the Studio "Set variable value" action.
+    /// Called again on the same widget it adds another action to the same handler (executed in order).</summary>
     public static void OnClickSet(IUANode widget, string variablePath, object value)
     {
         var target = Project.Current.GetVariable(variablePath);
         if (target == null) { Log.Warning("Ui", "Missing command variable " + variablePath); return; }
-        var eh = InformationModel.MakeObject<FTOptix.CoreBase.EventHandler>("OnMouseClick");
-        widget.Add(eh);
-        eh.GetOrCreateVariable("ListenEventType").Value = FTOptix.UI.ObjectTypes.MouseClickEvent;
-        var mc = InformationModel.MakeObject("MethodContainer1");
+        var eh = widget.Get("OnMouseClick") as FTOptix.CoreBase.EventHandler;
+        if (eh == null)
+        {
+            eh = InformationModel.MakeObject<FTOptix.CoreBase.EventHandler>("OnMouseClick");
+            widget.Add(eh);
+            eh.GetOrCreateVariable("ListenEventType").Value = FTOptix.UI.ObjectTypes.MouseClickEvent;
+        }
+        var existing = eh.Get("MethodsToCall")?.Children.Count() ?? 0;   // MethodsToCall is a placeholder collection (no Children)
+        var mc = InformationModel.MakeObject("MethodContainer" + (existing + 1));
         eh.MethodsToCall.Add(mc);
         var objPtr = InformationModel.MakeVariable<NodePointer>("ObjectPointer", OpcUa.DataTypes.NodeId);
         objPtr.Value = InformationModel.GetObject(FTOptix.CoreBase.Objects.VariableCommands).NodeId;
@@ -179,6 +162,4 @@ public static class Ui
         inputArgs.Add(index);
     }
 
-    public static (string, NodeId, object) Str(string name, string value) => (name, OpcUa.DataTypes.String, value);
-    public static (string, NodeId, object) Int(string name, int value) => (name, OpcUa.DataTypes.Int32, value);
 }

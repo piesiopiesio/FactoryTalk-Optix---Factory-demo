@@ -29,6 +29,8 @@ public sealed class CommandBits
             Add(modelRoot, line.Id, OptixNames.CmdStop, FM.Cmd.Stop);
             Add(modelRoot, line.Id, OptixNames.CmdReset, FM.Cmd.Reset);
             foreach (var eq in line.Equipment) Add(modelRoot, eq.Path, OptixNames.CmdReset, FM.Cmd.Reset);
+            var stopRequest = modelRoot.GetVariable($"{line.Id}/{OptixNames.StopRequest}");
+            if (stopRequest != null) stopRequest.Value = false;   // no stale Stop confirmation after a restart
         }
         Log.Info("CommandBits", $"{bits.Count} command bits watched");
     }

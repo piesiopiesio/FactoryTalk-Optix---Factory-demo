@@ -52,6 +52,21 @@ public class FactoryBuilder : BaseNetLogic
         }
     }
 
+    /// <summary>Groups Operatorzy/UtrzymanieRuchu + users and test passwords from demo-users.json (project root).</summary>
+    [ExportMethod]
+    public void CreateDemoUsers()
+    {
+        try
+        {
+            foreach (var (name, password) in SecurityGenerator.Build())
+            {
+                var result = Session.ChangePassword(name, password, string.Empty);
+                Log.Info("FactoryBuilder", $"User {name}: password {result.ResultCode}");
+            }
+        }
+        catch (Exception ex) { Log.Error("FactoryBuilder", "CreateDemoUsers failed: " + ex); }
+    }
+
     [ExportMethod]
     public void Clean()
     {

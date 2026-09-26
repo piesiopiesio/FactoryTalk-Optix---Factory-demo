@@ -1,4 +1,4 @@
-// @summary: Right-hand panel of a line screen: state, OEE/KPIs, line commands (start/stop/reset/time) and the active fault list.
+// @summary: Right-hand panel of a line screen: state, OEE/KPIs, commands (Start, Stop with confirmation, reset, time) by user role, active fault list.
 #region Using directives
 using System;
 using System.Linq;
@@ -46,8 +46,12 @@ public static class LinePanel
         }
         y += 12;
 
+        // Filled by AccessLogic (per session): which commands the logged-in user may use.
+        Ui.Text(panel, "AccessInfo", "Uprawnienia: …", Pad, y, 13, N.UnitsArgb);
+        y += 26;
+        var commandsY = y;
         Command(panel, "Start", "Start", Pad, y, 146, N.ModelVar(spec.Id, N.CmdStart), true);
-        Command(panel, "Stop", "Stop", Pad + 158, y, 146, N.ModelVar(spec.Id, N.CmdStop), true);
+        Command(panel, "Stop", "Stop", Pad + 158, y, 146, N.ModelVar(spec.Id, N.StopRequest), true);   // opens the confirmation
         y += 54;
         Command(panel, "Reset", "Kasuj awarie", Pad, y, 304, N.ModelVar(spec.Id, N.CmdReset), true);
         y += 54;
@@ -56,11 +60,29 @@ public static class LinePanel
         y += 50;
         Ui.Value(panel, "TimeScale", "Tempo symulacji ×{0}", Pad, y, 13, N.ModelVar(hallId, N.TimeScale));
         y += 34;
+        StopConfirm(panel, spec, Pad - 6, commandsY - 6);   // after the buttons: drawn on top of them
 
         Ui.Text(panel, "FaultsTitle", "Aktywne awarie", Pad, y, 16, N.TitleArgb, bold: true);
         Ui.Value(panel, "FaultsCount", "({0})", 150, y, 16, N.ModelVar(spec.Id, nameof(FM.Line.ActiveFaults)));
         y += 30;
         FaultList(panel, line, Pad, y);
+
+        // Runtime UI NetLogic (class AccessLogic): enables commands by the session user's group.
+        panel.Add(InformationModel.MakeObject("AccessLogic", FTOptix.NetLogic.ObjectTypes.NetLogic));
+    }
+
+    /// <summary>Confirmation over the command buttons, visible while the line's stopRequest is set (Stop pressed).</summary>
+    static void StopConfirm(IUANode panel, FX.LineSpec spec, double x, double y)
+    {
+        var box = Ui.Box(panel, "StopConfirm", x, y, 316, 150, N.WhiteArgb, N.TitleArgb, 2);
+        Ui.Link(box.VisibleVariable, N.ModelVar(spec.Id, N.StopRequest));
+        Ui.Text(box, "Question", "Zatrzymać linię?", 14, 10, 18, N.TitleArgb, bold: true);
+        Ui.Text(box, "Detail", $"{spec.Name}: praca stacji zostanie przerwana.", 14, 40, 13, N.UnitsArgb);
+        var yes = Ui.Button(box, "StopConfirmYes", "Zatrzymaj", 14, 90, 140);
+        Ui.OnClickSet(yes, N.ModelVar(spec.Id, N.CmdStop), true);
+        Ui.OnClickSet(yes, N.ModelVar(spec.Id, N.StopRequest), false);
+        var no = Ui.Button(box, "StopConfirmNo", "Anuluj", 162, 90, 140);
+        Ui.OnClickSet(no, N.ModelVar(spec.Id, N.StopRequest), false);
     }
 
     static void Command(IUANode parent, string name, string text, double x, double y, double w, string variablePath, object value)

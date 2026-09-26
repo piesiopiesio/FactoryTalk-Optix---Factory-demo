@@ -11,6 +11,7 @@ public static class ManifestSource
 {
     /// <summary>ProjectFiles/factory.json: what runtime (and a deployed panel) reads.</summary>
     public static string FilePath => ResourceUri.FromProjectRelativePath(OptixNames.ManifestFile).Uri;
+    public static string ProjectFilesDir => Path.GetDirectoryName(FilePath) ?? ".";
 
     /// <summary>Repo layout: optix/Factory_demo/ProjectFiles -> ../../../factory.json is the source of truth.</summary>
     public static string RepoPath => Path.GetFullPath(Path.Combine(Path.GetDirectoryName(FilePath) ?? ".", "..", "..", "..", OptixNames.ManifestFile));

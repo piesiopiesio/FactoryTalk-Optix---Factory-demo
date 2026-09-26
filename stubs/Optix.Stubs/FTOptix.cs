@@ -9,6 +9,7 @@ namespace FTOptix.NetLogic
     {
         public IUAObject LogicObject { get; }
         public IUANode Owner { get; }
+        public NetLogicSession Session { get; }
         public virtual void Start() { }
         public virtual void Stop() { }
     }
@@ -20,15 +21,14 @@ namespace FTOptix.NetLogic
         public void Dispose() { }
     }
 
-    public sealed class LongRunningTask : IDisposable
-    {
-        public LongRunningTask(Action<LongRunningTask> action, IUANode owner) { }
-        public bool IsCancellationRequested => false;
-        public void Start() { }
-        public void Dispose() { }
-    }
-
     public static class ObjectTypes { public static readonly NodeId NetLogic = new(3, 1); }
+
+    /// <summary>Real type name differs; only these members are used (checked in Template Library LoginForm logic).</summary>
+    public sealed class NetLogicSession
+    {
+        public FTOptix.Core.User User { get; }
+        public FTOptix.Core.ChangePasswordResult ChangePassword(string userName, string newPassword, string oldPassword) => new();
+    }
 }
 
 namespace FTOptix.HMIProject
@@ -55,6 +55,11 @@ namespace FTOptix.Core
     public interface Folder : IUAObject { }
     public static class DataTypes { public static readonly NodeId VariablePointer = new(5, 1); }
     public interface NodePointer : IUAVariable { }
+    public interface User : IUAObject { }
+    public interface Group : IUAObject { }
+    public static class ReferenceTypes { public static readonly NodeId HasGroup = new(6, 1); }
+    public enum ChangePasswordResultCode { Success, WrongOldPassword, PasswordAlreadyUsed, PasswordTooShort, UserNotFound, UnsupportedOperation }
+    public sealed class ChangePasswordResult { public ChangePasswordResultCode ResultCode { get; } }
 
     public struct Color
     {
@@ -97,6 +102,7 @@ namespace FTOptix.UI
         float LeftMargin { get; set; }
         float TopMargin { get; set; }
         bool Visible { get; set; }
+        bool Enabled { get; set; }
         IUAVariable VisibleVariable { get; }
         bool HitTestVisible { get; set; }
         HorizontalAlignment HorizontalAlignment { get; set; }
