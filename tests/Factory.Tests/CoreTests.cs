@@ -137,3 +137,16 @@ public static class SignalTests
             Assert.Equal(StatePalette.Hex(s), states.GetProperty(s.ToString()).GetString(), $"theme color for {s}");
     }
 }
+
+public static class AlarmTests
+{
+    [Test] public static void AlarmPrioritiesFollowIsa182()
+    {
+        var eq = Fixtures.Engine().Hall.Lines.SelectMany(l => l.Equipment).ToList();
+        AlarmPriority P(string type) => eq.First(e => e.TypeKey == type).AlarmPriority;
+        Assert.Equal(AlarmPriority.Urgent, P("palletizer"), "light curtain (safety) must be Urgent");
+        Assert.True(eq.OfType<Conveyor>().All(c => c.AlarmPriority < P("labeler")), "belt drive fault must outrank missing labels");
+        var sev = Enum.GetValues<AlarmPriority>().Select(AlarmPriorities.Severity).ToList();
+        Assert.True(sev.Zip(sev.Skip(1)).All(p => p.First > p.Second) && sev.All(s => s is >= 1 and <= 1000), "Severity must fall 1->4 within 1..1000");
+    }
+}

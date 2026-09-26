@@ -14,6 +14,8 @@ public sealed class CasePacker : Station
 
     protected override string[] FaultCatalog => new[] { "Brak kartonów", "Zacięcie klapy kartonu", "Błąd kleju" };
 
+    public override AlarmPriority AlarmPriority => AlarmPriority.Medium;
+
     protected override Outcome Process(Item item, SimContext ctx)
     {
         UnitsInCase++;

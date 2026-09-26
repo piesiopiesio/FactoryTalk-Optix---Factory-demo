@@ -16,6 +16,8 @@ public sealed class Filler : Station
 
     protected override string[] FaultCatalog => new[] { "Zacięcie butelki w karuzeli", "Błąd zaworu nalewaka", "Niskie ciśnienie CO2" };
 
+    public override AlarmPriority AlarmPriority => AlarmPriority.High;
+
     protected override MachineState? Hold(SimContext ctx)
     {
         var capacity = Param("tankL", 800);

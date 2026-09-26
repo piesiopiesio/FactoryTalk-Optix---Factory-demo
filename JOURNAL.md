@@ -2,6 +2,14 @@
 
 Najnowszy wpis na górze. Maks. 14 wpisów; starsze w `docs/archive/`.
 
+## 2026-09-26 (przebieg dzienny)
+- Zadanie: priorytety alarmów wg ISA-18.2. Nowy `AlarmPriority` (Core, 1 Pilny … 4 Niski) nadpisywany per typ urządzenia;
+  `AlarmGenerator` ustawia `Severity` (900/700/500/300) i dopisuje `P1…P4` do komunikatu (priorytet nie tylko kolorem).
+- Założenie: jeden alarm na urządzenie, więc priorytet jest per urządzenie, nie per kod awarii (to zostaje w pozycji [M] „priorytet w FaultCatalog”).
+  `Severity` zapisywane przez `GetVariable("Severity")` + `new UAValue(ushort)` — właściwość `DigitalAlarm.Severity` niesprawdzona w CheatSheet; do weryfikacji w Studio.
+- Test `AlarmPrioritiesFollowIsa182` (15/15). KPI bez zmian (30 min, seed 42): OEE 74,6 %, 71,6 butelki/min średnio, 9 awarii.
+- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: czytelne nazwy piór trendu.
+
 ## 2026-09-26 (noc, sesja z Maćkiem przy Studio)
 - Przegląd bibliotek: wbudowana Template Library 1.7.5.13 (~45 widgetów, grafiki, skrypty, 4 style), 134 repo FactoryTalk-Optix,
   biblioteki urządzeń i pakiet OEE+PackML z Innovation Center. Rekomendacje w BACKLOG (znacznik [studio]).

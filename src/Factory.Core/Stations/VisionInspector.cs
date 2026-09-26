@@ -13,6 +13,8 @@ public sealed class VisionInspector : Station
 
     protected override string[] FaultCatalog => new[] { "Kamera nie odpowiada", "Brudny obiektyw" };
 
+    public override AlarmPriority AlarmPriority => AlarmPriority.Medium;
+
     protected override Outcome Process(Item item, SimContext ctx) =>
         item.IsGoodBottle ? Outcome.Pass(item) : Outcome.Reject;
 }

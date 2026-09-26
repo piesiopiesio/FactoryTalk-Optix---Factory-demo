@@ -13,6 +13,8 @@ public sealed class Capper : Station
 
     protected override string[] FaultCatalog => new[] { "Brak nakrętek", "Przeciążenie głowicy" };
 
+    public override AlarmPriority AlarmPriority => AlarmPriority.High;
+
     protected override Outcome Process(Item item, SimContext ctx)
     {
         var target = Param("torqueNm", 2.2);

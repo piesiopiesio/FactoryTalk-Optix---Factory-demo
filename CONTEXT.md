@@ -29,7 +29,8 @@ factory.json ──FactoryLoader──▶ Hall (Core) ──SimEngine.Tick(0.1s)
 8. Determinizm: seed z `factory.json`; te same wejścia = ten sam przebieg (test `SameSeedSameRun`).
 
 ## Model domeny (src/Factory.Core)
-- `Equipment` (abstr.): Id, Name, State, FaultModel (MTBF/MTTR), komendy Start/Stop/Reset, czas w stanach.
+- `Equipment` (abstr.): Id, Name, State, FaultModel (MTBF/MTTR), komendy Start/Stop/Reset, czas w stanach,
+  `AlarmPriority` 1–4 (→ Severity alarmu Optix, `AlarmPriorities`).
 - `Station : Equipment`: cykl acquire → `Process(item)` → emit; Starved/Blocked; liczniki Processed/Good/Reject.
 - Stacje (`Stations/`, klucz `[StationType]`): feeder, filler, capper, labeler, vision, casepacker, palletizer.
 - `Conveyor : Equipment`: akumulująca taśma (pitch, length, speed), blokuje stację przed sobą.
@@ -88,6 +89,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Core/Manifest/FactoryManifest.cs` — DTOs mirroring factory.json (camelCase JSON). Pure data, no behavior.
 - `src/Factory.Core/Manifest/Layout.cs` — Screen geometry from factory.json (1600x900 logical canvas): station/conveyor rects + layout lint. Used by Optix builder and preview.
 - `src/Factory.Core/Manifest/StationRegistry.cs` — Maps manifest "type" keys to Station classes via [StationType]; the single extension point for new stations.
+- `src/Factory.Core/Model/AlarmPriority.cs` — Alarm priority 1-4 (ISA-18.2 / Rockwell HMI guide) per equipment type and its OPC UA Severity (1-1000) mapping.
 - `src/Factory.Core/Model/Conveyor.cs` — Accumulating belt: items keep pitch spacing, travel length/speed, block the upstream station when full.
 - `src/Factory.Core/Model/Equipment.cs` — Base of every simulated device: identity, commands, fault model, state machine hook, time-in-state.
 - `src/Factory.Core/Model/Hall.cs` — Root of the factory: hall metadata, zones (layout only) and production lines.
@@ -108,7 +110,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Core/Stations/Labeler.cs` — Applies labels from a roll; random misses mark the bottle defective; roll stock is consumed.
 - `src/Factory.Core/Stations/Palletizer.cs` — Line sink: stacks cases on pallets; a full pallet triggers a timed pallet change (Maintenance).
 - `src/Factory.Core/Stations/VisionInspector.cs` — Inspects every bottle; anything not filled, capped, labeled and defect-free is rejected.
-- `src/Factory.Optix/AlarmGenerator.cs` — One DigitalAlarm per equipment in Alarms/Factory, linked to Model/Factory/<path>/faultActive; operator acknowledges.
+- `src/Factory.Optix/AlarmGenerator.cs` — One DigitalAlarm per equipment in Alarms/Factory, linked to Model/Factory/<path>/faultActive; Severity from priority 1-4; operator acknowledges.
 - `src/Factory.Optix/CommandBits.cs` — Runtime side of HMI commands: polls cmdStart/cmdStop/cmdReset bits and Hall/timeScale, executes on SimEngine, clears bits.
 - `src/Factory.Optix/Factory.Optix.csproj` — Cloud compile check of the NetLogic layer against stubs. In Studio these .cs files are linked into NetSolution instead.
 - `src/Factory.Optix/FactoryBuilder.cs` — Design-time NetLogic: Build() regenerates types, Model/Factory, alarms, screens and window tabs from factory.json; Clean() removes them.

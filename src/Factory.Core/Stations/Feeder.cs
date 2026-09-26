@@ -10,6 +10,7 @@ namespace Factory.Core.Stations;
 public sealed class Feeder : Station
 {
     protected override string[] FaultCatalog => new[] { "Przewrócona butelka", "Brak butelek w zasobniku" };
+    public override AlarmPriority AlarmPriority => AlarmPriority.Low;
 
     protected override Item? Acquire(SimContext ctx) => new() { Id = ctx.NewItemId(), Kind = ItemKind.Bottle };
 

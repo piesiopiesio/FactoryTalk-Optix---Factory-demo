@@ -30,6 +30,8 @@ public abstract class Equipment
 
     /// <summary>Fault catalog of this device type; code = index + 1.</summary>
     protected virtual string[] FaultCatalog => new[] { "Awaria napędu", "Czujnik nie odpowiada" };
+    /// <summary>Priority of this device's fault alarm (one alarm per device); drives Optix Severity.</summary>
+    public virtual AlarmPriority AlarmPriority => AlarmPriority.Medium;
     public string Describe(int code) => code >= 1 && code <= FaultCatalog.Length ? FaultCatalog[code - 1] : $"Kod {code}";
 
     public void Tick(SimContext ctx)

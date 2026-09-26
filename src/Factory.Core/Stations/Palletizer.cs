@@ -16,6 +16,8 @@ public sealed class Palletizer : Station
 
     protected override string[] FaultCatalog => new[] { "Kurtyna świetlna naruszona", "Brak pustych palet" };
 
+    public override AlarmPriority AlarmPriority => AlarmPriority.Urgent;
+
     protected override MachineState? Hold(SimContext ctx)
     {
         if (changeLeftS <= 0) return null;

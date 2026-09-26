@@ -15,6 +15,8 @@ public sealed class Labeler : Station
 
     protected override string[] FaultCatalog => new[] { "Zerwana taśma etykiet", "Błąd czujnika etykiety" };
 
+    public override AlarmPriority AlarmPriority => AlarmPriority.Low;
+
     protected override Outcome Process(Item item, SimContext ctx)
     {
         var roll = Param("rollLabels", 6000);

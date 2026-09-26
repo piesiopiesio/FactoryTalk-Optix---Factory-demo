@@ -5,7 +5,6 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
-- [ ] [S] Priorytety alarmów (Severity wg ISA-18.2: kurtyna/awaria napędu wyżej niż brak etykiet) w `AlarmGenerator`
 - [ ] [S] Czytelne nazwy piór trendu (dziś `L1_oee`) — np. `L1 OEE`, bez psucia nazw kolumn w bazie
 - [ ] [M] [studio] Użytkownicy: LoginForm + UsernameLabel w nagłówku, role Operator / Utrzymanie ruchu (Start/Stop vs Kasuj awarie), IdleTimeoutLogic
 - [ ] [S] [studio] Stop linii z potwierdzeniem (ConfirmationDialog) albo DelayedButton „przytrzymaj, aby zatrzymać”
@@ -43,10 +42,14 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] `snapshot.py`: mini-mapa stacji w kafelku linii na obrazie hali (jak w artboardzie `Main`)
 - [ ] [S] [agent] Wejście/wyjście butelek między klatkami w `Line1` (pojawianie się na 0 i znikanie na 1 w trakcie interpolacji, bez skoku co 2 s)
 - [ ] [S] [agent] `snapshot.py --sub 0.5`: klatka pośrednia taśm (ta sama reguła co `beltAt` w artboardzie), żeby agent widział interpolację
+- [ ] [S] [agent] Priorytet alarmu w podglądzie: `P1–P4` przy awarii w faceplate `Line1` i w nagłówku (z `AlarmPriority` w layout.json)
+- [ ] [S] [agent] Studio: sprawdzić, czy `Severity` ustawione przez `GetVariable("Severity")` widać w AlarmGrid; jeśli jest właściwość `DigitalAlarm.Severity` — dopisać do stubów i użyć jej
 
 ## Blocked
 
 ## Done
+- [x] 2026-09-26 Priorytety alarmów 1–4 (ISA-18.2): `AlarmPriority` w Core (paletyzator Pilny, napełniarka/zakręcarka Wysoki,
+  taśmy/kartoniarka/wizyjna Średni, podajnik/etykieciarka Niski) → `Severity` 900/700/500/300 i prefiks `P1…` w komunikacie alarmu; test
 - [x] 2026-09-26 Pakiet bibliotek 1: ISAStyleSheet, AlarmBanner w nagłówku, zakładka Alarmy (aktywne z Ack/Confirm + historia
   z EmbeddedDatabase), zakładka Trendy (AdvancedTrend, 16 zmiennych w DataLogger1) — sprawdzone w emulatorze
 - [x] 2026-09-25 Pierwsze uruchomienie w Studio (Factory_demo, Optix 1.7.5.13): FactoryBuilder generuje typy, model, alarmy,
