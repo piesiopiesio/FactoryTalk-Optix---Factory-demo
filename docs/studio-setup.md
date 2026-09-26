@@ -37,6 +37,9 @@ Pliki w `NetSolution/Factory` są generowane — edytuj `src/` w repo.
 - Nowa metoda [ExportMethod] trafia do menu Execute dopiero po Ctrl+S w Studio; sama zmiana pliku (auto-kompilacja) nie dodaje węzła metody.
 - `Session.ChangePassword` nie działa w Studio (brak obsługi metody) — hasła kont ustawia runtime.
 - Czarne zrzuty ekranu (widać tylko pasek zadań) po starcie PC: Win+Ctrl+Shift+B (restart sterownika grafiki).
+- NetLogic tworzony przez Build (usuwany i tworzony od nowa) dostaje od Studio pusty szablon klasy w miejsce naszego pliku →
+  węzły NetLogic tworzyć raz i nie kasować (AccessLogic siedzi w MainWindow, poza `WindowParts`).
+- W podglądzie web kliknięcie w Rectangle nie wywołuje zdarzenia → do otwierania faceplate'u służy przycisk „Szczegóły”.
 - Sterowanie ekranem: nie wywoływać „open application” dla działającego Studio (otwiera drugą instancję);
   ikona obok książek („Open .NET Solution”) uruchamia VS Code.
 

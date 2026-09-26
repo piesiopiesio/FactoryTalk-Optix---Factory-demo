@@ -67,8 +67,6 @@ public static class LinePanel
         y += 30;
         FaultList(panel, line, Pad, y);
 
-        // Runtime UI NetLogic (class AccessLogic): enables commands by the session user's group.
-        panel.Add(InformationModel.MakeObject("AccessLogic", FTOptix.NetLogic.ObjectTypes.NetLogic));
     }
 
     /// <summary>Confirmation over the command buttons, visible while the line's stopRequest is set (Stop pressed).</summary>

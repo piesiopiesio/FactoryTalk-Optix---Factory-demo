@@ -23,8 +23,18 @@ public static class StationDetail
     /// <summary>Invisible click target over a station tile (last child, so on top): selectedStation = k.</summary>
     public static void ClickTarget(IUANode tile, double w, double h, string lineId, int k)
     {
-        var hit = Ui.Box(tile, "Open", 0, 0, w, h, Transparent, Transparent, 0);
+        // Alpha 1/255, not 0: a fully transparent rectangle is not hit-tested (clicks fall through, checked in the emulator).
+        var hit = Ui.Box(tile, "Open", 0, 0, w, h, 0x01FFFFFF, Transparent, 0);
         Ui.OnClickSet(hit, N.ModelVar(lineId, N.SelectedStation), k);
+    }
+
+    /// <summary>Explicit "Szczegóły" button above the tile (web client does not deliver clicks on a Rectangle).
+    /// Narrow (78 px) so it stays left of a vertical belt leaving the tile centre.</summary>
+    public static void OpenButton(IUANode screen, string stationId, double tileX, double tileY, string lineId, int k)
+    {
+        var b = Ui.Button(screen, "Details_" + stationId, "Szczegóły", tileX, tileY - 46, 78, 40);
+        b.FontSize = 12;
+        Ui.OnClickSet(b, N.ModelVar(lineId, N.SelectedStation), k);
     }
 
     public static void Build(IUANode screen, FX.LineSpec spec, FM.Line line)
@@ -68,7 +78,9 @@ public static class StationDetail
         fault.WordWrap = true;
         var reset = Ui.Button(box, "Reset", "Kasuj awarię", lx, H - 60, 200);     // enabled by AccessLogic (maintenance)
         Ui.OnClickSet(reset, V(N.CmdReset), true);
-        Ui.Text(box, "Hint", "Grafika porusza się tylko z danymi procesu (cykl, poziom, liczba sztuk).", GX, H - 34, 11, N.UnitsArgb);
+        var hint = Ui.Text(box, "Hint", "Grafika porusza się tylko z danymi procesu (cykl, poziom, liczba sztuk).", GX, GY + GH + 8, 11, N.UnitsArgb);
+        hint.Width = (float)GW;
+        hint.WordWrap = true;
     }
 
     /// <summary>Style guide: no decorative animation — every movement is a live value (cycle progress, level, count).</summary>

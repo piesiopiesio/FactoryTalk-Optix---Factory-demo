@@ -60,6 +60,7 @@ public static class LineView
                 N.ModelVar(path, own[i].Name));
 
         Ui.Bar(tile, "Progress", 4, h - 7, w - 8, 4, false, N.LineArgb, N.ModelVar(path, nameof(FM.Station.Progress)));
-        StationDetail.ClickTarget(tile, w, h, lineId, k);   // click -> station faceplate
+        StationDetail.ClickTarget(tile, w, h, lineId, k);   // click on the tile -> station faceplate (native UI)
+        StationDetail.OpenButton(screen, s.Id, N.X(r.X), N.Y(r.Y), lineId, k);   // explicit button (works in web too)
     }
 }

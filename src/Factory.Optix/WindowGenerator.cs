@@ -62,5 +62,10 @@ public static class WindowGenerator
             nav.Panels.Add(item);
         }
         nav.CurrentTabIndex = 0;
+
+        // Runtime UI NetLogic (class AccessLogic), created once: a re-created NetLogic node gets its class file
+        // replaced by Studio's empty template, so this one is not part of WindowParts and survives Build.
+        if (window.Get("AccessLogic") == null)
+            window.Add(InformationModel.MakeObject("AccessLogic", FTOptix.NetLogic.ObjectTypes.NetLogic));
     }
 }

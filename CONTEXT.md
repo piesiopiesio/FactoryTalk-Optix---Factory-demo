@@ -111,7 +111,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Core/Stations/Palletizer.cs` — Line sink: stacks cases on pallets; a full pallet triggers a timed pallet change (Maintenance).
 - `src/Factory.Core/Stations/VisionInspector.cs` — Inspects every bottle; anything not filled, capped, labeled and defect-free is rejected.
 - `src/Factory.Optix/AccessLevels.cs` — Operator access model: level from the session user's groups (0 anonymous, 1 Operatorzy, 2 UtrzymanieRuchu) + control thresholds.
-- `src/Factory.Optix/AccessLogic.cs` — Runtime UI NetLogic under each LinePanel: enables commands by the session user's level (AccessLevels), per session.
+- `src/Factory.Optix/AccessLogic.cs` — Runtime UI NetLogic in MainWindow: enables line commands and faceplate resets by the session user's level (AccessLevels).
 - `src/Factory.Optix/AlarmGenerator.cs` — One DigitalAlarm per equipment in Alarms/Factory, linked to Model/Factory/<path>/faultActive; Severity from priority 1-4; operator acknowledges.
 - `src/Factory.Optix/CommandBits.cs` — Runtime side of HMI commands: polls cmdStart/cmdStop/cmdReset bits and Hall/timeScale, executes on SimEngine, clears bits.
 - `src/Factory.Optix/Factory.Optix.csproj` — Cloud compile check of the NetLogic layer against stubs. In Studio these .cs files are linked into NetSolution instead.

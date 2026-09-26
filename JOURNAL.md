@@ -8,6 +8,8 @@ Najnowszy wpis na górze. Maks. 14 wpisów; starsze w `docs/archive/`.
   ruch tylko z danymi: poziom w butelce = napełnienie, głowica zakręcarki schodzi z postępem cyklu, etykieta owija się,
   linia skanu wizyjnej, karton = butelki w kartonie, stos na palecie = kartony. „Kasuj awarię” w faceplacie tylko dla UR.
 - Budżet kontekstu źródeł podniesiony do 68k (warstwa Optix urosła; rdzeń nadal 12k).
+- Sprawdzone w emulatorze: faceplate'y Zakręcarki, Napełniarki, Kartoniarki; „Kasuj awarię” szare bez logowania.
+  Poprawki po teście: przycisk „Szczegóły” nad kaflem (klik w Rectangle w web nie działa), AccessLogic przeniesiony do MainWindow.
 
 ## 2026-09-26 (przedpołudnie, sesja przy Studio)
 - Logowanie i role gotowe i sprawdzone w emulatorze (podgląd CDP): bez logowania przyciski linii nieaktywne; `operator` — Start/Stop/tempo,
