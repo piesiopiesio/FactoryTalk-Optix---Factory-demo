@@ -2,6 +2,12 @@
 
 Najnowszy wpis na górze. Maks. 14 wpisów; starsze w `docs/archive/`.
 
+## 2026-09-26 (rano, sesja z Maćkiem z telefonu)
+- Przegląd przebiegu dziennego: priorytety alarmów OK (15/15); Severity do sprawdzenia w Studio przy najbliższym Execute Build.
+- `gen_status`: źródło „github” tylko przy zdalnym `github` (kopia z canvasu miała origin = bundle), dziennik czyta nagłówki z dopiskiem.
+- Zdalny dostęp do PC: wybrane uśpienie zamiast wyłączania + codzienna pobudka 07:00 na 60 min
+  (`tools/windows/setup-sleep-wake.ps1`, `keep-awake.ps1`, opis `docs/windows-sleep-wake.md`). Czeka na instalację i test przy PC.
+
 ## 2026-09-26 (przebieg dzienny)
 - Zadanie: priorytety alarmów wg ISA-18.2. Nowy `AlarmPriority` (Core, 1 Pilny … 4 Niski) nadpisywany per typ urządzenia;
   `AlarmGenerator` ustawia `Severity` (900/700/500/300) i dopisuje `P1…P4` do komunikatu (priorytet nie tylko kolorem).
