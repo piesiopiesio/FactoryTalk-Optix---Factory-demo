@@ -110,13 +110,15 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Core/Stations/Labeler.cs` — Applies labels from a roll; random misses mark the bottle defective; roll stock is consumed.
 - `src/Factory.Core/Stations/Palletizer.cs` — Line sink: stacks cases on pallets; a full pallet triggers a timed pallet change (Maintenance).
 - `src/Factory.Core/Stations/VisionInspector.cs` — Inspects every bottle; anything not filled, capped, labeled and defect-free is rejected.
+- `src/Factory.Optix/AccessLevels.cs` — Operator access model: level from the session user's groups (0 anonymous, 1 Operatorzy, 2 UtrzymanieRuchu) + control thresholds.
+- `src/Factory.Optix/AccessLogic.cs` — Runtime UI NetLogic under each LinePanel: enables commands by the session user's level (AccessLevels), per session.
 - `src/Factory.Optix/AlarmGenerator.cs` — One DigitalAlarm per equipment in Alarms/Factory, linked to Model/Factory/<path>/faultActive; Severity from priority 1-4; operator acknowledges.
 - `src/Factory.Optix/CommandBits.cs` — Runtime side of HMI commands: polls cmdStart/cmdStop/cmdReset bits and Hall/timeScale, executes on SimEngine, clears bits.
 - `src/Factory.Optix/Factory.Optix.csproj` — Cloud compile check of the NetLogic layer against stubs. In Studio these .cs files are linked into NetSolution instead.
 - `src/Factory.Optix/FactoryBuilder.cs` — Design-time NetLogic: Build() regenerates types, Model/Factory, alarms, screens and window tabs from factory.json; Clean() removes them.
 - `src/Factory.Optix/HallView.cs` — Level 1 screen (HallScreen): zones, one tile per line with state, KPIs and a live mini-map of its stations.
-- `src/Factory.Optix/LibraryViews.cs` — Screens built from Template Library widgets: Alarms (AlarmGrid + filtered history) and Trends (AdvancedTrend on DataLogger1).
-- `src/Factory.Optix/LinePanel.cs` — Right-hand panel of a line screen: state, OEE/KPIs, line commands (start/stop/reset/time) and the active fault list.
+- `src/Factory.Optix/LibraryViews.cs` — Screens built from Template Library widgets: Alarms (AlarmGrid + history), Trends (AdvancedTrend), Login (LoginForm).
+- `src/Factory.Optix/LinePanel.cs` — Right-hand panel of a line screen: state, OEE/KPIs, commands (Start, Stop with confirmation, reset, time) by user role, active fault list.
 - `src/Factory.Optix/LineView.cs` — Level 2 line diagram (LineScreen_<id>): belts with occupancy bars and station tiles (state, counts, own signals, progress).
 - `src/Factory.Optix/LoggerGenerator.cs` — Fills Loggers/DataLogger1 with the KPI signals worth trending: line doubles, stations' own doubles, belt occupancy.
 - `src/Factory.Optix/ManifestSource.cs` — Loads ProjectFiles/factory.json inside Optix (builds the Core Hall); design-time sync copies the repo-root manifest in.
@@ -124,7 +126,8 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Optix/NodeUtil.cs` — Small node helpers for generators: ensure/reset folders, clear children, delete by name.
 - `src/Factory.Optix/OptixBinder.cs` — Runtime bridge: writes changed [Signal] values (+ stateColor) from SimEngine into Model/Factory variables.
 - `src/Factory.Optix/OptixNames.cs` — Optix-side naming: project paths, camelCase variable names, .NET -> OPC UA data type mapping, UI colors, screen scale.
-- `src/Factory.Optix/ScreenGenerator.cs` — Regenerates the HMI from factory.json: HallScreen, LineScreen_<id> per line, Alarms/Trends screens, MainWindow chrome/tabs.
+- `src/Factory.Optix/ScreenGenerator.cs` — Regenerates the HMI from factory.json: HallScreen, LineScreen_<id> per line, Alarms/Trends/Login screens, MainWindow chrome/tabs.
+- `src/Factory.Optix/SecurityGenerator.cs` — Demo accounts: groups Operatorzy/UtrzymanieRuchu and users from <project>/demo-users.json (test passwords, not in the repo).
 - `src/Factory.Optix/SimulationLogic.cs` — Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits.
 - `src/Factory.Optix/StationTable.cs` — Station table under the line diagram: one row per station (state, good/reject, cycle, speed, progress, fault message).
 - `src/Factory.Optix/TypeGenerator.cs` — Creates one Optix ObjectType per Core class (FillerType, ConveyorType, LineType, HallType...) with a variable per [Signal].

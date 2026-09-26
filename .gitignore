@@ -12,3 +12,4 @@ optix/**/ProjectFiles/NetSolution/obj/
 *.user
 .vs/
 dist/
+__pycache__/
