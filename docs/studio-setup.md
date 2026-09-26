@@ -22,6 +22,9 @@ Pliki w `NetSolution/Factory` są generowane — edytuj `src/` w repo.
   **Build** uruchamia się w Studio: prawy klik → Execute Build (wątek UI Studio; wywołanie przez most ftx-mcp
   z wątku HTTP może zamknąć Studio).
 - `Model/SimulationLogic` — runtime NetLogic, tworzy go Build, jeśli brakuje. Klasa: `NetSolution/SimulationLogic.cs`.
+- `NetLogic/FactoryBuilder` → Execute **CreateDemoUsers** — grupy `Operatorzy`, `UtrzymanieRuchu` i konta z
+  `Factory_demo/demo-users.json` (katalog projektu, poza repo i ProjectFiles; hasła testowe w pamięci projektu Claude).
+- `LinePanel/AccessLogic` — runtime NetLogic tworzony przez Build w każdym panelu linii. Klasa: `NetSolution/AccessLogic.cs`.
 
 ## Pułapki (sprawdzone 2026-09-25)
 - Klasa NetLogic musi leżeć w `NetSolution/<NazwaWęzła>.cs`; inaczej Studio dopisze tam szablon → duplikat klasy.
@@ -36,6 +39,7 @@ Pliki w `NetSolution/Factory` są generowane — edytuj `src/` w repo.
 Wstawione przeciągnięciem z okna Libraries (ikona książek na pasku) — Build ich nie tworzy, tylko używa:
 - `UI/ISAStyleSheet1` (ISA Style Sheet) — styl obu presentation engine (`StyleSheet` w Native i Web).
 - `UI/AlarmBanner`, `UI/AlarmGrid`, `UI/AlarmHistoryGridWithFilter` (typy), `UI/AdvancedTrend/*` (folder z `AdvancedTrendMain`).
+- `UI/LoginForm/*` (folder z typem `LoginForm`), `UI/UsernameLabel` (typ) — dodane 2026-09-26.
 - `DataStores/EmbeddedDatabase1`, `Loggers/AlarmsEventLogger1` (Store = EmbeddedDatabase1),
   `Loggers/DataLogger1` (Store = EmbeddedDatabase1, co 1 s; zmienne dopisuje `LoggerGenerator`).
 Brak któregoś elementu = Build pomija ten fragment i pisze ostrzeżenie w Output (nazwy w `OptixNames.Lib*`).
@@ -46,8 +50,9 @@ Brak któregoś elementu = Build pomija ten fragment i pisze ostrzeżenie w Outp
 - `Alarms/Factory/*` — DigitalAlarm na `faultActive` każdego urządzenia.
 - `UI/Screens/HallScreen` (poziom 1) i `UI/Screens/LineScreen_<id>` (poziom 2: schemat, tabela stacji, panel KPI + komendy + awarie).
 - `UI/Screens/AlarmsScreen` (AlarmGrid z potwierdzaniem + historia z filtrem czasu) i `UI/Screens/TrendsScreen` (AdvancedTrend na DataLogger1).
+- `UI/Screens/LoginScreen` (LoginForm na `Security/Users` + opis ról); w panelu linii Stop z potwierdzeniem (`stopRequest`).
 - `Loggers/DataLogger1/VariablesToLog`: KPI linii, własne sygnały stacji (zbiornik, moment…), zapełnienie taśm.
-- W `UI/MainWindow`: `Background`, `Header` (średnie OEE, linie w pracy, AlarmBanner, lampka awarii), `MainNav` (zakładki).
+- W `UI/MainWindow`: `Background`, `Header` (średnie OEE, linie w pracy, AlarmBanner, lampka awarii, użytkownik), `MainNav` (zakładki).
 Wszystko inne (np. `UI/Custom`, własne ekrany) Build zostawia w spokoju.
 
 ## Weryfikacja
