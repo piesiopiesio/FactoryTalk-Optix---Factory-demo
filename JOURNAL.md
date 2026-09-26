@@ -2,6 +2,15 @@
 
 Najnowszy wpis na górze. Maks. 14 wpisów; starsze w `docs/archive/`.
 
+## 2026-09-26 (przedpołudnie, sesja przy Studio)
+- Logowanie i role gotowe i sprawdzone w emulatorze (podgląd CDP): bez logowania przyciski linii nieaktywne; `operator` — Start/Stop/tempo,
+  „Kasuj awarie” wyłączone; `serwis` — także kasowanie. Stop otwiera nakładkę Zatrzymaj/Anuluj (`stopRequest`), obie ścieżki działają.
+- Konta: Build zakłada grupy i użytkowników z `demo-users.json` (katalog projektu); hasła ustawia runtime (`SimulationLogic.Start` →
+  `Session.ChangePassword`), bo w Studio ta metoda nie istnieje. Hasła testowe w pamięci projektu Claude, nie w repo.
+- Priorytety alarmów z przebiegu dziennego sprawdzone: `GetVariable("Severity")` zwracało null → teraz `alarm.Severity`; P1 = 900 potwierdzone.
+- Pułapki Studio: nowa metoda [ExportMethod] pojawia się w menu Execute dopiero po Ctrl+S w Studio (nie po samej zmianie pliku);
+  automatyczna kompilacja po wgraniu plików bywa zawodna → Ctrl+S. Czarne zrzuty ekranu po starcie PC: pomógł Win+Ctrl+Shift+B.
+
 ## 2026-09-26 (rano, sesja z Maćkiem z telefonu)
 - Przegląd przebiegu dziennego: priorytety alarmów OK (15/15); Severity do sprawdzenia w Studio przy najbliższym Execute Build.
 - `gen_status`: źródło „github” tylko przy zdalnym `github` (kopia z canvasu miała origin = bundle), dziennik czyta nagłówki z dopiskiem.

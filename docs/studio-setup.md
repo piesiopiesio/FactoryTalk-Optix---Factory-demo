@@ -34,6 +34,9 @@ Pliki w `NetSolution/Factory` są generowane — edytuj `src/` w repo.
   (`cmdStart`/`cmdStop`/`cmdReset`, `Hall/timeScale`) wbudowanym `VariableCommands.Set`; `SimulationLogic`
   wykonuje je co 100 ms i kasuje (handshake jak w PLC).
 - Ctrl+S w Studio uruchamia kompilację NetSolution (po wgraniu plików). Execute działa na ostatniej udanej kompilacji.
+- Nowa metoda [ExportMethod] trafia do menu Execute dopiero po Ctrl+S w Studio; sama zmiana pliku (auto-kompilacja) nie dodaje węzła metody.
+- `Session.ChangePassword` nie działa w Studio (brak obsługi metody) — hasła kont ustawia runtime.
+- Czarne zrzuty ekranu (widać tylko pasek zadań) po starcie PC: Win+Ctrl+Shift+B (restart sterownika grafiki).
 
 ## Elementy dodane raz w Studio (Template Library, 2026-09-25)
 Wstawione przeciągnięciem z okna Libraries (ikona książek na pasku) — Build ich nie tworzy, tylko używa:

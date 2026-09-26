@@ -20,9 +20,8 @@ public static class AlarmGenerator
                 alarm.InputValueVariable.SetDynamicLink(source);
                 var prio = eq.AlarmPriority;
                 alarm.Message = $"P{(int)prio} {line.Name} / {eq.Name}: awaria";   // priority as text, not only color
-                // Severity (UInt16, 1-1000) set via the variable: property accessor not verified on Optix 1.7 stubs.
-                var severity = alarm.GetVariable("Severity");
-                if (severity != null) severity.Value = new UAValue(FM.AlarmPriorities.Severity(prio));
+                // OPC UA Severity 1-1000 (the Severity variable is not materialized on a new alarm: GetVariable returned null).
+                alarm.Severity = FM.AlarmPriorities.Severity(prio);
                 alarm.AutoAcknowledge = false;   // operator acknowledges in the Alarms tab (ISA-18.2)
                 alarm.AutoConfirm = false;
                 folder.Add(alarm);

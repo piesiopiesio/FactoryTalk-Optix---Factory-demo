@@ -170,5 +170,6 @@ namespace FTOptix.Alarm
         string Message { get; set; }
         bool AutoAcknowledge { get; set; }
         bool AutoConfirm { get; set; }
+        ushort Severity { get; set; }
     }
 }
