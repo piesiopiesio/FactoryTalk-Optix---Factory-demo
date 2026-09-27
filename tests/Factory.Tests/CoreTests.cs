@@ -150,3 +150,19 @@ public static class AlarmTests
         Assert.True(sev.Zip(sev.Skip(1)).All(p => p.First > p.Second) && sev.All(s => s is >= 1 and <= 1000), "Severity must fall 1->4 within 1..1000");
     }
 }
+
+public static class TrendTests
+{
+    [Test] public static void TrendPensKeepColumnsAndReadLikeOperatorText()
+    {
+        var pens = TrendPens.Of(Fixtures.Engine().Hall).ToList();
+        var cols = pens.Select(p => p.Column).ToList();
+        foreach (var must in new[] { "L1_oee", "L1_throughputPerMin", "L1_FILL_tankLevel", "L1_C1_occupancy" })
+            Assert.True(cols.Contains(must), $"DB column {must} missing (renaming a column orphans logged history)");
+        Assert.Equal(pens.Count, cols.Distinct().Count(), "duplicate DB columns");
+        Assert.Equal(pens.Count, pens.Select(p => p.Label).Distinct().Count(), "duplicate pen names");
+        Assert.Equal("L1 OEE [%]", pens.First(p => p.Column == "L1_oee").Label, "line OEE pen");
+        Assert.Equal("L1 Napełniarka: Zbiornik [%]", pens.First(p => p.Column == "L1_FILL_tankLevel").Label, "filler tank pen");
+        Assert.True(pens.All(p => !p.Label.Contains('_') && p.Label.Length <= 40), "pen names must be readable (no '_', <= 40 chars)");
+    }
+}

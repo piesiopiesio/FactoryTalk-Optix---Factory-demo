@@ -27,11 +27,11 @@ public sealed class Line
 
     [Signal] public MachineState State { get; private set; }
     [Signal] public string StateText => StatePalette.Label(State);
-    [Signal(Unit = "%", Decimals = 1)] public double Oee => Availability * Performance * Quality / 10000.0;
-    [Signal(Unit = "%", Decimals = 1)] public double Availability { get; private set; }
-    [Signal(Unit = "%", Decimals = 1)] public double Performance { get; private set; }
-    [Signal(Unit = "%", Decimals = 1)] public double Quality { get; private set; }
-    [Signal(Unit = "/min", Decimals = 1)] public double ThroughputPerMin { get; private set; }
+    [Signal(Unit = "%", Decimals = 1, Label = "OEE")] public double Oee => Availability * Performance * Quality / 10000.0;
+    [Signal(Unit = "%", Decimals = 1, Label = "Dostępność")] public double Availability { get; private set; }
+    [Signal(Unit = "%", Decimals = 1, Label = "Wydajność")] public double Performance { get; private set; }
+    [Signal(Unit = "%", Decimals = 1, Label = "Jakość")] public double Quality { get; private set; }
+    [Signal(Unit = "/min", Decimals = 1, Label = "Przepustowość")] public double ThroughputPerMin { get; private set; }
     [Signal] public long GoodUnits => deliveredUnits;
     [Signal] public long RejectUnits => Stations.Sum(s => s.Reject);
     [Signal] public int ActiveFaults => Equipment.Count(e => e.FaultActive);

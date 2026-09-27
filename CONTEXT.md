@@ -52,7 +52,8 @@ factory.json ──FactoryLoader──▶ Hall (Core) ──SimEngine.Tick(0.1s)
 - NetLogic design-time `NetLogic/FactoryBuilder`: `Build()` generuje model, alarmy, ekrany i zakładki; `Clean()`.
   Build uruchamia się w Studio (prawy klik → Execute), NIE przez most ftx-mcp (wątek HTTP może zamknąć Studio).
 - Widoki: `HallView` (poziom 1 + mini-mapa), `LineView` (schemat), `StationTable`, `LinePanel` (KPI, komendy, awarie),
-  `WindowGenerator` (nagłówek + NavigationPanel), `LibraryViews` (Alarmy, Trendy z Template Library), `LoggerGenerator`.
+  `WindowGenerator` (nagłówek + NavigationPanel), `LibraryViews` (Alarmy, Trendy z Template Library), `LoggerGenerator`
+  (lista z Core `TrendPens`: kolumna bazy = BrowseName — nie zmieniać formatu, nazwa pióra = DisplayName).
   Widgety tylko przez `Ui.cs`. Elementy Template Library (styl ISA, AlarmBanner/Grid, AdvancedTrend, loggery) dodaje się
   raz w Studio — lista w docs/studio-setup.md; brak = fragment pominięty z ostrzeżeniem.
 - Pętla ze Studio (sesja połączona z komputerem): `export_optix.py` → wgranie plików → `optix_build_check` →
@@ -98,6 +99,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Core/Model/MachineState.cs` — Machine states + shared color palette (used by Optix binder and Design preview).
 - `src/Factory.Core/Model/SignalAttribute.cs` — [Signal] marks a property exported to Optix variables, trace.json and the preview.
 - `src/Factory.Core/Model/Station.cs` — Template-method work cycle for stations: acquire -> process (subclass) -> emit; tracks starved/blocked.
+- `src/Factory.Core/Model/TrendPens.cs` — Signals worth trending (line KPIs, station doubles, belt occupancy) with DB column names and readable pen labels.
 - `src/Factory.Core/Sim/FaultModel.cs` — Random failures: exponential MTBF on running time, MTTR repair, optional auto-recover.
 - `src/Factory.Core/Sim/SimContext.cs` — Per-tick context passed to every node: dt, clock, RNG, event sink, id generator.
 - `src/Factory.Core/Sim/SimEngine.cs` — Runs the hall: fixed-step Tick(dt), commands by path ("L1", "L1/FILL"), event log, node enumeration.
@@ -120,7 +122,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Optix/LibraryViews.cs` — Screens built from Template Library widgets: Alarms (AlarmGrid + history), Trends (AdvancedTrend), Login (LoginForm).
 - `src/Factory.Optix/LinePanel.cs` — Right-hand panel of a line screen: state, OEE/KPIs, commands (Start, Stop with confirmation, reset, time) by user role, active fault list.
 - `src/Factory.Optix/LineView.cs` — Level 2 line diagram (LineScreen_<id>): belts with occupancy bars and station tiles (state, counts, own signals, progress).
-- `src/Factory.Optix/LoggerGenerator.cs` — Fills Loggers/DataLogger1 with the KPI signals worth trending: line doubles, stations' own doubles, belt occupancy.
+- `src/Factory.Optix/LoggerGenerator.cs` — Fills Loggers/DataLogger1 with Core's TrendPens: column = BrowseName (stable), readable pen name = DisplayName.
 - `src/Factory.Optix/ManifestSource.cs` — Loads ProjectFiles/factory.json inside Optix (builds the Core Hall); design-time sync copies the repo-root manifest in.
 - `src/Factory.Optix/ModelGenerator.cs` — Builds Model/Factory (Hall + lines with stations and conveyors, paths match SimEngine.Nodes()) and ensures Model/SimulationLogic.
 - `src/Factory.Optix/NodeUtil.cs` — Small node helpers for generators: ensure/reset folders, clear children, delete by name.

@@ -5,7 +5,6 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
-- [ ] [S] Czytelne nazwy piór trendu (dziś `L1_oee`) — np. `L1 OEE`, bez psucia nazw kolumn w bazie
 - [ ] [S] Separator tysięcy po polsku w Optix (dziś „1,612”) — locale projektu `pl-PL` albo format w StringFormatter
 - [ ] [S] Kliknięcie kafla linii na hali przełącza zakładkę na ekran linii
 - [ ] [M] Cykl uzupełniania zbiornika napełniarki — stan `Maintenance` + zdarzenie `LowTank` w przebiegu, test
@@ -43,10 +42,14 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] `snapshot.py --sub 0.5`: klatka pośrednia taśm (ta sama reguła co `beltAt` w artboardzie), żeby agent widział interpolację
 - [ ] [S] [agent] Priorytet alarmu w podglądzie: `P1–P4` przy awarii w faceplate `Line1` i w nagłówku (z `AlarmPriority` w layout.json)
 - [ ] [S] [agent] Studio: sprawdzić, czy `Severity` ustawione przez `GetVariable("Severity")` widać w AlarmGrid; jeśli jest właściwość `DigitalAlarm.Severity` — dopisać do stubów i użyć jej
+- [ ] [S] [agent] [studio] Sprawdzić w emulatorze, że AdvancedTrend pokazuje DisplayName pióra (nie BrowseName); jeśli nie — ustawić tytuł pióra w widgecie
+- [ ] [S] [agent] Ta sama lista `TrendPens` w podglądzie: artboard trendu (OEE, przepustowość, zbiornik) z `preview.json`
 
 ## Blocked
 
 ## Done
+- [x] 2026-09-27 Czytelne nazwy piór trendu: `TrendPens` w Core (kolumna = dotychczasowa BrowseName, np. `L1_oee`;
+  pióro = DisplayName pl-PL, np. „L1 OEE [%]”, „L1 Napełniarka: Zbiornik [%]”); podpisy KPI linii i zapełnienia taśm; test
 - [x] 2026-09-26 [studio] Logowanie (LoginForm, użytkownik w nagłówku), role Operatorzy / UtrzymanieRuchu blokujące przyciski linii, Stop z potwierdzeniem — sprawdzone w emulatorze
 - [x] 2026-09-26 Priorytety alarmów 1–4 (ISA-18.2): `AlarmPriority` w Core (paletyzator Pilny, napełniarka/zakręcarka Wysoki,
   taśmy/kartoniarka/wizyjna Średni, podajnik/etykieciarka Niski) → `Severity` 900/700/500/300 i prefiks `P1…` w komunikacie alarmu; test

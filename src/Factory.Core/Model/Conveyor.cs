@@ -17,7 +17,7 @@ public sealed class Conveyor : Equipment
 
     [Signal(Unit = "m/s")] public double SpeedMps { get; internal set; } = 0.4;
     [Signal] public int ItemsOnBelt => belt.Count;
-    [Signal(Unit = "%", Decimals = 0)] public double Occupancy => 100.0 * belt.Count / Capacity;
+    [Signal(Unit = "%", Decimals = 0, Label = "Zapełnienie")] public double Occupancy => 100.0 * belt.Count / Capacity;
 
     protected override string[] FaultCatalog => new[] { "Zacięcie na taśmie", "Przeciążenie silnika" };
 

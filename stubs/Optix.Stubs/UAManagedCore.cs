@@ -23,7 +23,7 @@ namespace UAManagedCore
         public static implicit operator UAValue(NodeId v) => new(v);
     }
 
-    public sealed class LocalizedText { public LocalizedText(string text) { Text = text; } public string Text { get; } }
+    public sealed class LocalizedText { public LocalizedText(string text) { Text = text; } public LocalizedText(string text, string localeId) { Text = text; LocaleId = localeId; } public string Text { get; } public string LocaleId { get; } = ""; }
 
     public enum DynamicLinkMode { Read, ReadWrite, Write }
 
@@ -32,6 +32,7 @@ namespace UAManagedCore
     public interface IUANode
     {
         string BrowseName { get; set; }
+        LocalizedText DisplayName { get; set; }
         NodeId NodeId { get; }
         IUANode Owner { get; }
         IEnumerable<IUANode> Children { get; }

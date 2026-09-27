@@ -27,6 +27,8 @@ public static class OptixNames
         LibLoginForm = "UI/LoginForm/LoginForm", LibUsernameLabel = "UI/UsernameLabel", UsersFolder = "Security/Users",
         // GraphicElements (Template Library) used in station faceplates
         LibBottle = "UI/Bottle1", LibCarton = "UI/Carton", LibPallet = "UI/PalletBoxSide", LibPhotoEye = "UI/PhotoEyeSensorSide";
+    /// <summary>Locale of generated display texts (pen names in trends).</summary>
+    public const string Locale = "pl-PL";
     public const string StateColorVar = "stateColor";
     /// <summary>HMI -> simulation command variables (PLC-style: HMI sets true, SimulationLogic executes and clears).
     /// Buttons use the built-in VariableCommands.Set, so no NetLogic method nodes are needed.</summary>
