@@ -5,7 +5,6 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
-- [ ] [S] Separator tysięcy po polsku w Optix (dziś „1,612”) — locale projektu `pl-PL` albo format w StringFormatter
 - [ ] [S] Kliknięcie kafla linii na hali przełącza zakładkę na ekran linii
 - [ ] [M] Cykl uzupełniania zbiornika napełniarki — stan `Maintenance` + zdarzenie `LowTank` w przebiegu, test
 - [ ] [S] Wymiana rolki etykiet — przestój `Maintenance` etykieciarki, widoczny w OEE i zdarzeniach
@@ -44,10 +43,14 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] Studio: sprawdzić, czy `Severity` ustawione przez `GetVariable("Severity")` widać w AlarmGrid; jeśli jest właściwość `DigitalAlarm.Severity` — dopisać do stubów i użyć jej
 - [ ] [S] [agent] [studio] Sprawdzić w emulatorze, że AdvancedTrend pokazuje DisplayName pióra (nie BrowseName); jeśli nie — ustawić tytuł pióra w widgecie
 - [ ] [S] [agent] Ta sama lista `TrendPens` w podglądzie: artboard trendu (OEE, przepustowość, zbiornik) z `preview.json`
+- [ ] [S] [agent] [studio] Sprawdzić w emulatorze format „2 148” / „74,6” po zalogowaniu (LocaleId kont demo) i bez logowania (Locales projektu = pl-PL)
+- [ ] [S] [agent] Polski format liczb w podglądzie (`Intl.NumberFormat('pl-PL')` w `Main`/`Line1`/`Status` i w `snapshot.py`), spójnie z Optix
 
 ## Blocked
 
 ## Done
+- [x] 2026-09-28 Separator tysięcy po polsku w Optix: konta demo dostają `LocaleId = pl-PL` (CreateDemoUsers), StringFormatter
+  formatuje wg locale sesji; dla sesji bez logowania krok w Studio (Locales projektu) opisany w docs/studio-setup.md
 - [x] 2026-09-27 Czytelne nazwy piór trendu: `TrendPens` w Core (kolumna = dotychczasowa BrowseName, np. `L1_oee`;
   pióro = DisplayName pl-PL, np. „L1 OEE [%]”, „L1 Napełniarka: Zbiornik [%]”); podpisy KPI linii i zapełnienia taśm; test
 - [x] 2026-09-26 [studio] Logowanie (LoginForm, użytkownik w nagłówku), role Operatorzy / UtrzymanieRuchu blokujące przyciski linii, Stop z potwierdzeniem — sprawdzone w emulatorze

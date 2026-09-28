@@ -54,7 +54,7 @@ factory.json ──FactoryLoader──▶ Hall (Core) ──SimEngine.Tick(0.1s)
 - Widoki: `HallView` (poziom 1 + mini-mapa), `LineView` (schemat), `StationTable`, `LinePanel` (KPI, komendy, awarie),
   `WindowGenerator` (nagłówek + NavigationPanel), `LibraryViews` (Alarmy, Trendy z Template Library), `LoggerGenerator`
   (lista z Core `TrendPens`: kolumna bazy = BrowseName — nie zmieniać formatu, nazwa pióra = DisplayName).
-  Widgety tylko przez `Ui.cs`. Elementy Template Library (styl ISA, AlarmBanner/Grid, AdvancedTrend, loggery) dodaje się
+  Liczby formatuje StringFormatter wg locale sesji (konta demo `pl-PL`, Anonymous = Locales projektu). Widgety tylko przez `Ui.cs`. Elementy Template Library (styl ISA, AlarmBanner/Grid, AdvancedTrend, loggery) dodaje się
   raz w Studio — lista w docs/studio-setup.md; brak = fragment pominięty z ostrzeżeniem.
 - Pętla ze Studio (sesja połączona z komputerem): `export_optix.py` → wgranie plików → `optix_build_check` →
   Execute Build → `optix_emulator restart` → `optix_observe screenshot`.
@@ -129,7 +129,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Optix/OptixBinder.cs` — Runtime bridge: writes changed [Signal] values (+ stateColor) from SimEngine into Model/Factory variables.
 - `src/Factory.Optix/OptixNames.cs` — Optix-side naming: project paths, camelCase variable names, .NET -> OPC UA data type mapping, UI colors, screen scale.
 - `src/Factory.Optix/ScreenGenerator.cs` — Regenerates the HMI from factory.json: HallScreen, LineScreen_<id> per line, Alarms/Trends/Login screens, MainWindow chrome/tabs.
-- `src/Factory.Optix/SecurityGenerator.cs` — Demo accounts: design time creates groups Operatorzy/UtrzymanieRuchu + users from demo-users.json; runtime sets their test passwords.
+- `src/Factory.Optix/SecurityGenerator.cs` — Demo accounts: design time creates groups Operatorzy/UtrzymanieRuchu + users (locale pl-PL) from demo-users.json; runtime sets their test passwords.
 - `src/Factory.Optix/SimulationLogic.cs` — Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits, sets demo passwords.
 - `src/Factory.Optix/StationDetail.cs` — Level 3 station faceplate on the line screen: tile click opens it; Template Library graphic moved only by live signals.
 - `src/Factory.Optix/StationTable.cs` — Station table under the line diagram: one row per station (state, good/reject, cycle, speed, progress, fault message).

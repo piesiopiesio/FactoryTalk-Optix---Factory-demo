@@ -1,4 +1,4 @@
-// @summary: Demo accounts: design time creates groups Operatorzy/UtrzymanieRuchu + users from demo-users.json; runtime sets their test passwords.
+// @summary: Demo accounts: design time creates groups Operatorzy/UtrzymanieRuchu + users (locale pl-PL) from demo-users.json; runtime sets their test passwords.
 #region Using directives
 using System;
 using System.IO;
@@ -25,7 +25,8 @@ public static class SecurityGenerator
         ? JsonSerializer.Deserialize<Seed>(File.ReadAllText(path), new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
         : null;
 
-    /// <summary>Design time, idempotent: missing groups/users are created and put in their group; seed copied to ProjectFiles.</summary>
+    /// <summary>Design time, idempotent: missing groups/users are created and put in their group, every demo user gets locale pl-PL
+    /// (Polish number format after login); seed copied to ProjectFiles.</summary>
     public static void Build()
     {
         var groups = Project.Current.Get("Security/Groups");
@@ -40,6 +41,7 @@ public static class SecurityGenerator
         {
             var user = users.Get(u.Name) as User;
             if (user == null) { user = InformationModel.MakeObject<User>(u.Name); users.Add(user); }
+            user.LocaleId = OptixNames.Locale;   // session locale -> numbers "2 148", "74,6" (StringFormatter follows it)
             var group = groups.Get(u.Group);
             if (group != null && !user.Refs.GetObjects(FTOptix.Core.ReferenceTypes.HasGroup, false).Any(x => x.NodeId == group.NodeId))
                 user.Refs.AddReference(FTOptix.Core.ReferenceTypes.HasGroup, group);

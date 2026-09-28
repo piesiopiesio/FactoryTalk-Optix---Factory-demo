@@ -49,7 +49,7 @@ namespace FTOptix.Core
     public interface Folder : IUAObject { }
     public static class DataTypes { public static readonly NodeId VariablePointer = new(5, 1); }
     public interface NodePointer : IUAVariable { }
-    public interface User : IUAObject { }
+    public interface User : IUAObject { string LocaleId { get; set; } }   // CheatSheet users-groups: user.LocaleId = locale
     public interface Group : IUAObject { }
     public static class ReferenceTypes { public static readonly NodeId HasGroup = new(6, 1); }
     public enum ChangePasswordResultCode { Success, WrongOldPassword, PasswordAlreadyUsed, PasswordTooShort, UserNotFound, UnsupportedOperation }

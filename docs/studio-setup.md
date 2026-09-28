@@ -54,6 +54,12 @@ Wstawione przeciągnięciem z okna Libraries (ikona książek na pasku) — Buil
   `Loggers/DataLogger1` (Store = EmbeddedDatabase1, co 1 s; zmienne dopisuje `LoggerGenerator`).
 Brak któregoś elementu = Build pomija ten fragment i pisze ostrzeżenie w Output (nazwy w `OptixNames.Lib*`).
 
+## Format liczb po polsku (locale sesji)
+StringFormatter (`"Dobre {0} szt."`) formatuje liczby wg locale sesji: `en-US` daje „1,612”, `pl-PL` — „1 612” i „74,6”.
+- Konta demo: **CreateDemoUsers** ustawia każdemu `LocaleId = pl-PL` (`OptixNames.Locale`) — po zalogowaniu format polski.
+- Sesja bez logowania (Anonymous) bierze locale projektu: w Studio zaznacz węzeł projektu → właściwość **Locales** →
+  `pl-PL` na pierwszym miejscu (jednorazowo, plik Studio — agent go nie zmienia). Do sprawdzenia w emulatorze (pozycja [studio]).
+
 ## Co generuje Build (wszystko z `factory.json`)
 - `Model/Templates/Factory/*` — typy (stacje, Conveyor, Line, Hall) ze zmiennymi `[Signal]` + `stateColor`.
 - `Model/Factory/Hall`, `Model/Factory/L1/<stacja|taśma>` — instancje.
