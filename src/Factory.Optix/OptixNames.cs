@@ -37,6 +37,8 @@ public static class OptixNames
     public const string StopRequest = "stopRequest";
     /// <summary>Line: station faceplate shown on the line screen (1..n = station index, 0 = none).</summary>
     public const string SelectedStation = "selectedStation";
+    /// <summary>HallScreen variable: tab index requested by a line tile (-1 = none); AccessLogic switches MainNav per session.</summary>
+    public const string OpenTab = "openTab";
 
     // Rockwell Process HMI Style Guide (docs/hmi-style.md, design/theme.json).
     public const uint BackgroundArgb = 0xFFE0E0E0, GroupArgb = 0xFFE8E8E8, LineArgb = 0xFFA0A0A4, TitleArgb = 0xFF3F3F3F,

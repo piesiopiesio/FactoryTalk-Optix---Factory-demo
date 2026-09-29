@@ -1,4 +1,4 @@
-// @summary: Runtime UI NetLogic in MainWindow: enables line commands and faceplate resets by the session user's level (AccessLevels).
+// @summary: Runtime UI NetLogic in MainWindow: enables commands/resets by the session user's level; hall tile click switches the tab.
 #region Using directives
 using System;
 using System.Linq;
@@ -18,7 +18,7 @@ public class AccessLogic : BaseNetLogic
     public override void Start()
     {
         Apply();
-        poll = new PeriodicTask(Apply, 500, LogicObject);   // user and open tab changes picked up within 0.5 s
+        poll = new PeriodicTask(Apply, 500, LogicObject);   // user, open tab and hall tile clicks picked up within 0.5 s
         poll.Start();
     }
 
@@ -35,8 +35,15 @@ public class AccessLogic : BaseNetLogic
             var nav = Owner.Get("MainNav");
             if (nav == null) return;
             var level = AccessLevels.Of(Session.User);
+            int? requestedTab = null;
             foreach (var screen in nav.Children)
             {
+                // Hall tile click writes the line's tab index into this session's HallScreen/openTab (-1 = nothing pending).
+                if (screen.GetVariable(OptixNames.OpenTab) is IUAVariable open && open.Value.Value is int tab && tab >= 0)
+                {
+                    requestedTab = tab;
+                    open.Value = -1;
+                }
                 var panel = screen.Get("LinePanel");
                 if (panel == null) continue;
                 foreach (var (path, min) in AccessLevels.Controls)
@@ -48,6 +55,7 @@ public class AccessLogic : BaseNetLogic
                     if (detail.Get("Reset") is Item reset) reset.Enabled = level >= AccessLevels.Maintenance;
                 if (panel.Get("AccessInfo") is Label info) info.Text = "Uprawnienia: " + AccessLevels.Describe(level);
             }
+            if (requestedTab is int t && nav is NavigationPanel np) np.CurrentTabIndex = t;   // after the loop: switching replaces MainNav's child
         }
         catch (Exception ex)
         {

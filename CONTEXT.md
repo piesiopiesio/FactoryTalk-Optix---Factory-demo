@@ -51,7 +51,7 @@ factory.json ──FactoryLoader──▶ Hall (Core) ──SimEngine.Tick(0.1s)
   `VariableCommands.Set`, wykonuje `CommandBits` w runtime NetLogic `Model/SimulationLogic` (tworzy go Build).
 - NetLogic design-time `NetLogic/FactoryBuilder`: `Build()` generuje model, alarmy, ekrany i zakładki; `Clean()`.
   Build uruchamia się w Studio (prawy klik → Execute), NIE przez most ftx-mcp (wątek HTTP może zamknąć Studio).
-- Widoki: `HallView` (poziom 1 + mini-mapa), `LineView` (schemat), `StationTable`, `LinePanel` (KPI, komendy, awarie),
+- Widoki: `HallView` (poziom 1 + mini-mapa; kafel → zakładka linii przez `HallScreen/openTab` + `AccessLogic`, kolejność zakładek = Core `NavTabs`), `LineView` (schemat), `StationTable`, `LinePanel` (KPI, komendy, awarie),
   `WindowGenerator` (nagłówek + NavigationPanel), `LibraryViews` (Alarmy, Trendy z Template Library), `LoggerGenerator`
   (lista z Core `TrendPens`: kolumna bazy = BrowseName — nie zmieniać formatu, nazwa pióra = DisplayName).
   Liczby formatuje StringFormatter wg locale sesji (konta demo `pl-PL`, Anonymous = Locales projektu). Widgety tylko przez `Ui.cs`. Elementy Template Library (styl ISA, AlarmBanner/Grid, AdvancedTrend, loggery) dodaje się
@@ -89,6 +89,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Core/Manifest/FactoryLoader.cs` — Parses + validates factory.json and builds the Hall object graph (stations, conveyors, links).
 - `src/Factory.Core/Manifest/FactoryManifest.cs` — DTOs mirroring factory.json (camelCase JSON). Pure data, no behavior.
 - `src/Factory.Core/Manifest/Layout.cs` — Screen geometry from factory.json (1600x900 logical canvas): station/conveyor rects + layout lint. Used by Optix builder and preview.
+- `src/Factory.Core/Manifest/NavTabs.cs` — Order of the main navigation tabs (Hala, one per line, Alarmy, Trendy, Logowanie) and the tab index of each line screen.
 - `src/Factory.Core/Manifest/StationRegistry.cs` — Maps manifest "type" keys to Station classes via [StationType]; the single extension point for new stations.
 - `src/Factory.Core/Model/AlarmPriority.cs` — Alarm priority 1-4 (ISA-18.2 / Rockwell HMI guide) per equipment type and its OPC UA Severity (1-1000) mapping.
 - `src/Factory.Core/Model/Conveyor.cs` — Accumulating belt: items keep pitch spacing, travel length/speed, block the upstream station when full.
@@ -113,7 +114,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Core/Stations/Palletizer.cs` — Line sink: stacks cases on pallets; a full pallet triggers a timed pallet change (Maintenance).
 - `src/Factory.Core/Stations/VisionInspector.cs` — Inspects every bottle; anything not filled, capped, labeled and defect-free is rejected.
 - `src/Factory.Optix/AccessLevels.cs` — Operator access model: level from the session user's groups (0 anonymous, 1 Operatorzy, 2 UtrzymanieRuchu) + control thresholds.
-- `src/Factory.Optix/AccessLogic.cs` — Runtime UI NetLogic in MainWindow: enables line commands and faceplate resets by the session user's level (AccessLevels).
+- `src/Factory.Optix/AccessLogic.cs` — Runtime UI NetLogic in MainWindow: enables commands/resets by the session user's level; hall tile click switches the tab.
 - `src/Factory.Optix/AlarmGenerator.cs` — One DigitalAlarm per equipment in Alarms/Factory, linked to Model/Factory/<path>/faultActive; Severity from priority 1-4; operator acknowledges.
 - `src/Factory.Optix/CommandBits.cs` — Runtime side of HMI commands: polls cmdStart/cmdStop/cmdReset bits and Hall/timeScale, executes on SimEngine, clears bits.
 - `src/Factory.Optix/Factory.Optix.csproj` — Cloud compile check of the NetLogic layer against stubs. In Studio these .cs files are linked into NetSolution instead.

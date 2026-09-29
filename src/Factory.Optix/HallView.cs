@@ -3,7 +3,10 @@
 using System;
 using System.Linq;
 using UAManagedCore;
+using OpcUa = UAManagedCore.OpcUa;
 using FTOptix.UI;
+using FTOptix.HMIProject;
+using FTOptix.Core;
 #endregion
 using FM = Factory.Core.Model;
 using FX = Factory.Core.Manifest;
@@ -23,10 +26,15 @@ public static class HallView
             Ui.Text(screen, "ZoneName_" + z.Id, z.Name + (z.Planned ? " (planowana)" : ""),
                 N.X(z.Rect[0]) + 12, N.Y(z.Rect[1]) + 8, 16, z.Planned ? N.UnitsArgb : N.TitleArgb, bold: true);
         }
-        foreach (var l in m.Lines) LineTile(screen, l);
+        // Per-screen request variable: a variable of the screen itself is per session at runtime (the screen is instantiated
+        // in each session's MainNav), a Model variable would switch the tab for every client.
+        var openTab = InformationModel.MakeVariable(N.OpenTab, OpcUa.DataTypes.Int32);
+        openTab.Value = -1;
+        screen.Add(openTab);
+        foreach (var l in m.Lines) LineTile(screen, l, FX.NavTabs.IndexOf(m, l.Id));
     }
 
-    static void LineTile(IUANode screen, FX.LineSpec l)
+    static void LineTile(IUANode screen, FX.LineSpec l, int tabIndex)
     {
         double x = N.X(l.Rect[0]), y = N.Y(l.Rect[1]), w = N.L(l.Rect[2]), h = N.L(l.Rect[3]);
         var tile = Ui.Box(screen, "Line_" + l.Id, x, y, w, h, N.BackgroundArgb);
@@ -48,6 +56,13 @@ public static class HallView
             Ui.Value(tile, kpis[i].Name, kpis[i].Format, 380 + i * 200, 20, 18, N.ModelVar(l.Id, kpis[i].Signal));
 
         MiniMap(tile, l, 16, 110, w - 32, h - 126);
+
+        // Level 1 -> level 2: whole tile clickable (last child = on top) + explicit button (web client ignores Rectangle clicks).
+        var openTab = $"{N.ScreensFolder}/{N.HallScreen}/{N.OpenTab}";
+        var hit = Ui.Box(tile, "Open", 0, 0, w, h, 0x01FFFFFF, 0x00000000, 0);   // alpha 1/255: alpha 0 is not hit-tested
+        Ui.OnClickSet(hit, openTab, tabIndex);
+        var button = Ui.Button(tile, "OpenLine", "Ekran linii", w - 172, 56, 160);   // below the KPI row, above the mini-map
+        Ui.OnClickSet(button, openTab, tabIndex);
     }
 
     /// <summary>Stations and belts of the line, scaled into the tile: state colors at a glance (level 1).</summary>

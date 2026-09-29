@@ -25,10 +25,11 @@ public static class ScreenGenerator
         WindowGenerator.Clear(window);   // tabs point at the screens: drop them before the screens are replaced
         Clean(screens);
 
+        var titles = FX.NavTabs.Of(manifest).ToDictionary(t => t.Key, t => t.Title);   // one tab order for window + hall tiles
         var tabs = new List<(string Title, IUANode Screen)>();
         var hallScreen = NewScreen(screens, N.HallScreen);
         HallView.Build(hallScreen, manifest);
-        tabs.Add(("Hala", hallScreen));
+        tabs.Add((titles[FX.NavTabs.Hall], hallScreen));
 
         foreach (var spec in manifest.Lines)
         {
@@ -38,18 +39,18 @@ public static class ScreenGenerator
             StationTable.Build(screen, spec);
             LinePanel.Build(screen, spec, line, hall.Id);
             StationDetail.Build(screen, spec, line);   // last: drawn on top of the diagram
-            tabs.Add((spec.Name, screen));
+            tabs.Add((titles[spec.Id], screen));
         }
 
         var alarms = NewScreen(screens, N.AlarmsScreen);
         LibraryViews.Alarms(alarms);
-        tabs.Add(("Alarmy", alarms));
+        tabs.Add((titles[FX.NavTabs.Alarms], alarms));
         var trends = NewScreen(screens, N.TrendsScreen);
         LibraryViews.Trends(trends);
-        tabs.Add(("Trendy", trends));
+        tabs.Add((titles[FX.NavTabs.Trends], trends));
         var login = NewScreen(screens, N.LoginScreen);
         LibraryViews.Login(login);
-        tabs.Add(("Logowanie", login));
+        tabs.Add((titles[FX.NavTabs.Login], login));
 
         WindowGenerator.Build(window, hall, tabs);
     }

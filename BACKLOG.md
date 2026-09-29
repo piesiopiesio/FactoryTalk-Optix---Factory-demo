@@ -5,7 +5,6 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
-- [ ] [S] Kliknięcie kafla linii na hali przełącza zakładkę na ekran linii
 - [ ] [M] Cykl uzupełniania zbiornika napełniarki — stan `Maintenance` + zdarzenie `LowTank` w przebiegu, test
 - [ ] [S] Wymiana rolki etykiet — przestój `Maintenance` etykieciarki, widoczny w OEE i zdarzeniach
 - [ ] [S] Artboard `Alarms` — lista zdarzeń z czasem, stacją, czasem trwania; link z `Line1`
@@ -45,10 +44,14 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] Ta sama lista `TrendPens` w podglądzie: artboard trendu (OEE, przepustowość, zbiornik) z `preview.json`
 - [ ] [S] [agent] [studio] Sprawdzić w emulatorze format „2 148” / „74,6” po zalogowaniu (LocaleId kont demo) i bez logowania (Locales projektu = pl-PL)
 - [ ] [S] [agent] Polski format liczb w podglądzie (`Intl.NumberFormat('pl-PL')` w `Main`/`Line1`/`Status` i w `snapshot.py`), spójnie z Optix
+- [ ] [S] [agent] [studio] Sprawdzić w emulatorze (i w kliencie web), że klik w kafel/„Ekran linii” na hali otwiera zakładkę linii tylko w tej sesji; jeśli `openTab` ekranu nie jest per sesja — przenieść żądanie do zmiennej sesji
+- [ ] [S] [agent] Link „Ekran linii” w podglądzie także z całego kafla (artboard `Main`), spójnie z Optix
 
 ## Blocked
 
 ## Done
+- [x] 2026-09-29 Kliknięcie kafla linii na hali przełącza zakładkę na ekran linii: kafel + przycisk „Ekran linii” zapisują indeks
+  zakładki (Core `NavTabs`) do `HallScreen/openTab`, `AccessLogic` przełącza `MainNav.CurrentTabIndex` w tej sesji (≤ 0,5 s)
 - [x] 2026-09-28 Separator tysięcy po polsku w Optix: konta demo dostają `LocaleId = pl-PL` (CreateDemoUsers), StringFormatter
   formatuje wg locale sesji; dla sesji bez logowania krok w Studio (Locales projektu) opisany w docs/studio-setup.md
 - [x] 2026-09-27 Czytelne nazwy piór trendu: `TrendPens` w Core (kolumna = dotychczasowa BrowseName, np. `L1_oee`;

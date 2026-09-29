@@ -165,4 +165,16 @@ public static class TrendTests
         Assert.Equal("L1 Napełniarka: Zbiornik [%]", pens.First(p => p.Column == "L1_FILL_tankLevel").Label, "filler tank pen");
         Assert.True(pens.All(p => !p.Label.Contains('_') && p.Label.Length <= 40), "pen names must be readable (no '_', <= 40 chars)");
     }
+
+    [Test] public static void HallTileOpensItsLineTab()
+    {
+        var m = Fixtures.Manifest();
+        var tabs = NavTabs.Of(m);
+        Assert.Equal("Hala", tabs[0].Title, "hall is the first tab (CurrentTabIndex 0 at start)");
+        Assert.Equal(1, NavTabs.IndexOf(m, "L1"), "L1 tab index");
+        Assert.Equal(m.Lines[0].Name, tabs[NavTabs.IndexOf(m, "L1")].Title, "tile target shows the line's own screen");
+        Assert.Equal(m.Lines.Count + 4, tabs.Count, "hall + lines + Alarmy/Trendy/Logowanie");
+        Assert.Equal(tabs.Count, tabs.Select(t => t.Key).Distinct().Count(), "unique tab keys");
+        Assert.Throws<ArgumentException>(() => NavTabs.IndexOf(m, "L9"), "unknown line has no tab");
+    }
 }

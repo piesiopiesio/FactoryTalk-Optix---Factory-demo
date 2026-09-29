@@ -2,6 +2,15 @@
 
 Najnowszy wpis na górze. Maks. 14 wpisów; starsze w `docs/archive/`.
 
+## 2026-09-29 (przebieg dzienny)
+- Zadanie: kafel linii na hali → ekran linii. Nowy `NavTabs` w Core (kolejność zakładek: Hala, linie, Alarmy, Trendy, Logowanie;
+  `IndexOf(L1) = 1`), używany przez `ScreenGenerator`. Kafel ma przezroczysty cel kliknięcia i przycisk „Ekran linii” (web nie
+  dostarcza kliknięć w Rectangle); oba ustawiają `HallScreen/openTab`, a `AccessLogic` (co 0,5 s) ustawia `MainNav.CurrentTabIndex`.
+- Założenie (niesprawdzone w Studio): zmienna ekranu jest per sesja (ekran instancjonowany w MainNav sesji), więc klik nie przełącza
+  zakładki innym klientom; zmienna w Model przełączałaby wszystkich. Weryfikacja jako pozycja [studio] w Later. `*.yaml` nietknięte.
+- Test `HallTileOpensItsLineTab` (17/17, 6/6). KPI bez zmian (30 min, seed 42): OEE 74,6 %, 71,6 butelki/min średnio (96/min w ostatniej min.), 9 awarii.
+- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: cykl uzupełniania zbiornika napełniarki (Maintenance + LowTank).
+
 ## 2026-09-28 (przebieg dzienny)
 - Zadanie: separator tysięcy po polsku w Optix. StringFormatter formatuje liczby wg locale sesji (en-US → „1,612”), więc zamiast
   zmieniać formaty `{0}` ustawiam locale: `SecurityGenerator` nadaje kontom demo `User.LocaleId = pl-PL` (API z CheatSheet
