@@ -1,4 +1,4 @@
-// @summary: Fills bottles from a buffer tank; fill volume is noisy, out-of-tolerance bottles are marked defective.
+// @summary: Fills bottles from a buffer tank refilled in batches (LowTank -> Maintenance); noisy fill volume marks defects.
 #nullable enable
 using Factory.Core.Manifest;
 using Factory.Core.Model;
@@ -18,12 +18,26 @@ public sealed class Filler : Station
 
     public override AlarmPriority AlarmPriority => AlarmPriority.High;
 
+    /// <summary>True while the buffer tank is being refilled (station in Maintenance).</summary>
+    public bool Refilling { get; private set; }
+
     protected override MachineState? Hold(SimContext ctx)
     {
         var capacity = Param("tankL", 800);
         if (double.IsNaN(tankL)) tankL = 0.9 * capacity;
-        tankL = Math.Min(capacity, tankL + Param("inflowLps", 1.0) * ctx.Dt);   // TODO backlog #2: batch refill + LowTank alarm
-        return tankL < Param("fillMl", 500) / 1000.0 ? MachineState.Starved : null;
+        if (Refilling)
+        {
+            tankL = Math.Min(capacity, tankL + Param("refillLps", 12) * ctx.Dt);
+            if (tankL < Param("refillToPct", 95) / 100.0 * capacity) return MachineState.Maintenance;
+            Refilling = false;
+            ctx.Raise(Path, SimEventKind.MaintenanceEnded, 0, $"{Name}: zbiornik uzupełniony ({TankLevel:0} %)");
+            return null;
+        }
+        if (tankL >= Param("lowPct", 20) / 100.0 * capacity) return null;
+        Refilling = true;
+        ctx.Raise(Path, SimEventKind.LowTank, 0, $"{Name}: niski poziom zbiornika ({TankLevel:0} %)");
+        ctx.Raise(Path, SimEventKind.MaintenanceStarted, 0, $"{Name}: uzupełnianie zbiornika");
+        return MachineState.Maintenance;
     }
 
     protected override Outcome Process(Item item, SimContext ctx)

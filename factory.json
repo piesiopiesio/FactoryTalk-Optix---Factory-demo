@@ -17,7 +17,7 @@
       "stations": [
         { "id": "FEED", "type": "feeder",    "name": "Podajnik butelek", "pos": [60, 230],   "cycleS": 0.50, "fault": { "mtbfS": 2400, "mttrS": 30 } },
         { "id": "FILL", "type": "filler",    "name": "Napełniarka",      "pos": [420, 230],  "cycleS": 0.60, "fault": { "mtbfS": 900,  "mttrS": 60 },
-          "params": { "fillMl": 500, "fillSigmaMl": 3, "fillTolMl": 8, "tankL": 800 } },
+          "params": { "fillMl": 500, "fillSigmaMl": 3, "fillTolMl": 8, "tankL": 800, "lowPct": 20, "refillLps": 12, "refillToPct": 95 } },
         { "id": "CAP",  "type": "capper",    "name": "Zakręcarka",       "pos": [780, 230],  "cycleS": 0.52, "fault": { "mtbfS": 1200, "mttrS": 45 },
           "params": { "torqueNm": 2.2, "torqueSigma": 0.08, "torqueTol": 0.3 } },
         { "id": "LAB",  "type": "labeler",   "name": "Etykieciarka",     "pos": [1140, 230], "cycleS": 0.50, "fault": { "mtbfS": 1500, "mttrS": 90 },

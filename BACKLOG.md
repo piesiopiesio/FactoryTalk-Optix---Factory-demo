@@ -5,7 +5,6 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
-- [ ] [M] Cykl uzupełniania zbiornika napełniarki — stan `Maintenance` + zdarzenie `LowTank` w przebiegu, test
 - [ ] [S] Wymiana rolki etykiet — przestój `Maintenance` etykieciarki, widoczny w OEE i zdarzeniach
 - [ ] [S] Artboard `Alarms` — lista zdarzeń z czasem, stacją, czasem trwania; link z `Line1`
 - [ ] [M] Wstrzykiwanie awarii — `Cmd.InjectFault` w Core + `SimulationLogic.InjectFault` + przycisk w faceplate podglądu
@@ -46,10 +45,14 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] Polski format liczb w podglądzie (`Intl.NumberFormat('pl-PL')` w `Main`/`Line1`/`Status` i w `snapshot.py`), spójnie z Optix
 - [ ] [S] [agent] [studio] Sprawdzić w emulatorze (i w kliencie web), że klik w kafel/„Ekran linii” na hali otwiera zakładkę linii tylko w tej sesji; jeśli `openTab` ekranu nie jest per sesja — przenieść żądanie do zmiennej sesji
 - [ ] [S] [agent] Link „Ekran linii” w podglądzie także z całego kafla (artboard `Main`), spójnie z Optix
+- [ ] [S] [agent] Optix: komunikat informacyjny (nie alarm) przy `LowTank` / uzupełnianiu zbiornika — np. wpis w liście zdarzeń `LinePanel` i ikona „i” przy napełniarce
+- [ ] [S] [agent] Podgląd `Line1`: pasek poziomu zbiornika napełniarki z progami `lowPct`/`refillToPct` (z params w layout.json)
 
 ## Blocked
 
 ## Done
+- [x] 2026-09-30 Cykl uzupełniania zbiornika napełniarki: zamiast stałego dopływu partie — poniżej `lowPct` (20 %) zdarzenie
+  `LowTank` + `Maintenance` („uzupełnianie zbiornika”) do `refillToPct` (95 %) z `refillLps` 12 L/s; widoczne w OEE i zdarzeniach; test
 - [x] 2026-09-29 Kliknięcie kafla linii na hali przełącza zakładkę na ekran linii: kafel + przycisk „Ekran linii” zapisują indeks
   zakładki (Core `NavTabs`) do `HallScreen/openTab`, `AccessLogic` przełącza `MainNav.CurrentTabIndex` w tej sesji (≤ 0,5 s)
 - [x] 2026-09-28 Separator tysięcy po polsku w Optix: konta demo dostają `LocaleId = pl-PL` (CreateDemoUsers), StringFormatter

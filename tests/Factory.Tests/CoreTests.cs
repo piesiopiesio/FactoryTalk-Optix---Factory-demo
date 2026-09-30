@@ -178,3 +178,26 @@ public static class TrendTests
         Assert.Throws<ArgumentException>(() => NavTabs.IndexOf(m, "L9"), "unknown line has no tab");
     }
 }
+
+public static class MaintenanceTests
+{
+    [Test] public static void FillerTankRefillsInBatchesWithLowTankEvent()
+    {
+        var e = Fixtures.Engine();
+        var fill = (Factory.Core.Stations.Filler)Fixtures.St(e, "L1/FILL");
+        double minLevel = 100;
+        for (int i = 0; i < 18000; i++)
+        {
+            e.Tick(0.1);
+            minLevel = Math.Min(minLevel, fill.TankLevel);
+        }
+        var ev = e.Events.Where(x => x.NodeId == "L1/FILL").ToList();
+        var low = ev.Count(x => x.Kind == SimEventKind.LowTank);
+        Assert.True(low >= 1, "no LowTank event in 30 min");
+        Assert.Equal(low, ev.Count(x => x.Kind == SimEventKind.MaintenanceStarted), "every LowTank starts one refill");
+        Assert.True(ev.Count(x => x.Kind == SimEventKind.MaintenanceEnded) >= low - 1, "refills finish");
+        Assert.True(fill.TimeIn(MachineState.Maintenance) > 20, "refill must show as Maintenance time (Availability loss)");
+        Assert.True(minLevel >= 15 && minLevel < 20, $"tank never drains below the low mark (min {minLevel:0.0} %)");
+    }
+}
+

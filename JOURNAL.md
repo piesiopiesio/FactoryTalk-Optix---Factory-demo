@@ -2,6 +2,16 @@
 
 Najnowszy wpis na górze. Maks. 14 wpisów; starsze w `docs/archive/`.
 
+## 2026-09-30 (przebieg dzienny)
+- Zadanie: cykl uzupełniania zbiornika napełniarki. `Filler.Hold`: bez stałego dopływu; poziom < `lowPct` (20 %) → nowe zdarzenie
+  `SimEventKind.LowTank` + `MaintenanceStarted`, stan `Maintenance` aż do `refillToPct` (95 %) przy `refillLps` 12 L/s → `MaintenanceEnded`.
+  Parametry w factory.json. Przebieg 30 min: jedno uzupełnianie 1115,7–1165,8 s (50 s), linia za napełniarką głodna, podajnik zablokowany.
+- Założenia: uzupełnianie zatrzymuje nalewanie (przestój w Dostępności), `LowTank` to zdarzenie informacyjne, nie alarm Optix
+  (propozycja komunikatu w Later). Snapshot z klatki 570 (t=1140 s) pokazuje FILL · Maintenance. `*.yaml` nietknięte.
+- Test `FillerTankRefillsInBatchesWithLowTankEvent` (18/18, 6/6). KPI (30 min, seed 42): OEE 71,9 % (było 74,6), 68,8 butelki/min
+  średnio (było 71,6), 8 awarii — spadek zgodny z 50 s przestoju na stacji OEE.
+- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: wymiana rolki etykiet (Maintenance etykieciarki).
+
 ## 2026-09-29 (przebieg dzienny)
 - Zadanie: kafel linii na hali → ekran linii. Nowy `NavTabs` w Core (kolejność zakładek: Hala, linie, Alarmy, Trendy, Logowanie;
   `IndexOf(L1) = 1`), używany przez `ScreenGenerator`. Kafel ma przezroczysty cel kliknięcia i przycisk „Ekran linii” (web nie
