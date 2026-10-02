@@ -5,7 +5,6 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
-- [ ] [S] Wymiana rolki etykiet — przestój `Maintenance` etykieciarki, widoczny w OEE i zdarzeniach
 - [ ] [S] Artboard `Alarms` — lista zdarzeń z czasem, stacją, czasem trwania; link z `Line1`
 - [ ] [M] Wstrzykiwanie awarii — `Cmd.InjectFault` w Core + `SimulationLogic.InjectFault` + przycisk w faceplate podglądu
 - [ ] [S] Mikroprzestoje < 30 s — straty wydajności widoczne w OEE (Performance spada o 2–5 pp)
@@ -47,10 +46,14 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] Link „Ekran linii” w podglądzie także z całego kafla (artboard `Main`), spójnie z Optix
 - [ ] [S] [agent] Optix: komunikat informacyjny (nie alarm) przy `LowTank` / uzupełnianiu zbiornika — np. wpis w liście zdarzeń `LinePanel` i ikona „i” przy napełniarce
 - [ ] [S] [agent] Podgląd `Line1`: pasek poziomu zbiornika napełniarki z progami `lowPct`/`refillToPct` (z params w layout.json)
+- [ ] [S] [agent] Optix: ostrzeżenie (nie alarm) przy niskim zapasie etykiet (`LabelStock` < 10 %) w `LinePanel`, żeby operator przygotował rolkę
+- [ ] [S] [agent] `Sim.Cli` Checks: kontrola „przestoje planowe występują” (≥ 1 Maintenance na PAL, FILL, LAB w 30 min), żeby zmiana parametrów ich nie wyłączyła
 
 ## Blocked
 
 ## Done
+- [x] 2026-10-02 Wymiana rolki etykiet: pusta rolka (`rollLabels` 1500) → `MaintenanceStarted` „wymiana rolki etykiet”,
+  `Maintenance` etykieciarki przez `rollChangeS` (45 s) → `MaintenanceEnded` „nowa rolka”; widoczne w OEE i zdarzeniach; test
 - [x] 2026-09-30 Cykl uzupełniania zbiornika napełniarki: zamiast stałego dopływu partie — poniżej `lowPct` (20 %) zdarzenie
   `LowTank` + `Maintenance` („uzupełnianie zbiornika”) do `refillToPct` (95 %) z `refillLps` 12 L/s; widoczne w OEE i zdarzeniach; test
 - [x] 2026-09-29 Kliknięcie kafla linii na hali przełącza zakładkę na ekran linii: kafel + przycisk „Ekran linii” zapisują indeks

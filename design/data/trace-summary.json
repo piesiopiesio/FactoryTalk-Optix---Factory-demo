@@ -8,13 +8,13 @@
       "kpi": {
         "State": 1,
         "StateText": "Praca",
-        "Oee": 71.9,
+        "Oee": 70.6,
         "Availability": 86.3,
-        "Performance": 84.2,
+        "Performance": 82.7,
         "Quality": 99,
-        "ThroughputPerMin": 120,
-        "GoodUnits": 2064,
-        "RejectUnits": 22,
+        "ThroughputPerMin": 96,
+        "GoodUnits": 2016,
+        "RejectUnits": 21,
         "ActiveFaults": 0
       },
       "stations": [
@@ -22,25 +22,9 @@
           "id": "FEED",
           "typeKey": "feeder",
           "timePct": {
-            "Running": 61.6,
-            "Blocked": 34.9,
+            "Running": 60.5,
+            "Blocked": 35.9,
             "Faulted": 3.6
-          },
-          "counts": {
-            "processed": 2216,
-            "good": 2215,
-            "reject": 0
-          }
-        },
-        {
-          "id": "FILL",
-          "typeKey": "filler",
-          "timePct": {
-            "Running": 72.6,
-            "Starved": 3.2,
-            "Blocked": 10.5,
-            "Faulted": 10.9,
-            "Maintenance": 2.8
           },
           "counts": {
             "processed": 2178,
@@ -49,17 +33,33 @@
           }
         },
         {
+          "id": "FILL",
+          "typeKey": "filler",
+          "timePct": {
+            "Running": 71.4,
+            "Starved": 3.2,
+            "Blocked": 11.7,
+            "Faulted": 10.9,
+            "Maintenance": 2.8
+          },
+          "counts": {
+            "processed": 2140,
+            "good": 2140,
+            "reject": 0
+          }
+        },
+        {
           "id": "CAP",
           "typeKey": "capper",
           "timePct": {
-            "Running": 72.3,
+            "Running": 70.5,
             "Starved": 14.8,
-            "Blocked": 7.1,
+            "Blocked": 8.9,
             "Faulted": 5.8
           },
           "counts": {
-            "processed": 2168,
-            "good": 2168,
+            "processed": 2114,
+            "good": 2114,
             "reject": 0
           }
         },
@@ -67,14 +67,15 @@
           "id": "LAB",
           "typeKey": "labeler",
           "timePct": {
-            "Running": 59.9,
-            "Starved": 31.6,
+            "Running": 58.4,
+            "Starved": 30.6,
             "Blocked": 3.8,
-            "Faulted": 4.7
+            "Faulted": 4.7,
+            "Maintenance": 2.5
           },
           "counts": {
-            "processed": 2157,
-            "good": 2157,
+            "processed": 2103,
+            "good": 2103,
             "reject": 0
           }
         },
@@ -82,27 +83,27 @@
           "id": "VIS",
           "typeKey": "vision",
           "timePct": {
-            "Running": 59.6,
-            "Starved": 33.5,
+            "Running": 58.1,
+            "Starved": 35,
             "Blocked": 6.9
           },
           "counts": {
-            "processed": 2145,
-            "good": 2123,
-            "reject": 22
+            "processed": 2091,
+            "good": 2070,
+            "reject": 21
           }
         },
         {
           "id": "PACK",
           "typeKey": "casepacker",
           "timePct": {
-            "Running": 46.9,
-            "Starved": 45.1,
+            "Running": 45.7,
+            "Starved": 46.2,
             "Faulted": 8.1
           },
           "counts": {
-            "processed": 2108,
-            "good": 175,
+            "processed": 2056,
+            "good": 171,
             "reject": 0
           }
         },
@@ -110,13 +111,13 @@
           "id": "PAL",
           "typeKey": "palletizer",
           "timePct": {
-            "Running": 47.9,
-            "Starved": 47.6,
+            "Running": 46.7,
+            "Starved": 48.9,
             "Maintenance": 4.4
           },
           "counts": {
-            "processed": 172,
-            "good": 172,
+            "processed": 168,
+            "good": 168,
             "reject": 0
           }
         },
@@ -124,8 +125,8 @@
           "id": "C1",
           "typeKey": "conveyor",
           "timePct": {
-            "Running": 21.6,
-            "Blocked": 78.4
+            "Running": 21.4,
+            "Blocked": 78.6
           },
           "counts": null
         },
@@ -133,8 +134,8 @@
           "id": "C2",
           "typeKey": "conveyor",
           "timePct": {
-            "Running": 72.4,
-            "Blocked": 27.6
+            "Running": 54.9,
+            "Blocked": 45.1
           },
           "counts": null
         },
@@ -142,8 +143,8 @@
           "id": "C3",
           "typeKey": "conveyor",
           "timePct": {
-            "Running": 92.6,
-            "Blocked": 7.4
+            "Running": 90.7,
+            "Blocked": 9.3
           },
           "counts": null
         },
@@ -192,12 +193,12 @@
     {
       "name": "L1: OEE in target",
       "ok": true,
-      "detail": "71.9 % vs [55 %, 92 %]"
+      "detail": "70.6 % vs [55 %, 92 %]"
     },
     {
       "name": "L1: throughput in target",
       "ok": true,
-      "detail": "68.8/min avg"
+      "detail": "67.2/min avg"
     },
     {
       "name": "L1: faults happen and recover",
@@ -212,7 +213,7 @@
     {
       "name": "L1: bottle balance",
       "ok": true,
-      "detail": "fed 2215 = good 2064 + reject 22 + wip 129"
+      "detail": "fed 2178 = good 2016 + reject 21 + wip 141"
     }
   ],
   "ok": true

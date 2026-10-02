@@ -199,5 +199,18 @@ public static class MaintenanceTests
         Assert.True(fill.TimeIn(MachineState.Maintenance) > 20, "refill must show as Maintenance time (Availability loss)");
         Assert.True(minLevel >= 15 && minLevel < 20, $"tank never drains below the low mark (min {minLevel:0.0} %)");
     }
-}
 
+    [Test] public static void LabelRollChangeIsMaintenanceWithEvents()
+    {
+        var e = Fixtures.Engine();
+        var lab = (Factory.Core.Stations.Labeler)Fixtures.St(e, "L1/LAB");
+        double minStock = 100;
+        for (int i = 0; i < 18000; i++) { e.Tick(0.1); minStock = Math.Min(minStock, lab.LabelStock); }
+        var ev = e.Events.Where(x => x.NodeId == "L1/LAB").ToList();
+        var started = ev.Count(x => x.Kind == SimEventKind.MaintenanceStarted);
+        Assert.True(started >= 1, "no label roll change in 30 min");
+        Assert.True(ev.Count(x => x.Kind == SimEventKind.MaintenanceEnded) >= started - 1, "roll changes finish");
+        Assert.True(lab.TimeIn(MachineState.Maintenance) >= 40, "roll change must show as Maintenance time");
+        Assert.True(minStock < 1, $"roll runs out before the change (min {minStock:0.0} %)");
+    }
+}

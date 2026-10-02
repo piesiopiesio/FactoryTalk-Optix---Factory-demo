@@ -21,7 +21,7 @@
         { "id": "CAP",  "type": "capper",    "name": "Zakręcarka",       "pos": [780, 230],  "cycleS": 0.52, "fault": { "mtbfS": 1200, "mttrS": 45 },
           "params": { "torqueNm": 2.2, "torqueSigma": 0.08, "torqueTol": 0.3 } },
         { "id": "LAB",  "type": "labeler",   "name": "Etykieciarka",     "pos": [1140, 230], "cycleS": 0.50, "fault": { "mtbfS": 1500, "mttrS": 90 },
-          "params": { "missRate": 0.004, "rollLabels": 6000 } },
+          "params": { "missRate": 0.004, "rollLabels": 1500, "rollChangeS": 45 } },
         { "id": "VIS",  "type": "vision",    "name": "Kontrola wizyjna", "pos": [1140, 560], "cycleS": 0.45, "fault": { "mtbfS": 3600, "mttrS": 30 } },
         { "id": "PACK", "type": "casepacker","name": "Kartoniarka",      "pos": [780, 560],  "cycleS": 0.40, "fault": { "mtbfS": 1000, "mttrS": 120 } },
         { "id": "PAL",  "type": "palletizer","name": "Paletyzator",      "pos": [420, 560],  "cycleS": 5.0,  "fault": { "mtbfS": 1800, "mttrS": 60 },

@@ -35,7 +35,8 @@ factory.json ──FactoryLoader──▶ Hall (Core) ──SimEngine.Tick(0.1s)
 - Stacje (`Stations/`, klucz `[StationType]`): feeder, filler, capper, labeler, vision, casepacker, palletizer.
 - `Conveyor : Equipment`: akumulująca taśma (pitch, length, speed), blokuje stację przed sobą.
 - `Line`: stacje w łańcuchu + taśmy; KPI: OEE = A×P×Q (na `oeeStation`), ThroughputPerMin (60 s), Good/Reject.
-- Przestoje planowe (`Maintenance` przez `Station.Hold`): wymiana palety (PAL), uzupełnianie zbiornika FILL (`LowTank` → refill).
+- Przestoje planowe (`Maintenance` przez `Station.Hold`): wymiana palety (PAL), wymiana rolki etykiet (LAB),
+  uzupełnianie zbiornika FILL (`LowTank` → refill).
 - `Hall`: strefy (tylko layout) + linie. `SimEngine`: Tick, Command("L1" | "L1/FILL" | "Hall"), Events, Nodes().
 - `Layout`: geometria ekranów z manifestu (canvas 1600×900; Optix ×1.2) + lint.
 - Stany: Stopped 0, Running 1, Starved 2, Blocked 3, Faulted 4, Maintenance 5; kolory `StatePalette` = `design/theme.json`.
@@ -111,7 +112,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Core/Stations/CasePacker.cs` — Collects bottles into cases (unitsPerCase) and emits one case item per full case.
 - `src/Factory.Core/Stations/Feeder.cs` — Source station: creates empty bottles at its cycle rate (infinite supply).
 - `src/Factory.Core/Stations/Filler.cs` — Fills bottles from a buffer tank refilled in batches (LowTank -> Maintenance); noisy fill volume marks defects.
-- `src/Factory.Core/Stations/Labeler.cs` — Applies labels from a roll; random misses mark the bottle defective; roll stock is consumed.
+- `src/Factory.Core/Stations/Labeler.cs` — Applies labels from a roll; random misses mark the bottle defective; an empty roll triggers a timed roll change (Maintenance).
 - `src/Factory.Core/Stations/Palletizer.cs` — Line sink: stacks cases on pallets; a full pallet triggers a timed pallet change (Maintenance).
 - `src/Factory.Core/Stations/VisionInspector.cs` — Inspects every bottle; anything not filled, capped, labeled and defect-free is rejected.
 - `src/Factory.Optix/AccessLevels.cs` — Operator access model: level from the session user's groups (0 anonymous, 1 Operatorzy, 2 UtrzymanieRuchu) + control thresholds.
