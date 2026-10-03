@@ -2,6 +2,16 @@
 
 Najnowszy wpis na górze. Maks. 14 wpisów; starsze w `docs/archive/`.
 
+## 2026-10-03 (przebieg dzienny)
+- Zadanie: artboard `Alarms` (1600×900, na canvasie pod `Line1`). `rowsOf` paruje FaultRaised/Cleared i MaintenanceStarted/Ended
+  per urządzenie w wiersze (początek, koniec, czas trwania; otwarte = „trwa”), `LowTank` jako wiersz informacyjny. Filtry
+  Wszystkie/Awarie/Obsługa/Informacje (40 px), kafle: 8 awarii, 9:56 łącznie, MTTR 1:14, 6 przestojów planowych, 2:55. Zakładka „Alarmy” + link w `Line1`.
+- Założenia: tylko podgląd (Optix ma już zakładkę Alarmy z AlarmGrid); dane wyłącznie z `preview.json`, bez zmian w C#. Limit budżetu
+  źródeł 68k → 72k tokenów w `tools/ctx.py` (nowy artboard nie mieścił się; teraz 69,2k). `canvas.json` scalony z wersją z canvasu.
+- Weryfikacja: render artboardu przez makietę DCLogic + Chromium (15 wierszy, nic nie nachodzi), `make check` 19/19, 6/6.
+  KPI bez zmian (30 min, seed 42): OEE 70,6 %, 67,2 butelki/min średnio (96/min w ostatniej min.). `*.yaml` nietknięte.
+- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: wstrzykiwanie awarii (`Cmd.InjectFault`).
+
 ## 2026-10-02 (przebieg dzienny)
 - Zadanie: wymiana rolki etykiet. `Labeler.Hold` jak w paletyzatorze: pusta rolka → `MaintenanceStarted` („wymiana rolki etykiet”),
   stan `Maintenance` przez `rollChangeS` (45 s), potem nowa rolka i `MaintenanceEnded`. Usunięty TODO z natychmiastową wymianą.

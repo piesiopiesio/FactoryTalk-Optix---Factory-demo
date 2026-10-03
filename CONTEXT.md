@@ -68,7 +68,7 @@ Arial. Stany: Stop `#808080`, Praca `#F0F0F0`, oczekiwanie/obsługa `#93C2E4` + 
 Przyciski ≥ 40 px, odstęp 10 px. Stan nigdy tylko kolorem.
 
 ## Podgląd (Claude Design)
-Canvas: https://claude.ai/artifact/5UbGvx3SZaw2ncuJ9pPdrE — artboardy `Main` (hala), `Line1`, `Status`.
+Canvas: https://claude.ai/artifact/5UbGvx3SZaw2ncuJ9pPdrE — artboardy `Main` (hala), `Line1`, `Alarms` (zdarzenia z czasem trwania, pod `Line1`), `Status`.
 Pliki w `design/canvas/project/`; publikacja: root = `design/canvas`, tylko zmienione pliki.
 Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 
@@ -84,6 +84,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 
 ## Indeks plików
 <!-- index:start -->
+- `design/canvas/project/Alarms.dc.html` — artboard: Alarmy i zdarzenia linii 1 — poziom 2
 - `design/canvas/project/Line1.dc.html` — artboard: Linia pakująca 1 — poziom 2
 - `design/canvas/project/Main.dc.html` — artboard: Hala — przegląd, poziom 1
 - `design/canvas/project/Status.dc.html` — artboard: Stan projektu — poziom 4
