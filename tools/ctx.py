@@ -7,7 +7,8 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 CORE_FILES = ["CONTEXT.md", "factory.json", "BACKLOG.md", "JOURNAL.md"]
 SOURCE_GLOBS = ["src/**/*.cs", "src/**/*.csproj", "tests/**/*.cs", "stubs/**/*.cs", "tools/*.py", "tools/*.sh", "design/canvas/project/*.dc.html",
                 "AGENT_DAILY.md", "Makefile", "docs/*.md"]
-CORE_BUDGET, SOURCE_BUDGET, MAX_CS_LINES = 12_000, 72_000, 250
+# Core = read every run (kept small: JOURNAL max 7 entries). Sources are read on demand: 80k leaves room for the Optix layer.
+CORE_BUDGET, SOURCE_BUDGET, MAX_CS_LINES = 12_000, 80_000, 250
 SKIP = ("/obj/", "/bin/")
 
 

@@ -40,7 +40,7 @@ Sprawdź: nic nie nachodzi na siebie, podpisy mieszczą się, stany i KPI wyglą
 ## 6. Pamięć projektu
 - `BACKLOG.md`: zadanie → `## Done` z datą; 1–2 nowe propozycje na koniec `## Later` z tagiem `[agent]`.
 - `JOURNAL.md`: nowy wpis NA GÓRZE `## RRRR-MM-DD` (3–5 punktów: co, wynik KPI, problemy, następne).
-  Więcej niż 14 wpisów → najstarsze do `docs/archive/journal-RRRR-MM.md`.
+  Więcej niż 7 wpisów → najstarsze do `docs/archive/journal-RRRR-MM.md`.
 - `python3 tools/ctx.py --write` (indeks w CONTEXT.md). Zmiana architektury → popraw CONTEXT.md.
 
 ## 7. Zapis
