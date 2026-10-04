@@ -76,8 +76,10 @@ public static class StationDetail
         var fault = Ui.Value(box, "Fault", "{0}", lx, y + 6, 13, V(nameof(FM.Equipment.FaultText)));
         fault.Width = (float)(W - lx - 16);
         fault.WordWrap = true;
-        var reset = Ui.Button(box, "Reset", "Kasuj awarię", lx, H - 60, 200);     // enabled by AccessLogic (maintenance)
+        var reset = Ui.Button(box, "Reset", "Kasuj awarię", lx, H - 60, 160);     // enabled by AccessLogic (maintenance)
         Ui.OnClickSet(reset, V(N.CmdReset), true);
+        var inject = Ui.Button(box, "InjectFault", "Wstrzyknij awarię", lx + 170, H - 60, 160);   // test fault, maintenance only
+        Ui.OnClickSet(inject, V(N.CmdFault), true);
         var hint = Ui.Text(box, "Hint", "Grafika porusza się tylko z danymi procesu (cykl, poziom, liczba sztuk).", GX, GY + GH + 8, 11, N.UnitsArgb);
         hint.Width = (float)GW;
         hint.WordWrap = true;

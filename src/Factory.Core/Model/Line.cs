@@ -38,6 +38,7 @@ public sealed class Line
 
     public void Command(Cmd cmd, SimContext ctx)
     {
+        if (cmd == Cmd.InjectFault) return;   // device-level only: a whole-line injection would fault every station at once
         foreach (var e in Equipment) e.Command(cmd, ctx);
     }
 

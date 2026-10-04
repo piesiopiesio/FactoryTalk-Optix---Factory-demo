@@ -2,6 +2,16 @@
 
 Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
 
+## 2026-10-04 (przebieg dzienny)
+- Zadanie: wstrzykiwanie awarii. Core: `Cmd.InjectFault` → `Equipment.InjectFault` (kod 1, naprawa = średni MTTR, dla urządzeń bez
+  modelu awarii 30 s; bez losowania, więc determinizm zostaje; zdarzenie „… (wstrzyknięta)”). Linia/hala odrzucają polecenie.
+- Optix: bit `cmdFault` na każdym urządzeniu (TypeGenerator, CommandBits), przycisk „Wstrzyknij awarię” 160 px obok „Kasuj awarię”
+  w faceplate (AccessLogic: tylko utrzymanie ruchu), `SimulationLogic.InjectFault(path)` jako [ExportMethod]. `*.yaml` nietknięte.
+- Założenie: podgląd nie symuluje (niezmiennik 4), więc przycisk w faceplate `Line1` przeskakuje do najbliższej zarejestrowanej awarii
+  wybranej stacji (podpis to wyjaśnia). Render artboardu makietą DCLogic + Chromium: przycisk i podpis mieszczą się w panelu.
+- Testy 22/22 (3 nowe w `FaultTests.cs`), checks 6/6. KPI bez zmian (30 min, seed 42): OEE 70,6 %, 67,2 butelki/min średnio.
+- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: mikroprzestoje < 30 s (Performance −2–5 pp).
+
 ## 2026-10-03 (przebieg dzienny)
 - Zadanie: artboard `Alarms` (1600×900, na canvasie pod `Line1`). `rowsOf` paruje FaultRaised/Cleared i MaintenanceStarted/Ended
   per urządzenie w wiersze (początek, koniec, czas trwania; otwarte = „trwa”), `LowTank` jako wiersz informacyjny. Filtry
@@ -57,12 +67,3 @@ Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
 - Założenie (niesprawdzone w Studio): AdvancedTrend bierze nazwę pióra z DisplayName zmiennej loggera — pozycja [studio] w Later.
 - Test `TrendPensKeepColumnsAndReadLikeOperatorText` (16/16). KPI bez zmian (30 min, seed 42): OEE 74,6 %, 71,6 butelki/min średnio
   (96/min w ostatniej minucie), 9 awarii. GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: separator tysięcy pl-PL.
-
-## 2026-09-26 (południe, sesja przy Studio)
-- Faceplate stacji (poziom 3): klik w kafel stacji → ramka nad schematem (`StationDetail`), zamykana „Zamknij”; `Line/selectedStation`.
-- Grafiki z Template Library (GraphicElements): Bottle1, Carton, PalletBoxSide, PhotoEyeSensorSide — płasko (nakładki 3D ukryte),
-  ruch tylko z danymi: poziom w butelce = napełnienie, głowica zakręcarki schodzi z postępem cyklu, etykieta owija się,
-  linia skanu wizyjnej, karton = butelki w kartonie, stos na palecie = kartony. „Kasuj awarię” w faceplacie tylko dla UR.
-- Budżet kontekstu źródeł podniesiony do 68k (warstwa Optix urosła; rdzeń nadal 12k).
-- Sprawdzone w emulatorze: faceplate'y Zakręcarki, Napełniarki, Kartoniarki; „Kasuj awarię” szare bez logowania.
-  Poprawki po teście: przycisk „Szczegóły” nad kaflem (klik w Rectangle w web nie działa), AccessLogic przeniesiony do MainWindow.

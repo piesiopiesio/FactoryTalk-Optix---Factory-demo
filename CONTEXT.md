@@ -37,7 +37,7 @@ factory.json ──FactoryLoader──▶ Hall (Core) ──SimEngine.Tick(0.1s)
 - `Line`: stacje w łańcuchu + taśmy; KPI: OEE = A×P×Q (na `oeeStation`), ThroughputPerMin (60 s), Good/Reject.
 - Przestoje planowe (`Maintenance` przez `Station.Hold`): wymiana palety (PAL), wymiana rolki etykiet (LAB),
   uzupełnianie zbiornika FILL (`LowTank` → refill).
-- `Hall`: strefy (tylko layout) + linie. `SimEngine`: Tick, Command("L1" | "L1/FILL" | "Hall"), Events, Nodes().
+- `Hall`: strefy (tylko layout) + linie. `SimEngine`: Tick, Command("L1" | "L1/FILL" | "Hall"; `InjectFault` tylko urządzenie), Events, Nodes().
 - `Layout`: geometria ekranów z manifestu (canvas 1600×900; Optix ×1.2) + lint.
 - Stany: Stopped 0, Running 1, Starved 2, Blocked 3, Faulted 4, Maintenance 5; kolory `StatePalette` = `design/theme.json`.
 
@@ -49,7 +49,7 @@ factory.json ──FactoryLoader──▶ Hall (Core) ──SimEngine.Tick(0.1s)
 ## Optix (ścieżki w projekcie `Factory_demo`, Studio 1.7.5.13)
 - `Model/Factory/{Hall|L1|L1/FILL}/<signal>` + `stateColor` (UInt32 ARGB). `[Signal(Label=…)]` = podpis na ekranie.
   Typy: `Model/Templates/Factory/<Klasa>Type` (sufiks obowiązkowy — proxy Studio przesłania klasy Core).
-- Polecenia HMI = bity `cmdStart/cmdStop/cmdReset` (linia), `cmdReset` (urządzenie), `Hall/timeScale`; przyciski
+- Polecenia HMI = bity `cmdStart/cmdStop/cmdReset` (linia), `cmdReset`/`cmdFault` (urządzenie; awaria testowa), `Hall/timeScale`; przyciski
   `VariableCommands.Set`, wykonuje `CommandBits` w runtime NetLogic `Model/SimulationLogic` (tworzy go Build).
 - NetLogic design-time `NetLogic/FactoryBuilder`: `Build()` generuje model, alarmy, ekrany i zakładki; `Clean()`.
   Build uruchamia się w Studio (prawy klik → Execute), NIE przez most ftx-mcp (wątek HTTP może zamknąć Studio).
@@ -119,7 +119,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Optix/AccessLevels.cs` — Operator access model: level from the session user's groups (0 anonymous, 1 Operatorzy, 2 UtrzymanieRuchu) + control thresholds.
 - `src/Factory.Optix/AccessLogic.cs` — Runtime UI NetLogic in MainWindow: enables commands/resets by the session user's level; hall tile click switches the tab.
 - `src/Factory.Optix/AlarmGenerator.cs` — One DigitalAlarm per equipment in Alarms/Factory, linked to Model/Factory/<path>/faultActive; Severity from priority 1-4; operator acknowledges.
-- `src/Factory.Optix/CommandBits.cs` — Runtime side of HMI commands: polls cmdStart/cmdStop/cmdReset bits and Hall/timeScale, executes on SimEngine, clears bits.
+- `src/Factory.Optix/CommandBits.cs` — Runtime side of HMI commands: polls cmdStart/cmdStop/cmdReset/cmdFault bits and Hall/timeScale, executes on SimEngine, clears bits.
 - `src/Factory.Optix/Factory.Optix.csproj` — Cloud compile check of the NetLogic layer against stubs. In Studio these .cs files are linked into NetSolution instead.
 - `src/Factory.Optix/FactoryBuilder.cs` — Design-time NetLogic: Build() regenerates types, Model/Factory, alarms, screens, tabs from factory.json + demo accounts; Clean() removes them.
 - `src/Factory.Optix/HallView.cs` — Level 1 screen (HallScreen): zones, one tile per line with state, KPIs and a live mini-map of its stations.
@@ -134,7 +134,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Optix/OptixNames.cs` — Optix-side naming: project paths, camelCase variable names, .NET -> OPC UA data type mapping, UI colors, screen scale.
 - `src/Factory.Optix/ScreenGenerator.cs` — Regenerates the HMI from factory.json: HallScreen, LineScreen_<id> per line, Alarms/Trends/Login screens, MainWindow chrome/tabs.
 - `src/Factory.Optix/SecurityGenerator.cs` — Demo accounts: design time creates groups Operatorzy/UtrzymanieRuchu + users (locale pl-PL) from demo-users.json; runtime sets their test passwords.
-- `src/Factory.Optix/SimulationLogic.cs` — Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits, sets demo passwords.
+- `src/Factory.Optix/SimulationLogic.cs` — Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits, InjectFault method, sets demo passwords.
 - `src/Factory.Optix/StationDetail.cs` — Level 3 station faceplate on the line screen: tile click opens it; Template Library graphic moved only by live signals.
 - `src/Factory.Optix/StationTable.cs` — Station table under the line diagram: one row per station (state, good/reject, cycle, speed, progress, fault message).
 - `src/Factory.Optix/TypeGenerator.cs` — Creates one Optix ObjectType per Core class (FillerType, ConveyorType, LineType, HallType...) with a variable per [Signal].
@@ -148,6 +148,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `stubs/Optix.Stubs/FTOptix.cs` — Stubs for FTOptix.* namespaces (NetLogic, Project, InformationModel, UI widgets, converters, events, alarms) - verified against Optix 1.7 build.
 - `stubs/Optix.Stubs/UAManagedCore.cs` — Stubs for UAManagedCore (nodes, variables, values, NodeId, Log) - only members our code uses; shapes verified against Optix 1.7.
 - `tests/Factory.Tests/CoreTests.cs` — Tests for manifest validation, conveyor/flow behavior, determinism, KPIs, signals and palette.
+- `tests/Factory.Tests/FaultTests.cs` — Tests for injected (operator/test) faults: device-only, event pair, repair time, no effect on the RNG stream.
 - `tests/Factory.Tests/Fixtures.cs` — Test helpers: repo paths, loading the real factory.json, building small ad-hoc lines.
 - `tests/Factory.Tests/TestRunner.cs` — Minimal test harness: discovers static methods marked [Test], runs them, prints PASS/FAIL, exit code.
 - `tools/check_design.py` — Static lint of the Design canvas: canvas.json <-> artboards, required head line, hole syntax, sizes, data files.

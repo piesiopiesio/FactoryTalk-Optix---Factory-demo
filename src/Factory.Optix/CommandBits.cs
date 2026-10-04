@@ -1,4 +1,4 @@
-// @summary: Runtime side of HMI commands: polls cmdStart/cmdStop/cmdReset bits and Hall/timeScale, executes on SimEngine, clears bits.
+// @summary: Runtime side of HMI commands: polls cmdStart/cmdStop/cmdReset/cmdFault bits and Hall/timeScale, executes on SimEngine, clears bits.
 #region Using directives
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,11 @@ public sealed class CommandBits
             Add(modelRoot, line.Id, OptixNames.CmdStart, FM.Cmd.Start);
             Add(modelRoot, line.Id, OptixNames.CmdStop, FM.Cmd.Stop);
             Add(modelRoot, line.Id, OptixNames.CmdReset, FM.Cmd.Reset);
-            foreach (var eq in line.Equipment) Add(modelRoot, eq.Path, OptixNames.CmdReset, FM.Cmd.Reset);
+            foreach (var eq in line.Equipment)
+            {
+                Add(modelRoot, eq.Path, OptixNames.CmdReset, FM.Cmd.Reset);
+                Add(modelRoot, eq.Path, OptixNames.CmdFault, FM.Cmd.InjectFault);
+            }
             var stopRequest = modelRoot.GetVariable($"{line.Id}/{OptixNames.StopRequest}");
             if (stopRequest != null) stopRequest.Value = false;   // no stale Stop confirmation after a restart
             var selected = modelRoot.GetVariable($"{line.Id}/{OptixNames.SelectedStation}");

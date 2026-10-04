@@ -4,7 +4,8 @@ namespace Factory.Core.Model;
 
 public enum MachineState { Stopped = 0, Running = 1, Starved = 2, Blocked = 3, Faulted = 4, Maintenance = 5 }
 
-public enum Cmd { Start, Stop, Reset }
+/// <summary>InjectFault = test/demo fault on one device (path "L1/FILL"); ignored for a whole line or the hall.</summary>
+public enum Cmd { Start, Stop, Reset, InjectFault }
 
 public static class StatePalette
 {

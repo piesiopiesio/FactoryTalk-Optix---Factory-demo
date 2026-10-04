@@ -52,7 +52,8 @@ public class AccessLogic : BaseNetLogic
                     foreach (var row in list.Children)
                         if (row.Get("Reset") is Item reset) reset.Enabled = level >= AccessLevels.Maintenance;
                 foreach (var detail in screen.Children.Where(c => c.BrowseName.StartsWith("Detail_")))
-                    if (detail.Get("Reset") is Item reset) reset.Enabled = level >= AccessLevels.Maintenance;
+                    foreach (var name in new[] { "Reset", "InjectFault" })
+                        if (detail.Get(name) is Item b) b.Enabled = level >= AccessLevels.Maintenance;
                 if (panel.Get("AccessInfo") is Label info) info.Text = "Uprawnienia: " + AccessLevels.Describe(level);
             }
             if (requestedTab is int t && nav is NavigationPanel np) np.CurrentTabIndex = t;   // after the loop: switching replaces MainNav's child

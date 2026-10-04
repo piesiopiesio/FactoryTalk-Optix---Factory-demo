@@ -62,7 +62,23 @@ public abstract class Equipment
             case Cmd.Start: Commanded = true; break;
             case Cmd.Stop: Commanded = false; break;
             case Cmd.Reset: if (Fault.Reset()) ClearFault(ctx); break;
+            case Cmd.InjectFault: InjectFault(ctx); break;
         }
+    }
+
+    /// <summary>Repair time of an injected fault when the device has no MTTR (fault-free devices).</summary>
+    public const double InjectedRepairS = 30;
+
+    /// <summary>Operator/test fault: first catalog entry, repair = mean MTTR (no RNG draw, so the run stays deterministic).
+    /// No-op while already faulted.</summary>
+    void InjectFault(SimContext ctx)
+    {
+        if (Fault.Active) return;
+        if (Fault.MttrS <= 0) Fault = new FaultModel { MtbfS = Fault.MtbfS, MttrS = InjectedRepairS, AutoRecover = Fault.AutoRecover };
+        Fault.Force(Fault.MttrS);
+        FaultCode = 1;
+        State = MachineState.Faulted;
+        ctx.Raise(Path, SimEventKind.FaultRaised, FaultCode, FaultText + " (wstrzyknięta)");
     }
 
     void ClearFault(SimContext ctx)

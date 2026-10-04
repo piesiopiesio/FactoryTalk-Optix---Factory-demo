@@ -33,6 +33,8 @@ public static class OptixNames
     /// <summary>HMI -> simulation command variables (PLC-style: HMI sets true, SimulationLogic executes and clears).
     /// Buttons use the built-in VariableCommands.Set, so no NetLogic method nodes are needed.</summary>
     public const string CmdStart = "cmdStart", CmdStop = "cmdStop", CmdReset = "cmdReset", TimeScale = "timeScale";
+    /// <summary>Device bit: inject a test fault (faceplate button, maintenance only) -> Core Cmd.InjectFault.</summary>
+    public const string CmdFault = "cmdFault";
     /// <summary>Line flag: Stop pressed, confirmation shown (HMI-only state; cleared by Yes/Cancel and at runtime start).</summary>
     public const string StopRequest = "stopRequest";
     /// <summary>Line: station faceplate shown on the line screen (1..n = station index, 0 = none).</summary>

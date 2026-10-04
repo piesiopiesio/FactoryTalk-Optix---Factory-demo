@@ -5,7 +5,6 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
-- [ ] [M] Wstrzykiwanie awarii — `Cmd.InjectFault` w Core + `SimulationLogic.InjectFault` + przycisk w faceplate podglądu
 - [ ] [S] Mikroprzestoje < 30 s — straty wydajności widoczne w OEE (Performance spada o 2–5 pp)
 - [ ] [M] Straty OEE per stacja (Pareto) — dane w trace-summary + wykres w `Line1`
 - [ ] [M] Model zmian (3 zmiany, planowane przestoje) — czas planowany w OEE
@@ -49,10 +48,15 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] `Sim.Cli` Checks: kontrola „przestoje planowe występują” (≥ 1 Maintenance na PAL, FILL, LAB w 30 min), żeby zmiana parametrów ich nie wyłączyła
 - [ ] [S] [agent] `Alarms`: klik w wiersz przenosi do `Line1` na chwilę zdarzenia (parametr w URL / wspólny stan), z zaznaczoną stacją
 - [ ] [S] [agent] Zakładka „Alarmy” także w nagłówku `Main` i `Status` (spójna nawigacja podglądu)
+- [ ] [S] [agent] [studio] Sprawdzić w emulatorze przycisk „Wstrzyknij awarię” w faceplate (wyłączony dla operatora, alarm P… pojawia się, Kasuj po naprawie) i metodę `InjectFault` w SimulationLogic
+- [ ] [S] [agent] `Sim.Cli --inject L1/LAB@600`: scenariusz demo z awarią wstrzykniętą w zadanym czasie (przebieg nadal deterministyczny), żeby podgląd pokazał awarię testową
 
 ## Blocked
 
 ## Done
+- [x] 2026-10-04 Wstrzykiwanie awarii: `Cmd.InjectFault` w Core (tylko urządzenie, kod 1, naprawa = MTTR lub 30 s, bez losowania,
+  zdarzenie „(wstrzyknięta)”), bit `cmdFault` + przycisk „Wstrzyknij awarię” w faceplate Optix (utrzymanie ruchu),
+  `SimulationLogic.InjectFault(path)` [ExportMethod]; w podglądzie `Line1` przycisk skacze do najbliższej awarii stacji; 3 testy
 - [x] 2026-10-03 Artboard `Alarms` (pod `Line1`): awarie i obsługi planowe sparowane w wiersze (początek, koniec, czas trwania,
   stacja, rodzaj, opis) + informacje (`LowTank`); filtry, kafle (liczba/łączny czas awarii, MTTR, przestoje planowe); zakładka i link z `Line1`
 - [x] 2026-10-02 Wymiana rolki etykiet: pusta rolka (`rollLabels` 1500) → `MaintenanceStarted` „wymiana rolki etykiet”,

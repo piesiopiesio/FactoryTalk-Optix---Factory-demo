@@ -44,10 +44,12 @@ public sealed class SimEngine
         return fresh;
     }
 
-    /// <summary>Target: line id ("L1"), equipment path ("L1/FILL") or "Hall" (all lines).</summary>
+    /// <summary>Target: line id ("L1"), equipment path ("L1/FILL") or "Hall" (all lines).
+    /// InjectFault only for a device; returns false for a line, the hall or an unknown path.</summary>
     public bool Command(string target, Cmd cmd)
     {
         ctx.Time = Time;
+        if (cmd == Cmd.InjectFault && (target == Hall.Id || Hall.Lines.Any(l => l.Id == target))) return false;
         if (target == Hall.Id) { foreach (var l in Hall.Lines) l.Command(cmd, ctx); return true; }
         var line = Hall.Lines.FirstOrDefault(l => l.Id == target);
         if (line != null) { line.Command(cmd, ctx); return true; }

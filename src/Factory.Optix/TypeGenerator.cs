@@ -20,10 +20,10 @@ public static class TypeGenerator
     /// named "Hall"/"Line"/"Conveyor" would shadow the Core classes (global types win over using directives).</summary>
     public static string TypeName(Type t) => t.Name + "Type";
 
-    /// <summary>Command bits per node type: lines start/stop/reset, every device can be reset.</summary>
+    /// <summary>Command bits per node type: lines start/stop/reset, every device can be reset or get a test fault.</summary>
     public static IEnumerable<string> Commands(Type t) =>
         t == typeof(FM.Line) ? new[] { OptixNames.CmdStart, OptixNames.CmdStop, OptixNames.CmdReset }
-        : typeof(FM.Equipment).IsAssignableFrom(t) ? new[] { OptixNames.CmdReset }
+        : typeof(FM.Equipment).IsAssignableFrom(t) ? new[] { OptixNames.CmdReset, OptixNames.CmdFault }
         : Array.Empty<string>();
 
     public static Dictionary<Type, IUAObjectType> Build(IUANode folder)

@@ -1,4 +1,4 @@
-// @summary: Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits, sets demo passwords.
+// @summary: Runtime NetLogic (Model/SimulationLogic): ticks SimEngine every 100 ms, publishes signals, executes HMI command bits, InjectFault method, sets demo passwords.
 #region Using directives
 using System;
 using UAManagedCore;
@@ -49,6 +49,19 @@ public class SimulationLogic : BaseNetLogic
     {
         tick?.Dispose();
         tick = null;
+    }
+
+    /// <summary>Test fault on one device ("L1/FILL"): for scripts, the Studio method browser and remote demos.
+    /// The faceplate button uses the cmdFault bit instead (same Core command).</summary>
+    [ExportMethod]
+    public void InjectFault(string path)
+    {
+        if (engine == null) return;
+        lock (sync)
+        {
+            var ok = engine.Command(path, FM.Cmd.InjectFault);
+            Log.Info("SimulationLogic", ok ? $"Injected fault on {path}" : $"InjectFault ignored: '{path}' is not a device");
+        }
     }
 
     void Step()
