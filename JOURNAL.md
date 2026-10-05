@@ -2,6 +2,17 @@
 
 Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
 
+## 2026-10-05 (przebieg dzienny)
+- Zadanie: mikroprzestoje < 30 s. Nowy `MicroStopModel` (Core/Sim): odstęp wykładniczy na czasie pracy (`mtbsS`), długość
+  wykładnicza przycięta do [1, 29] s (`meanS`). Stan zostaje „Praca”, bez alarmu i zdarzenia, brak postępu cyklu → strata
+  Wydajności, nie Dostępności. Sygnały stacji: `MicroStopActive`, `MicroStops`, `MicroStopS` (Optix/trace/faceplate automatycznie).
+- factory.json: `microStop` na FILL (240 s / 4 s) i CAP (360 s / 4 s); walidacja `meanS` ≤ 29. Własny strumień RNG na urządzenie
+  (seed z hali + ścieżki), żeby nie przetasować losowań awarii. Mimo to zmienia się czas pracy, więc realizacja awarii przy seed 42
+  i tak jest inna — pierwszy wariant (240/5, 400/4) dawał przebieg z OEE 49,6 % (długie awarie FILL/PACK); wybrany wariant ma typowy przebieg.
+- Test bez awarii (3 seedy): Performance −3,6 pp (kryterium 2–5 pp). Testy 25/25 (3 nowe w `MicroStopTests.cs`), checks 6/6.
+  KPI (30 min, seed 42): OEE 67,0 % (było 70,6), Performance 79,6 %, 66,8 butelki/min średnio; FILL 9 mikroprzestojów (64 s), CAP 5 (29 s).
+- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. W Studio potrzebny ponowny Build (3 nowe zmienne na stację). Następne: Pareto strat OEE per stacja.
+
 ## 2026-10-04 (przebieg dzienny)
 - Zadanie: wstrzykiwanie awarii. Core: `Cmd.InjectFault` → `Equipment.InjectFault` (kod 1, naprawa = średni MTTR, dla urządzeń bez
   modelu awarii 30 s; bez losowania, więc determinizm zostaje; zdarzenie „… (wstrzyknięta)”). Linia/hala odrzucają polecenie.
@@ -58,12 +69,3 @@ Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
   Weryfikacja jako pozycja [studio] w Later. Plików `*.yaml` nie ruszam.
 - `make check` zielony (16/16, 6/6). KPI bez zmian (30 min, seed 42): OEE 74,6 %, 71,6 butelki/min średnio (96/min w ostatniej min.), 9 awarii.
 - GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: kliknięcie kafla linii na hali → ekran linii.
-
-## 2026-09-27 (przebieg dzienny)
-- Zadanie: czytelne nazwy piór trendu. Nowy `TrendPens` w Core (wybór sygnałów przeniesiony z `LoggerGenerator`): kolumna bazy
-  = dotychczasowa BrowseName (`L1_oee`, `L1_FILL_tankLevel`) — historia DataLogger1 zostaje; nazwa pióra = `DisplayName` (pl-PL).
-- Podpisy `Label` dla KPI linii (OEE, Dostępność, Wydajność, Jakość, Przepustowość) i zapełnienia taśm → pióra „L1 OEE [%]”,
-  „L1 Napełniarka: Zbiornik [%]”, „L1 Taśma C1: Zapełnienie [%]”. Stuby: `IUANode.DisplayName`, `LocalizedText(text, locale)`.
-- Założenie (niesprawdzone w Studio): AdvancedTrend bierze nazwę pióra z DisplayName zmiennej loggera — pozycja [studio] w Later.
-- Test `TrendPensKeepColumnsAndReadLikeOperatorText` (16/16). KPI bez zmian (30 min, seed 42): OEE 74,6 %, 71,6 butelki/min średnio
-  (96/min w ostatniej minucie), 9 awarii. GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: separator tysięcy pl-PL.

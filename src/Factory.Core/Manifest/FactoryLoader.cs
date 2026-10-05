@@ -42,6 +42,8 @@ public static class FactoryLoader
                 if (!StationRegistry.Has(s.Type)) errors.Add($"{p}/{s.Id}: unknown type '{s.Type}'");
                 if (s.CycleS <= 0) errors.Add($"{p}/{s.Id}: cycleS must be > 0");
                 if (s.Pos.Length != 2) errors.Add($"{p}/{s.Id}: pos must be [x, y]");
+                if (s.MicroStop is { } ms && (ms.MtbsS <= 0 || ms.MeanS <= 0 || ms.MeanS > MicroStopModel.MaxS))
+                    errors.Add($"{p}/{s.Id}: microStop needs mtbsS > 0 and 0 < meanS <= {MicroStopModel.MaxS}");
             }
 
             var stationIds = line.Stations.Select(s => s.Id).ToHashSet();
@@ -70,13 +72,13 @@ public static class FactoryLoader
             Name = m.Hall.Name,
             Seed = m.Hall.Seed,
             Zones = m.Hall.Zones.Select(z => new Zone(z.Id, z.Name, z.Rect, z.Planned)).ToList(),
-            Lines = m.Lines.Select(BuildLine).ToList(),
+            Lines = m.Lines.Select(l => BuildLine(l, m.Hall.Seed)).ToList(),
         };
     }
 
-    static Line BuildLine(LineSpec spec)
+    static Line BuildLine(LineSpec spec, int seed)
     {
-        var stations = spec.Stations.ToDictionary(s => s.Id, s => CreateStation(spec, s));
+        var stations = spec.Stations.ToDictionary(s => s.Id, s => CreateStation(spec, s, seed));
         var conveyors = spec.Conveyors.Select(c => CreateConveyor(spec, c)).ToList();
         foreach (var c in conveyors)
         {
@@ -98,7 +100,7 @@ public static class FactoryLoader
         return new Line(spec.Id, spec.Name, ordered, conveyors, oee) { AutoStart = spec.AutoStart };
     }
 
-    static Station CreateStation(LineSpec line, StationSpec s)
+    static Station CreateStation(LineSpec line, StationSpec s, int seed)
     {
         var st = StationRegistry.Create(s.Type);
         st.Id = s.Id;
@@ -107,6 +109,8 @@ public static class FactoryLoader
         st.LineId = line.Id;
         st.CycleS = s.CycleS;
         st.Fault = ToFault(s.Fault);
+        if (s.MicroStop != null)
+            st.MicroStop = new MicroStopModel { MtbsS = s.MicroStop.MtbsS, MeanS = s.MicroStop.MeanS, Rng = new SimRandom(MicroStopModel.SeedFor(seed, st.Path)) };
         var prms = new Dictionary<string, double>(s.Params)
         {
             ["unitsPerCase"] = line.Product.UnitsPerCase,

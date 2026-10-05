@@ -5,7 +5,6 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
-- [ ] [S] Mikroprzestoje < 30 s — straty wydajności widoczne w OEE (Performance spada o 2–5 pp)
 - [ ] [M] Straty OEE per stacja (Pareto) — dane w trace-summary + wykres w `Line1`
 - [ ] [M] Model zmian (3 zmiany, planowane przestoje) — czas planowany w OEE
 - [ ] [M] SKU 0,5 L / 1,5 L z przezbrojeniem — czasy cyklu z receptury w factory.json
@@ -50,10 +49,14 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] Zakładka „Alarmy” także w nagłówku `Main` i `Status` (spójna nawigacja podglądu)
 - [ ] [S] [agent] [studio] Sprawdzić w emulatorze przycisk „Wstrzyknij awarię” w faceplate (wyłączony dla operatora, alarm P… pojawia się, Kasuj po naprawie) i metodę `InjectFault` w SimulationLogic
 - [ ] [S] [agent] `Sim.Cli --inject L1/LAB@600`: scenariusz demo z awarią wstrzykniętą w zadanym czasie (przebieg nadal deterministyczny), żeby podgląd pokazał awarię testową
+- [ ] [S] [agent] Podgląd/Optix: wskaźnik mikroprzestoju na kaflu stacji (np. „Praca · mikroprzestój” + licznik), bo stan zostaje „Praca”
+- [ ] [M] [agent] Osobny strumień RNG także dla `FaultModel` każdego urządzenia — dziś każda zmiana czasu pracy przetasowuje awarie przy tym samym seedzie (KPI demo skaczą o ±15 pp)
 
 ## Blocked
 
 ## Done
+- [x] 2026-10-05 Mikroprzestoje < 30 s: `MicroStopModel` (własny RNG na urządzenie), `microStop` w factory.json (FILL, CAP),
+  stan „Praca” bez alarmu, sygnały `MicroStopActive`/`MicroStops`/`MicroStopS`, liczniki w trace-summary; test bez awarii: Performance −3,6 pp
 - [x] 2026-10-04 Wstrzykiwanie awarii: `Cmd.InjectFault` w Core (tylko urządzenie, kod 1, naprawa = MTTR lub 30 s, bez losowania,
   zdarzenie „(wstrzyknięta)”), bit `cmdFault` + przycisk „Wstrzyknij awarię” w faceplate Optix (utrzymanie ruchu),
   `SimulationLogic.InjectFault(path)` [ExportMethod]; w podglądzie `Line1` przycisk skacze do najbliższej awarii stacji; 3 testy

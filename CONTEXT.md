@@ -37,6 +37,8 @@ factory.json ──FactoryLoader──▶ Hall (Core) ──SimEngine.Tick(0.1s)
 - `Line`: stacje w łańcuchu + taśmy; KPI: OEE = A×P×Q (na `oeeStation`), ThroughputPerMin (60 s), Good/Reject.
 - Przestoje planowe (`Maintenance` przez `Station.Hold`): wymiana palety (PAL), wymiana rolki etykiet (LAB),
   uzupełnianie zbiornika FILL (`LowTank` → refill).
+- Mikroprzestoje (`MicroStopModel`, `microStop` w factory.json, < 30 s): stan „Praca” bez alarmu, brak postępu = strata Wydajności;
+  własny RNG na urządzenie.
 - `Hall`: strefy (tylko layout) + linie. `SimEngine`: Tick, Command("L1" | "L1/FILL" | "Hall"; `InjectFault` tylko urządzenie), Events, Nodes().
 - `Layout`: geometria ekranów z manifestu (canvas 1600×900; Optix ×1.2) + lint.
 - Stany: Stopped 0, Running 1, Starved 2, Blocked 3, Faulted 4, Maintenance 5; kolory `StatePalette` = `design/theme.json`.
@@ -105,6 +107,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Core/Model/Station.cs` — Template-method work cycle for stations: acquire -> process (subclass) -> emit; tracks starved/blocked.
 - `src/Factory.Core/Model/TrendPens.cs` — Signals worth trending (line KPIs, station doubles, belt occupancy) with DB column names and readable pen labels.
 - `src/Factory.Core/Sim/FaultModel.cs` — Random failures: exponential MTBF on running time, MTTR repair, optional auto-recover.
+- `src/Factory.Core/Sim/MicroStopModel.cs` — Short stops (< 30 s) while running: exponential gap on running time, short pause; a Performance loss, not a fault or alarm.
 - `src/Factory.Core/Sim/SimContext.cs` — Per-tick context passed to every node: dt, clock, RNG, event sink, id generator.
 - `src/Factory.Core/Sim/SimEngine.cs` — Runs the hall: fixed-step Tick(dt), commands by path ("L1", "L1/FILL"), event log, node enumeration.
 - `src/Factory.Core/Sim/SimEvent.cs` — Alarm/event record (fault raised/cleared, maintenance, low tank) emitted by the engine.
@@ -150,6 +153,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `tests/Factory.Tests/CoreTests.cs` — Tests for manifest validation, conveyor/flow behavior, determinism, KPIs, signals and palette.
 - `tests/Factory.Tests/FaultTests.cs` — Tests for injected (operator/test) faults: device-only, event pair, repair time, no effect on the RNG stream.
 - `tests/Factory.Tests/Fixtures.cs` — Test helpers: repo paths, loading the real factory.json, building small ad-hoc lines.
+- `tests/Factory.Tests/MicroStopTests.cs` — Tests for micro stops (< 30 s): no alarm/state change, Performance loss of 2-5 pp on the real line, validation.
 - `tests/Factory.Tests/TestRunner.cs` — Minimal test harness: discovers static methods marked [Test], runs them, prints PASS/FAIL, exit code.
 - `tools/check_design.py` — Static lint of the Design canvas: canvas.json <-> artboards, required head line, hole syntax, sizes, data files.
 - `tools/ctx.py` — Context budget guard + file index: `--check` enforces token/line limits, `--write` refreshes the index in CONTEXT.md.

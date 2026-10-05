@@ -49,7 +49,7 @@ var summary = new
             e.Id, e.TypeKey,
             timePct = Enum.GetValues<MachineState>().Where(s => e.TimeIn(s) > 0)
                 .ToDictionary(s => s.ToString(), s => Math.Round(100 * e.TimeIn(s) / engine.Time, 1)),
-            counts = e is Station st ? new { st.Processed, st.Good, st.Reject } : null,
+            counts = e is Station st ? new { st.Processed, st.Good, st.Reject, st.MicroStops, MicroStopS = Math.Round(st.MicroStopS, 1) } : null,
         }),
     }),
     faults = engine.Events.Where(e => e.Kind == SimEventKind.FaultRaised).GroupBy(e => e.NodeId).ToDictionary(g => g.Key, g => g.Count()),

@@ -29,6 +29,11 @@ public abstract class Station : Equipment
     [Signal] public long Reject { get; private set; }
     [Signal(Unit = "s", Label = "Takt")] public double CycleTimeS => CycleS / Math.Max(0.01, SpeedPct / 100.0);
     [Signal(Unit = "%", Decimals = 0)] public double Progress => progress * 100;
+    /// <summary>Short stops (< 30 s): state stays Running, no progress = Performance loss in OEE.</summary>
+    public MicroStopModel MicroStop { get; internal set; } = MicroStopModel.None;
+    [Signal(Label = "Mikroprzestój")] public bool MicroStopActive => MicroStop.Active;
+    [Signal(Label = "Mikroprzestoje")] public long MicroStops => MicroStop.Count;
+    [Signal(Unit = "s", Decimals = 0, Label = "Czas mikroprzestojów")] public double MicroStopS => MicroStop.TotalS;
 
     /// <summary>Bottles held inside the station (in process, waiting to leave, or collected into a batch).</summary>
     public int WipUnits => (current?.Units ?? 0) + (outgoing?.Units ?? 0) + HeldUnits;
@@ -52,7 +57,9 @@ public abstract class Station : Equipment
             progress = 0;
         }
 
+        if (MicroStop.Pause(ctx.Dt)) return MachineState.Running;   // minor stop: no alarm, no progress
         progress += ctx.Dt / CycleTimeS;
+        MicroStop.Accumulate(ctx.Dt);
         if (progress < 1) return MachineState.Running;
 
         var outcome = Process(current, ctx);

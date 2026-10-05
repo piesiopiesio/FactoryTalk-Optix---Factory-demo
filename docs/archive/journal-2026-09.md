@@ -1,5 +1,14 @@
 # JOURNAL — archiwum 2026-09
 
+## 2026-09-27 (przebieg dzienny)
+- Zadanie: czytelne nazwy piór trendu. Nowy `TrendPens` w Core (wybór sygnałów przeniesiony z `LoggerGenerator`): kolumna bazy
+  = dotychczasowa BrowseName (`L1_oee`, `L1_FILL_tankLevel`) — historia DataLogger1 zostaje; nazwa pióra = `DisplayName` (pl-PL).
+- Podpisy `Label` dla KPI linii (OEE, Dostępność, Wydajność, Jakość, Przepustowość) i zapełnienia taśm → pióra „L1 OEE [%]”,
+  „L1 Napełniarka: Zbiornik [%]”, „L1 Taśma C1: Zapełnienie [%]”. Stuby: `IUANode.DisplayName`, `LocalizedText(text, locale)`.
+- Założenie (niesprawdzone w Studio): AdvancedTrend bierze nazwę pióra z DisplayName zmiennej loggera — pozycja [studio] w Later.
+- Test `TrendPensKeepColumnsAndReadLikeOperatorText` (16/16). KPI bez zmian (30 min, seed 42): OEE 74,6 %, 71,6 butelki/min średnio
+  (96/min w ostatniej minucie), 9 awarii. GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: separator tysięcy pl-PL.
+
 ## 2026-09-26 (południe, sesja przy Studio)
 - Faceplate stacji (poziom 3): klik w kafel stacji → ramka nad schematem (`StationDetail`), zamykana „Zamknij”; `Line/selectedStation`.
 - Grafiki z Template Library (GraphicElements): Bottle1, Carton, PalletBoxSide, PhotoEyeSensorSide — płasko (nakładki 3D ukryte),

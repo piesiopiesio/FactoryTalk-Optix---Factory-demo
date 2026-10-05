@@ -62,6 +62,7 @@ public sealed class StationSpec
     public int[] Pos { get; set; } = { 0, 0 };
     public double CycleS { get; set; } = 1;
     public FaultSpec? Fault { get; set; }
+    public MicroStopSpec? MicroStop { get; set; }
     public Dictionary<string, double> Params { get; set; } = new();
 }
 
@@ -82,4 +83,11 @@ public sealed class FaultSpec
     public double MtbfS { get; set; }
     public double MttrS { get; set; }
     public bool AutoRecover { get; set; } = true;
+}
+
+/// <summary>Short stops (< 30 s) counted as Performance loss: mean running time between stops and mean duration.</summary>
+public sealed class MicroStopSpec
+{
+    public double MtbsS { get; set; }
+    public double MeanS { get; set; }
 }
