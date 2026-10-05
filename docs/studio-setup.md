@@ -24,7 +24,8 @@ Pliki w `NetSolution/Factory` są generowane — edytuj `src/` w repo.
 - `Model/SimulationLogic` — runtime NetLogic, tworzy go Build, jeśli brakuje. Klasa: `NetSolution/SimulationLogic.cs`.
 - `NetLogic/FactoryBuilder` → Execute **CreateDemoUsers** — grupy `Operatorzy`, `UtrzymanieRuchu` i konta z
   `Factory_demo/demo-users.json` (katalog projektu, poza repo i ProjectFiles; hasła testowe w pamięci projektu Claude).
-- `LinePanel/AccessLogic` — runtime NetLogic tworzony przez Build w każdym panelu linii. Klasa: `NetSolution/AccessLogic.cs`.
+- `UI/MainWindow/AccessLogic` — runtime NetLogic (uprawnienia, przełączanie zakładki z hali), tworzony przez Build raz i nigdy
+  nie kasowany. Klasa: `NetSolution/AccessLogic.cs`.
 
 ## Pułapki (sprawdzone 2026-09-25)
 - Klasa NetLogic musi leżeć w `NetSolution/<NazwaWęzła>.cs`; inaczej Studio dopisze tam szablon → duplikat klasy.
@@ -40,6 +41,9 @@ Pliki w `NetSolution/Factory` są generowane — edytuj `src/` w repo.
 - NetLogic tworzony przez Build (usuwany i tworzony od nowa) dostaje od Studio pusty szablon klasy w miejsce naszego pliku →
   węzły NetLogic tworzyć raz i nie kasować (AccessLogic siedzi w MainWindow, poza `WindowParts`).
 - W podglądzie web kliknięcie w Rectangle nie wywołuje zdarzenia → do otwierania faceplate'u służy przycisk „Szczegóły”.
+- Przycisk ustawiający zmienną WŁASNEGO ekranu (np. `HallScreen/openTab`): `VariableToModify` jako względny DynamicLink
+  `…/openTab@NodeId` (`Ui.OnClickSet(..., relative: true)`). Sam NodeId wskazuje zmienną typu ekranu, a nie instancji w sesji —
+  klik nic nie zmieniał (sprawdzone 2026-10-05).
 - Sterowanie ekranem: nie wywoływać „open application” dla działającego Studio (otwiera drugą instancję);
   ikona obok książek („Open .NET Solution”) uruchamia VS Code.
 

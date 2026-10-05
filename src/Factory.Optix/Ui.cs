@@ -127,8 +127,10 @@ public static class Ui
     }
 
     /// <summary>MouseClick -> built-in VariableCommands.Set(variable, value): the Studio "Set variable value" action.
-    /// Called again on the same widget it adds another action to the same handler (executed in order).</summary>
-    public static void OnClickSet(IUANode widget, string variablePath, object value)
+    /// Called again on the same widget it adds another action to the same handler (executed in order).
+    /// <paramref name="relative"/>: target lives in the same screen type -> relative dynamic link "…@NodeId", resolved per
+    /// screen instance (session); a plain NodeId would point at the type's own variable, not the session's instance.</summary>
+    public static void OnClickSet(IUANode widget, string variablePath, object value, bool relative = false)
     {
         var target = Project.Current.GetVariable(variablePath);
         if (target == null) { Log.Warning("Ui", "Missing command variable " + variablePath); return; }
@@ -151,8 +153,15 @@ public static class Ui
         var inputArgs = InformationModel.MakeObject("InputArguments");
         mc.Add(inputArgs);
         var toModify = InformationModel.MakeVariable("VariableToModify", FTOptix.Core.DataTypes.VariablePointer);
-        toModify.Value = target.NodeId;
         inputArgs.Add(toModify);
+        if (relative)
+        {
+            toModify.SetDynamicLink(target);   // CheatSheet events: link + "@NodeId" so the pointer, not the value, is linked
+            var link = toModify.Refs.GetVariable(FTOptix.CoreBase.ReferenceTypes.HasDynamicLink);
+            if (link != null) link.Value = link.Value.Value + "@NodeId";
+            else { toModify.Value = target.NodeId; Log.Warning("Ui", "No dynamic link on VariableToModify for " + variablePath); }
+        }
+        else toModify.Value = target.NodeId;
         var v = InformationModel.MakeVariable("Value", target.DataType);
         if (value is bool b) v.Value = b;
         else v.Value = Convert.ToInt32(value);

@@ -2,6 +2,13 @@
 
 Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
 
+## 2026-10-05 (sesja z Maćkiem: wdrożenie w Studio)
+- Wgrane do Factory_demo 25 plików (e5c2399 → 42a60b7) + poprawka; `optix_build_check` OK, Ctrl+S, Execute Build, F5. AccessLogic.cs nie nadpisany.
+- Emulator (web): hala, linia, faceplate FILL (butelka, zbiornik), „Wstrzyknij awarię” wyszarzony bez logowania, trendy działają.
+- Błąd: „Ekran linii” na hali nic nie robił — `VariableToModify` wskazywał `openTab` typu ekranu, nie instancji w sesji. Poprawka:
+  względny DynamicLink `…@NodeId` (`Ui.OnClickSet relative`), po Build klik przełącza na zakładkę linii.
+- Do zrobienia w Studio: Locales = pl-PL (liczby „69.7 %” i legenda trendu `L1_oee` w sesji en-US).
+
 ## 2026-10-05 (przebieg dzienny)
 - Zadanie: mikroprzestoje < 30 s. Nowy `MicroStopModel` (Core/Sim): odstęp wykładniczy na czasie pracy (`mtbsS`), długość
   wykładnicza przycięta do [1, 29] s (`meanS`). Stan zostaje „Praca”, bez alarmu i zdarzenia, brak postępu cyklu → strata
@@ -61,11 +68,3 @@ Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
 - Test `HallTileOpensItsLineTab` (17/17, 6/6). KPI bez zmian (30 min, seed 42): OEE 74,6 %, 71,6 butelki/min średnio (96/min w ostatniej min.), 9 awarii.
 - GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: cykl uzupełniania zbiornika napełniarki (Maintenance + LowTank).
 
-## 2026-09-28 (przebieg dzienny)
-- Zadanie: separator tysięcy po polsku w Optix. StringFormatter formatuje liczby wg locale sesji (en-US → „1,612”), więc zamiast
-  zmieniać formaty `{0}` ustawiam locale: `SecurityGenerator` nadaje kontom demo `User.LocaleId = pl-PL` (API z CheatSheet
-  users-groups; dopisane do stubów). Sesja bez logowania bierze locale projektu → jednorazowy krok w Studio (docs/studio-setup.md).
-- Założenia (niesprawdzone w Studio): StringFormatter respektuje locale sesji; właściwość projektu „Locales” ustala locale Anonymous.
-  Weryfikacja jako pozycja [studio] w Later. Plików `*.yaml` nie ruszam.
-- `make check` zielony (16/16, 6/6). KPI bez zmian (30 min, seed 42): OEE 74,6 %, 71,6 butelki/min średnio (96/min w ostatniej min.), 9 awarii.
-- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: kliknięcie kafla linii na hali → ekran linii.

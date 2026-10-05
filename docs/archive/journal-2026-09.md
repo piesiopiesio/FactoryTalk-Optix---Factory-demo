@@ -1,5 +1,14 @@
 # JOURNAL — archiwum 2026-09
 
+## 2026-09-28 (przebieg dzienny)
+- Zadanie: separator tysięcy po polsku w Optix. StringFormatter formatuje liczby wg locale sesji (en-US → „1,612”), więc zamiast
+  zmieniać formaty `{0}` ustawiam locale: `SecurityGenerator` nadaje kontom demo `User.LocaleId = pl-PL` (API z CheatSheet
+  users-groups; dopisane do stubów). Sesja bez logowania bierze locale projektu → jednorazowy krok w Studio (docs/studio-setup.md).
+- Założenia (niesprawdzone w Studio): StringFormatter respektuje locale sesji; właściwość projektu „Locales” ustala locale Anonymous.
+  Weryfikacja jako pozycja [studio] w Later. Plików `*.yaml` nie ruszam.
+- `make check` zielony (16/16, 6/6). KPI bez zmian (30 min, seed 42): OEE 74,6 %, 71,6 butelki/min średnio (96/min w ostatniej min.), 9 awarii.
+- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: kliknięcie kafla linii na hali → ekran linii.
+
 ## 2026-09-27 (przebieg dzienny)
 - Zadanie: czytelne nazwy piór trendu. Nowy `TrendPens` w Core (wybór sygnałów przeniesiony z `LoggerGenerator`): kolumna bazy
   = dotychczasowa BrowseName (`L1_oee`, `L1_FILL_tankLevel`) — historia DataLogger1 zostaje; nazwa pióra = `DisplayName` (pl-PL).

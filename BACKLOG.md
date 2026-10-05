@@ -36,10 +36,10 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] Priorytet alarmu w podglądzie: `P1–P4` przy awarii w faceplate `Line1` i w nagłówku (z `AlarmPriority` w layout.json)
 - [ ] [S] [agent] Studio: sprawdzić, czy `Severity` ustawione przez `GetVariable("Severity")` widać w AlarmGrid; jeśli jest właściwość `DigitalAlarm.Severity` — dopisać do stubów i użyć jej
 - [ ] [S] [agent] [studio] Sprawdzić w emulatorze, że AdvancedTrend pokazuje DisplayName pióra (nie BrowseName); jeśli nie — ustawić tytuł pióra w widgecie
+  (2026-10-05: bez logowania, sesja en-US, legenda pokazuje BrowseName `L1_oee` — DisplayName jest tylko pl-PL; sprawdzić po Locales = pl-PL)
 - [ ] [S] [agent] Ta sama lista `TrendPens` w podglądzie: artboard trendu (OEE, przepustowość, zbiornik) z `preview.json`
 - [ ] [S] [agent] [studio] Sprawdzić w emulatorze format „2 148” / „74,6” po zalogowaniu (LocaleId kont demo) i bez logowania (Locales projektu = pl-PL)
 - [ ] [S] [agent] Polski format liczb w podglądzie (`Intl.NumberFormat('pl-PL')` w `Main`/`Line1`/`Status` i w `snapshot.py`), spójnie z Optix
-- [ ] [S] [agent] [studio] Sprawdzić w emulatorze (i w kliencie web), że klik w kafel/„Ekran linii” na hali otwiera zakładkę linii tylko w tej sesji; jeśli `openTab` ekranu nie jest per sesja — przenieść żądanie do zmiennej sesji
 - [ ] [S] [agent] Link „Ekran linii” w podglądzie także z całego kafla (artboard `Main`), spójnie z Optix
 - [ ] [S] [agent] Optix: komunikat informacyjny (nie alarm) przy `LowTank` / uzupełnianiu zbiornika — np. wpis w liście zdarzeń `LinePanel` i ikona „i” przy napełniarce
 - [ ] [S] [agent] Podgląd `Line1`: pasek poziomu zbiornika napełniarki z progami `lowPct`/`refillToPct` (z params w layout.json)
@@ -48,6 +48,7 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] `Alarms`: klik w wiersz przenosi do `Line1` na chwilę zdarzenia (parametr w URL / wspólny stan), z zaznaczoną stacją
 - [ ] [S] [agent] Zakładka „Alarmy” także w nagłówku `Main` i `Status` (spójna nawigacja podglądu)
 - [ ] [S] [agent] [studio] Sprawdzić w emulatorze przycisk „Wstrzyknij awarię” w faceplate (wyłączony dla operatora, alarm P… pojawia się, Kasuj po naprawie) i metodę `InjectFault` w SimulationLogic
+  (2026-10-05: bez logowania przycisk wyszarzony — OK; reszta wymaga zalogowania jako serwis)
 - [ ] [S] [agent] `Sim.Cli --inject L1/LAB@600`: scenariusz demo z awarią wstrzykniętą w zadanym czasie (przebieg nadal deterministyczny), żeby podgląd pokazał awarię testową
 - [ ] [S] [agent] Podgląd/Optix: wskaźnik mikroprzestoju na kaflu stacji (np. „Praca · mikroprzestój” + licznik), bo stan zostaje „Praca”
 - [ ] [M] [agent] Osobny strumień RNG także dla `FaultModel` każdego urządzenia — dziś każda zmiana czasu pracy przetasowuje awarie przy tym samym seedzie (KPI demo skaczą o ±15 pp)
@@ -55,6 +56,8 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 ## Blocked
 
 ## Done
+- [x] 2026-10-05 [studio] Wdrożenie 42a60b7 w Studio (Build, emulator). Klik „Ekran linii” na hali nic nie robił: `VariableToModify`
+  wskazywał zmienną `openTab` typu ekranu, nie instancji w sesji → względny DynamicLink `…/openTab@NodeId` (`Ui.OnClickSet relative`); sprawdzone w web
 - [x] 2026-10-05 Mikroprzestoje < 30 s: `MicroStopModel` (własny RNG na urządzenie), `microStop` w factory.json (FILL, CAP),
   stan „Praca” bez alarmu, sygnały `MicroStopActive`/`MicroStops`/`MicroStopS`, liczniki w trace-summary; test bez awarii: Performance −3,6 pp
 - [x] 2026-10-04 Wstrzykiwanie awarii: `Cmd.InjectFault` w Core (tylko urządzenie, kod 1, naprawa = MTTR lub 30 s, bez losowania,

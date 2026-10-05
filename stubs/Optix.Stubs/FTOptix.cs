@@ -75,7 +75,7 @@ namespace FTOptix.Core
 
 namespace FTOptix.CoreBase
 {
-    public static class ReferenceTypes { public static readonly NodeId HasSource = new(2, 1); }
+    public static class ReferenceTypes { public static readonly NodeId HasSource = new(2, 1), HasDynamicLink = new(2, 3); }
     public static class Objects { public static readonly NodeId VariableCommands = new(2, 2); }
 
     public interface StringFormatter : IUAObject { string Format { get; set; } }

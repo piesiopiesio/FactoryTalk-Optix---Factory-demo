@@ -52,6 +52,7 @@ namespace UAManagedCore
     {
         void AddReference(NodeId referenceType, IUANode target);
         IEnumerable<IUAObject> GetObjects(NodeId referenceType, bool includeSubtypes);
+        IUAVariable GetVariable(NodeId referenceType);   // CheatSheet creating-objects: Refs.GetVariable(HasDynamicLink)
     }
 
     public interface IContext { INodeFactory NodeFactory { get; } }
