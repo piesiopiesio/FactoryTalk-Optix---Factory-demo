@@ -39,7 +39,7 @@ public sealed class Labeler : Station
             ctx.Raise(Path, SimEventKind.MaintenanceStarted, 0, $"{Name}: wymiana rolki etykiet");
         }
         item.Labeled = true;
-        if (ctx.Rng.Chance(Param("missRate", 0.004))) item.Defect = true;
+        if (ctx.Rng.Chance(Param("missRate", 0.004))) item.MarkDefect(Id);
         return Outcome.Pass(item);
     }
 }

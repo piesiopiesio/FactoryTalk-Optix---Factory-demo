@@ -23,8 +23,12 @@ public abstract class Equipment
     [Signal] public bool FaultActive => State == MachineState.Faulted;
     [Signal] public int FaultCode { get; private set; }
     [Signal] public string FaultText => FaultCode == 0 ? "" : $"{Name}: {Describe(FaultCode)}";
+    /// <summary>Seconds of the line's OEE lost because of this equipment (set by <see cref="OeeLosses"/>).</summary>
+    [Signal(Unit = "s", Decimals = 0, Label = "Strata OEE")] public double OeeLossS { get; internal set; }
     [Signal(Unit = "%", Decimals = 0)] public double SpeedPct { get; set; } = 100;
 
+    /// <summary>State this tick was accounted in (a fault raised at the end of the tick shows from the next one).</summary>
+    public MachineState TickState { get; private set; } = MachineState.Stopped;
     public double TimeIn(MachineState s) => timeInState[(int)s];
     public double Param(string name, double fallback) => Params.TryGetValue(name, out var v) ? v : fallback;
 
@@ -43,6 +47,7 @@ public abstract class Equipment
               : Step(ctx);
 
         timeInState[(int)State] += ctx.Dt;
+        TickState = State;
 
         if (State == MachineState.Running && Fault.Accumulate(ctx.Dt, ctx.Rng))
         {

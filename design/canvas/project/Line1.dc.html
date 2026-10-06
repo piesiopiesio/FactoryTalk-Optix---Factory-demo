@@ -72,6 +72,18 @@ button{font-family:inherit}
 </sc-if>
 </sc-for>
 
+<div style="position: absolute; left: 240px; top: 362px; width: 870px; height: 180px; box-sizing: border-box; padding: 8px 12px; background: #E8E8E8; border: 1px solid #D8D8D8; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; gap: 10px; font-size: 13px"><b>Straty OEE wg przyczyny (Pareto, do chwili t)</b><span style="margin-left: auto; color: #767676">{{pareto.note}}</span></div>
+<sc-for list="{{pareto.rows}}" as="r" hint-placeholder-count="6">
+<div style="display: flex; gap: 10px; align-items: center; height: 20px; font-size: 12px">
+<span style="width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.label}}</span>
+<span style="width: 460px; height: 14px; box-sizing: border-box; border: 1px solid #A0A0A4; background: #E0E0E0"><span style="display: block; width: {{r.w}}px; height: 12px; background: #475CA7"></span></span>
+<span style="width: 70px; text-align: right; white-space: nowrap"><b style="color: #475CA7">{{r.pp}}</b> <span style="color: #767676">pp</span></span>
+<span style="width: 60px; text-align: right; color: #767676; white-space: nowrap">Σ {{r.cum}} %</span>
+</div>
+</sc-for>
+</div>
+
 <div style="position: absolute; left: 1330px; top: 182px; width: 250px; height: 520px; box-sizing: border-box; padding: 12px; background: #E8E8E8; border: 1px solid #A0A0A4; display: flex; flex-direction: column; gap: 8px">
 <div style="font-size: 12px">Szczegóły stacji · poziom 3</div>
 <div style="font-size: 16px; font-weight: 700">{{sel.name}}</div>
@@ -186,7 +198,7 @@ class Component extends DCLogic {
       scrub: e => this.setState({ i: Number(e.target.value), sub: 0 }),
     };
     if (!d) {
-      return Object.assign(base, { banner: { border: '#A0A0A4', fill: '#E0E0E0', count: '0', text: '' }, line: {}, kpis: [], belts: [], stations: [], sel: { signals: [] }, inject: {}, events: [], clock: '0:00', total: '0:00', last: 0, index: 0, seed: '' });
+      return Object.assign(base, { banner: { border: '#A0A0A4', fill: '#E0E0E0', count: '0', text: '' }, line: {}, kpis: [], pareto: { note: '', rows: [] }, belts: [], stations: [], sel: { signals: [] }, inject: {}, events: [], clock: '0:00', total: '0:00', last: 0, index: 0, seed: '' });
     }
 
     const pal = d.meta.palette, names = d.meta.stateNames;
@@ -256,6 +268,26 @@ class Component extends DCLogic {
       };
     });
 
+    // OEE loss Pareto: OeeLossS (seconds blamed on each device by Core OeeLosses) as a share of the planned time.
+    // The demo line runs from t = 0 and is never stopped, so planned time = t; the rest of 100 % − OEE is "inne".
+    const losses = d.nodes.filter(n => n.path.indexOf('L1/') === 0 && n.signals.indexOf('OeeLossS') >= 0)
+      .map(n => ({ id: n.path.slice(3), name: n.name, s: val(n.path, 'OeeLossS') }));
+    const lostPp = 100 - val('L1', 'Oee');
+    const sumPp = losses.reduce((a, x) => a + (t > 0 ? 100 * x.s / t : 0), 0);
+    if (t > 0 && lostPp - sumPp > 0.05) losses.push({ id: '', name: 'Inne (niepełny cykl, rozruch)', s: (lostPp - sumPp) * t / 100 });
+    losses.sort((a, b) => b.s - a.s);
+    const top = losses.filter(x => x.s > 0).slice(0, 6);
+    const maxPp = top.length && t > 0 ? 100 * top[0].s / t : 1;
+    let cum = 0;
+    const pareto = {
+      note: 'OEE ' + f1(val('L1', 'Oee')) + ' % + straty ' + f1(lostPp) + ' pp = 100 %',
+      rows: top.map(x => {
+        const pp = 100 * x.s / t;
+        cum += pp;
+        return { label: (x.id ? x.id + ' · ' : '') + x.name, pp: pp.toFixed(1), w: Math.round(458 * pp / maxPp), cum: (cum * 100 / Math.max(lostPp, 0.01)).toFixed(0) };
+      }),
+    };
+
     const sk = idx[s.sel];
     const node = d.nodes[sk];
     const selState = val(s.sel, 'State');
@@ -299,7 +331,7 @@ class Component extends DCLogic {
     return Object.assign(base, {
       banner: banner,
       line: { stateName: pl[names[lineState]], product: L.product.name },
-      kpis: kpis, belts: belts, stations: stations, sel: sel, events: events, inject: inject,
+      kpis: kpis, belts: belts, stations: stations, sel: sel, pareto: pareto, events: events, inject: inject,
       clock: mmss(t + dtSub), total: mmss(d.frames[d.frames.length - 1][0]), last: d.frames.length - 1, index: s.i, seed: d.meta.seed,
     });
   }

@@ -20,7 +20,7 @@ public sealed class Capper : Station
         var target = Param("torqueNm", 2.2);
         Torque = ctx.Rng.Normal(target, Param("torqueSigma", 0.08));
         item.Capped = true;
-        if (Math.Abs(Torque - target) > Param("torqueTol", 0.3)) item.Defect = true;
+        if (Math.Abs(Torque - target) > Param("torqueTol", 0.3)) item.MarkDefect(Id);
         return Outcome.Pass(item);
     }
 }

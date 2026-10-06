@@ -44,6 +44,11 @@ var summary = new
     {
         l.Id, l.Name,
         kpi = Signals.Snapshot(l),
+        oeeLosses = l.Losses.Pareto().Select(x => new
+        {
+            x.Id, x.Name, pp = Math.Round(l.Losses.Pp(x), 2), s = Math.Round(x.TotalS, 1),
+            availabilityS = Math.Round(x.AvailabilityS, 1), performanceS = Math.Round(x.PerformanceS, 1), qualityS = Math.Round(x.QualityS, 1),
+        }),
         stations = l.Equipment.Select(e => new
         {
             e.Id, e.TypeKey,

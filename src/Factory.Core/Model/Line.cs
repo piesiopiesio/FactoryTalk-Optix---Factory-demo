@@ -14,6 +14,7 @@ public sealed class Line
         Id = id; Name = name; Stations = stations; Conveyors = conveyors; OeeStation = oeeStation;
         Sink = stations[^1];
         Sink.Delivered = item => deliveredUnits += item.Units;
+        Losses = new OeeLosses(this);
     }
 
     public string Id { get; }
@@ -23,6 +24,8 @@ public sealed class Line
     public IReadOnlyList<Conveyor> Conveyors { get; }
     public Station OeeStation { get; }
     public Station Sink { get; }
+    /// <summary>Where the OEE went: lost time per equipment (Pareto).</summary>
+    public OeeLosses Losses { get; }
     public IEnumerable<Equipment> Equipment => Stations.Cast<Equipment>().Concat(Conveyors);
 
     [Signal] public MachineState State { get; private set; }
@@ -47,6 +50,7 @@ public sealed class Line
         foreach (var c in Conveyors) c.Tick(ctx);
         for (var i = Stations.Count - 1; i >= 0; i--) Stations[i].Tick(ctx);   // downstream first frees space
         UpdateKpis(ctx.Time + ctx.Dt);
+        Losses.Tick(ctx.Dt);
     }
 
     void UpdateKpis(double now)

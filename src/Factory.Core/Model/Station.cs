@@ -23,6 +23,8 @@ public abstract class Station : Equipment
     public double CycleS { get; internal set; } = 1;
     /// <summary>Called for every item leaving the line at a sink station (Output == null).</summary>
     public Action<Item>? Delivered { get; set; }
+    /// <summary>Called with every rejected unit (OEE quality loss attribution).</summary>
+    public Action<Item>? OnReject { get; set; }
 
     [Signal] public long Processed { get; private set; }
     [Signal] public long Good { get; private set; }
@@ -62,11 +64,12 @@ public abstract class Station : Equipment
         MicroStop.Accumulate(ctx.Dt);
         if (progress < 1) return MachineState.Running;
 
-        var outcome = Process(current, ctx);
+        var item = current;
+        var outcome = Process(item, ctx);
         Processed++;
         current = null;
         progress = 0;
-        if (outcome.Rejected) Reject++;
+        if (outcome.Rejected) { Reject++; OnReject?.Invoke(item); }
         if (outcome.Out != null && !TryEmit(outcome.Out)) outgoing = outcome.Out;
         return MachineState.Running;
     }

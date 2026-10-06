@@ -13,7 +13,11 @@ public sealed class Item
     public bool Capped { get; set; }
     public bool Labeled { get; set; }
     public bool Defect { get; set; }
+    /// <summary>Id of the station that made the first defect (OEE quality loss is blamed on it).</summary>
+    public string? DefectBy { get; private set; }
     public int Units { get; set; } = 1;   // bottles contained (case = 12, pallet = 480)
+
+    public void MarkDefect(string stationId) { Defect = true; DefectBy ??= stationId; }
 
     public bool IsGoodBottle => Filled && Capped && Labeled && !Defect;
 }

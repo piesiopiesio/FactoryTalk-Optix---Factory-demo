@@ -5,7 +5,6 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
-- [ ] [M] Straty OEE per stacja (Pareto) — dane w trace-summary + wykres w `Line1`
 - [ ] [M] Model zmian (3 zmiany, planowane przestoje) — czas planowany w OEE
 - [ ] [M] SKU 0,5 L / 1,5 L z przezbrojeniem — czasy cyklu z receptury w factory.json
 - [ ] [M] DataLogger + `TrendsScreen` w FactoryBuilder — logger OEE/throughput/tankLevel i trend
@@ -52,10 +51,15 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] `Sim.Cli --inject L1/LAB@600`: scenariusz demo z awarią wstrzykniętą w zadanym czasie (przebieg nadal deterministyczny), żeby podgląd pokazał awarię testową
 - [ ] [S] [agent] Podgląd/Optix: wskaźnik mikroprzestoju na kaflu stacji (np. „Praca · mikroprzestój” + licznik), bo stan zostaje „Praca”
 - [ ] [M] [agent] Osobny strumień RNG także dla `FaultModel` każdego urządzenia — dziś każda zmiana czasu pracy przetasowuje awarie przy tym samym seedzie (KPI demo skaczą o ±15 pp)
+- [ ] [S] [agent] Optix: panel Pareto strat OEE na ekranie linii (`LinePanel`/`LineView`) z sygnałów `oeeLossS` — paski jak w `Line1`
+- [ ] [S] [agent] Pareto strat OEE: podział słupka na Dostępność / Wydajność / Jakość (dane A/P/Q już w trace-summary) i podpowiedź przyczyny
 
 ## Blocked
 
 ## Done
+- [x] 2026-10-06 Straty OEE per stacja (Pareto): `OeeLosses` w Core przypisuje czas planowany stacji OEE sprawcy (awaria/obsługa,
+  brak podaży w górę, blokada w dół, mikroprzestój, odrzut wg `DefectBy`); OEE + Σ = 100 %; `oeeLosses` w trace-summary,
+  sygnał `OeeLossS` na urządzeniu, panel Pareto w `Line1`; 3 testy
 - [x] 2026-10-05 [studio] Wdrożenie 42a60b7 w Studio (Build, emulator). Klik „Ekran linii” na hali nic nie robił: `VariableToModify`
   wskazywał zmienną `openTab` typu ekranu, nie instancji w sesji → względny DynamicLink `…/openTab@NodeId` (`Ui.OnClickSet relative`); sprawdzone w web
 - [x] 2026-10-05 Mikroprzestoje < 30 s: `MicroStopModel` (własny RNG na urządzenie), `microStop` w factory.json (FILL, CAP),

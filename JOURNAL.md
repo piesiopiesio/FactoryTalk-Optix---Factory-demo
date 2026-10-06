@@ -2,6 +2,18 @@
 
 Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
 
+## 2026-10-06 (przebieg dzienny)
+- Zadanie: straty OEE per stacja (Pareto). Nowa klasa Core `OeeLosses` (w `Line`): każda sekunda czasu planowanego napełniarki (stacja OEE)
+  przypisana sprawcy — awaria/obsługa = FILL (Dostępność), Brak podaży → w górę linii, Blokada → w dół do pierwszego urządzenia, które nie czeka
+  (pełna taśma nie jest przyczyną, stojąca tak), mikroprzestój = FILL, odrzut = stacja, która zrobiła wadę (`Item.MarkDefect`/`DefectBy`).
+  Rozkład dokładny: OEE + Σ strat = 100 %, reszta „Inne” (niepełny cykl) 0,03 pp.
+- Wynik (30 min, seed 42): FILL 18,8 pp (awarie 264 s), CAP 7,3 pp (blokada przez awarie zakręcarki), LAB 4,2 pp, FEED 2,7 pp. PACK (1 awaria, 29 s)
+  pochłonięta przez bufory taśm — 0 pp. KPI bez zmian: OEE 67,0 %, 66,8 butelki/min średnio (brak nowego losowania).
+- Dane: `oeeLosses` w trace-summary (s, pp, podział A/P/Q); sygnał `OeeLossS` („Strata OEE”) na każdym urządzeniu → trace, faceplate i
+  zmienna Optix automatycznie (nie trafia do DataLoggera). `Line1`: panel Pareto między rzędami stacji (6 największych, pp i Σ %), zmienia się z czasem.
+- Testy 28/28 (3 nowe w `OeeLossTests.cs`), checks 6/6; render artboardu makietą DCLogic + Chromium (klatki 150 i 900) — nic nie nachodzi.
+  GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. W Studio potrzebny Build (nowa zmienna `oeeLossS`). Następne: model zmian.
+
 ## 2026-10-05 (sesja z Maćkiem: wdrożenie w Studio)
 - Wgrane do Factory_demo 25 plików (e5c2399 → 42a60b7) + poprawka; `optix_build_check` OK, Ctrl+S, Execute Build, F5. AccessLogic.cs nie nadpisany.
 - Emulator (web): hala, linia, faceplate FILL (butelka, zbiornik), „Wstrzyknij awarię” wyszarzony bez logowania, trendy działają.
@@ -58,13 +70,3 @@ Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
 - Test `FillerTankRefillsInBatchesWithLowTankEvent` (18/18, 6/6). KPI (30 min, seed 42): OEE 71,9 % (było 74,6), 68,8 butelki/min
   średnio (było 71,6), 8 awarii — spadek zgodny z 50 s przestoju na stacji OEE.
 - GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: wymiana rolki etykiet (Maintenance etykieciarki).
-
-## 2026-09-29 (przebieg dzienny)
-- Zadanie: kafel linii na hali → ekran linii. Nowy `NavTabs` w Core (kolejność zakładek: Hala, linie, Alarmy, Trendy, Logowanie;
-  `IndexOf(L1) = 1`), używany przez `ScreenGenerator`. Kafel ma przezroczysty cel kliknięcia i przycisk „Ekran linii” (web nie
-  dostarcza kliknięć w Rectangle); oba ustawiają `HallScreen/openTab`, a `AccessLogic` (co 0,5 s) ustawia `MainNav.CurrentTabIndex`.
-- Założenie (niesprawdzone w Studio): zmienna ekranu jest per sesja (ekran instancjonowany w MainNav sesji), więc klik nie przełącza
-  zakładki innym klientom; zmienna w Model przełączałaby wszystkich. Weryfikacja jako pozycja [studio] w Later. `*.yaml` nietknięte.
-- Test `HallTileOpensItsLineTab` (17/17, 6/6). KPI bez zmian (30 min, seed 42): OEE 74,6 %, 71,6 butelki/min średnio (96/min w ostatniej min.), 9 awarii.
-- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: cykl uzupełniania zbiornika napełniarki (Maintenance + LowTank).
-

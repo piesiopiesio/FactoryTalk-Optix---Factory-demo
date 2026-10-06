@@ -47,7 +47,7 @@ public sealed class Filler : Station
         tankL -= FillMl / 1000.0;
         item.FillMl = FillMl;
         item.Filled = true;
-        if (Math.Abs(FillMl - target) > Param("fillTolMl", 8)) item.Defect = true;
+        if (Math.Abs(FillMl - target) > Param("fillTolMl", 8)) item.MarkDefect(Id);
         return Outcome.Pass(item);
     }
 }

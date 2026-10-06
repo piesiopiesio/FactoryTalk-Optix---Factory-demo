@@ -17,6 +17,53 @@
         "RejectUnits": 26,
         "ActiveFaults": 1
       },
+      "oeeLosses": [
+        {
+          "id": "FILL",
+          "name": "Napełniarka",
+          "pp": 18.75,
+          "s": 337.5,
+          "availabilityS": 264.1,
+          "performanceS": 64.4,
+          "qualityS": 9
+        },
+        {
+          "id": "CAP",
+          "name": "Zakręcarka",
+          "pp": 7.29,
+          "s": 131.3,
+          "availabilityS": 0,
+          "performanceS": 131.3,
+          "qualityS": 0
+        },
+        {
+          "id": "LAB",
+          "name": "Etykieciarka",
+          "pp": 4.24,
+          "s": 76.4,
+          "availabilityS": 0,
+          "performanceS": 69.8,
+          "qualityS": 6.6
+        },
+        {
+          "id": "FEED",
+          "name": "Podajnik butelek",
+          "pp": 2.65,
+          "s": 47.7,
+          "availabilityS": 0,
+          "performanceS": 47.7,
+          "qualityS": 0
+        },
+        {
+          "id": "INNE",
+          "name": "Inne (niepełny cykl, rozruch)",
+          "pp": 0.03,
+          "s": 0.5,
+          "availabilityS": 0,
+          "performanceS": 0.5,
+          "qualityS": 0
+        }
+      ],
       "stations": [
         {
           "id": "FEED",
