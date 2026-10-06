@@ -5,39 +5,47 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
-- [ ] [M] Model zmian (3 zmiany, planowane przestoje) — czas planowany w OEE
+<!-- [help X.Y] = klocek z pomocy Optix; API i pułapki: docs/reference/optix-help-klocki.md; kolejność = plan (dokument planu, zakładka „Klocki z pomocy Optix”) -->
+- [ ] [S] [help 1.1] Pasma Severity 200/400/700/900 (Optix: ≤250 Low, ≤500 Medium, ≤750 High, >750 Urgent) — 4 różne priorytety w AlarmGrid, test
+- [ ] [S] [help 1.2] `selectedStation`, `stopRequest` per sesja: z LineType do ekranu linii, linki względne — dwa klienty web niezależne
+- [ ] [S] [help 1.3] Cel kliknięcia Rectangle: MouseUp + `HitTestVisible = true` — klik w kafel stacji/linii działa w web; potem bez przycisków „Szczegóły”/„Ekran linii”
+- [ ] [S] [help 1.4] Locale: `LocaleId` pl-PL w sesji + `TrendPen.Title` en-US/pl-PL — bez logowania „69,7 %”, legenda „L1 OEE [%]”
+- [ ] [S] [help 1.5] Takt wg zegara: mierzony upływ → n kroków stałego `Dt` — 10 min zegara = 10 min symulacji ±1 %
+- [ ] [S] [help 2.1] Wylogowanie po bezczynności przez UISession (`IdleTimeoutEnabled`, 5 min, `IdleTimeoutEvent` → Logout) — zastępuje IdleTimeoutLogic
+- [ ] [S] [help 2.2] Kafel hali wywołuje `MainNav.ChangePanelByTabIndex` — bez `openTab` i pętli w AccessLogic, przełączenie od razu
+- [ ] [M] [help 2.3] `Enabled` przycisków z grup sesji (zamiast pętli AccessLogic co 0,5 s) — anonim/operator/serwis jak dziś
+- [ ] [M] [help 2.4] Okno stacji jako Dialog z aliasem `{Station}` + `UICommands.OpenDialog` (typ bazowy stacji) — zamiast 7 ukrytych `Detail_*`
+- [ ] [S] [help 2.5] Ikona priorytetu P1–P4 (MultistateImage) przy stacji + `Blink` do potwierdzenia (System › Blink), też w podglądzie — ISA-101
+- [ ] [S] [help 2.6] Sparkline OEE na kaflu hali (pasmo celu), LinearGauge zbiornika ze strefami `lowPct`/`refillToPct`, TrendThreshold celu OEE
+- [ ] [S] [help 2.7] Budżet węzłów: `{0}` bez StringFormatter, mniej handlerów; pomiar Nodes Counter przed/po — ekran linii −30 % węzłów
+- [ ] [S] [help 3.1] HistogramChart Pareto z `oeeLossS` na ekranie linii (Optix) — zgodny z panelem w `Line1`
+- [ ] [M] [help 3.2] Awarie z historii alarmów: SQL GROUP BY (liczba) + czasy parowane w NetLogic — tabela na zakładce Alarmy
+- [ ] [M] [help 3.3] Raport zmianowy PDF (Report + `GeneratePdf(…, "pl-PL")`) — PDF po kliknięciu, KPI + stacje + awarie
 - [ ] [M] SKU 0,5 L / 1,5 L z przezbrojeniem — czasy cyklu z receptury w factory.json
+- [ ] [M] [help 3.4] Receptury SKU (RecipeSchema na osobnej bazie, RecipeEditor, `TransferFromStoreToTarget`) — po pozycji „SKU 0,5 L / 1,5 L”
+- [ ] [M] [help 4.1] Serwer OPC UA: `NodesToPublish` = Model/Factory, `UseNodePathInNodeIds`, bez szyfrowania — UaExpert widzi KPI i InjectFault
+- [ ] [M] [help 4.2] MQTT: wbudowany broker + MQTTPublisher z DataLogger1 — MQTT Explorer widzi KPI co 1 s
+- [ ] [S] [help 4.3] Rozpoznanie: typy Weihenstephan (companion specs) dla napełniarki — notatka, co Build wygeneruje z C#
+- [ ] [S] [help 4.4] Rozpoznanie: `TemplateLibrary.ImportLibraryItem` w Build (wymaga „Show feature preview”) — brakujący element dodany sam
+- [ ] [M] Model zmian (3 zmiany, planowane przestoje) — czas planowany w OEE
 - [ ] [M] DataLogger + `TrendsScreen` w FactoryBuilder — logger OEE/throughput/tankLevel i trend
-- [ ] [M] Priorytety alarmów wg przewodnika HMI — priorytet 1–4 w `FaultCatalog` (np. kurtyna świetlna = Pilny), kolor i numer w ikonie
-- [ ] [S] Potwierdzanie alarmów — stan niepotwierdzony (miganie ramki) i potwierdzony (stała ramka) w podglądzie i Optix
 
 ## Later
-- [ ] [S] [studio] Automatyczne wylogowanie po bezczynności (IdleTimeoutLogic z Template Library)
 - [ ] [L] Model stanów PackML (ISA-TR88) dla linii: Stopped/Idle/Execute/Suspended/Held/Aborted + ikony „States” z Template Library
-- [ ] [M] [studio] Raport zmianowy PDF (moduł Report; wzór: FactoryTalk-Optix/Training_Reports) — OEE, produkcja, awarie
-- [ ] [M] [studio] Pareto przestojów z historii alarmów (wzór: FactoryTalk-Optix/Optix_Sample_ParetoAlarmChart)
-- [ ] [M] [studio] Receptury SKU przez RecipesEditor/RecipeX (łączy się z pozycją „SKU 0,5 L / 1,5 L”)
 - [ ] [S] [studio] Zegar w nagłówku (ClockLogic) i powiadomienie „toast” o nowej awarii (wzór: Optix_Sample_ToastNotification)
 - [ ] [L] Sterownik zamiast symulacji: RA EtherNet/IP + Logix Emulate (tagi PLC w miejsce SimulationLogic, ta sama warstwa UI)
 - [ ] [M] LineScreen oparty o alias (jeden ekran dla wielu linii; Optix 1.8 `SetDynamicLinkToAlias`)
-- [ ] [M] Faceplate w Optix (okno dialogowe z sygnałami stacji) generowany przez FactoryBuilder
 - [ ] [M] Strefa Magazyn: palety z paletyzatora trafiają do regału (AGV jako taśma logiczna)
 - [ ] [M] Strefa Media: sprężone powietrze i energia per linia (kWh/1000 butelek)
 - [ ] [M] Druga linia (procesowa: mieszalnik + CIP) w hali
 - [ ] [M] Rozgałęzienia taśm (bufor boczny, odrzut z wizyjnej na osobną taśmę)
-- [ ] [M] Serwer OPC UA + MQTT publikujący KPI hali
 - [ ] [M] Faceplate z zakładkami Home / Diagnostyka / Ustawienia / Alarmy (przewodnik HMI), rozmiar = kontrolki × 50 + 10
-- [ ] [S] Sparkline OEE i wydajności na poziomie 1 (hala), bar graph poziomu zbiornika z limitami
 - [ ] [S] Pasek przycisków poziomu 2/3 w nagłówku Optix (nawigacja wg przewodnika HMI)
 - [ ] [S] [agent] `snapshot.py`: mini-mapa stacji w kafelku linii na obrazie hali (jak w artboardzie `Main`)
 - [ ] [S] [agent] Wejście/wyjście butelek między klatkami w `Line1` (pojawianie się na 0 i znikanie na 1 w trakcie interpolacji, bez skoku co 2 s)
 - [ ] [S] [agent] `snapshot.py --sub 0.5`: klatka pośrednia taśm (ta sama reguła co `beltAt` w artboardzie), żeby agent widział interpolację
 - [ ] [S] [agent] Priorytet alarmu w podglądzie: `P1–P4` przy awarii w faceplate `Line1` i w nagłówku (z `AlarmPriority` w layout.json)
-- [ ] [S] [agent] Studio: sprawdzić, czy `Severity` ustawione przez `GetVariable("Severity")` widać w AlarmGrid; jeśli jest właściwość `DigitalAlarm.Severity` — dopisać do stubów i użyć jej
-- [ ] [S] [agent] [studio] Sprawdzić w emulatorze, że AdvancedTrend pokazuje DisplayName pióra (nie BrowseName); jeśli nie — ustawić tytuł pióra w widgecie
-  (2026-10-05: bez logowania, sesja en-US, legenda pokazuje BrowseName `L1_oee` — DisplayName jest tylko pl-PL; sprawdzić po Locales = pl-PL)
 - [ ] [S] [agent] Ta sama lista `TrendPens` w podglądzie: artboard trendu (OEE, przepustowość, zbiornik) z `preview.json`
-- [ ] [S] [agent] [studio] Sprawdzić w emulatorze format „2 148” / „74,6” po zalogowaniu (LocaleId kont demo) i bez logowania (Locales projektu = pl-PL)
 - [ ] [S] [agent] Polski format liczb w podglądzie (`Intl.NumberFormat('pl-PL')` w `Main`/`Line1`/`Status` i w `snapshot.py`), spójnie z Optix
 - [ ] [S] [agent] Link „Ekran linii” w podglądzie także z całego kafla (artboard `Main`), spójnie z Optix
 - [ ] [S] [agent] Optix: komunikat informacyjny (nie alarm) przy `LowTank` / uzupełnianiu zbiornika — np. wpis w liście zdarzeń `LinePanel` i ikona „i” przy napełniarce
@@ -51,10 +59,10 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [agent] `Sim.Cli --inject L1/LAB@600`: scenariusz demo z awarią wstrzykniętą w zadanym czasie (przebieg nadal deterministyczny), żeby podgląd pokazał awarię testową
 - [ ] [S] [agent] Podgląd/Optix: wskaźnik mikroprzestoju na kaflu stacji (np. „Praca · mikroprzestój” + licznik), bo stan zostaje „Praca”
 - [ ] [M] [agent] Osobny strumień RNG także dla `FaultModel` każdego urządzenia — dziś każda zmiana czasu pracy przetasowuje awarie przy tym samym seedzie (KPI demo skaczą o ±15 pp)
-- [ ] [S] [agent] Optix: panel Pareto strat OEE na ekranie linii (`LinePanel`/`LineView`) z sygnałów `oeeLossS` — paski jak w `Line1`
 - [ ] [S] [agent] Pareto strat OEE: podział słupka na Dostępność / Wydajność / Jakość (dane A/P/Q już w trace-summary) i podpowiedź przyczyny
 
 ## Blocked
+- [ ] [S] [help 4.5] Pokazy > 2 h (emulator zawsze kończy po 2 h): eksport + runtime jako usługa (blocked: decyzja Maćka o licencji)
 
 ## Done
 - [x] 2026-10-06 Straty OEE per stacja (Pareto): `OeeLosses` w Core przypisuje czas planowany stacji OEE sprawcy (awaria/obsługa,
