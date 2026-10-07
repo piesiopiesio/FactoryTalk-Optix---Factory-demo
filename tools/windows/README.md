@@ -31,3 +31,6 @@ Poranny przebieg w chmurze (06:47) komputera nie potrzebuje; PC jest potrzebny t
 ## Wypchnięcie na GitHub z PC
 `wypchnij-na-github.cmd` + `repo.bundle` (kopia z podglądu) w jednym folderze → dwuklik. Wysyła tylko gałąź `claude/dev`
 (nigdy `main`, bez force) poświadczeniami gita z tego komputera. Potrzebny Git for Windows.
+
+## Nowy komputer
+Przeniesienie całego stanowiska (projekt Studio, ftx-mcp, dostęp z chmury, rutyny): `NOWA-MASZYNA.md`.
