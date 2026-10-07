@@ -2,6 +2,14 @@
 
 Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
 
+## 2026-10-07 (przebieg dzienny)
+- Zadanie: [help 1.1] pasma Severity. Optix pokazuje priorytet z pasm 1–250 Low, 251–500 Medium, 501–750 High, 751–1000 Urgent, więc
+  dawne 300 (P4) i 500 (P3) były oba „Medium”. Teraz 900/700/400/200; nowa funkcja `AlarmPriorities.OptixBand(severity)` opisuje pasma Optix.
+- Test `SeverityLandsInItsOwnOptixBand`: każdy priorytet ląduje we własnym paśmie, granica 500/501, linia demo używa wszystkich 4 pasm.
+- Testy 29/29, checks 6/6. KPI bez zmian (zmiana nie dotyka symulacji): OEE 67,0 %, 66,8 butelki/min średnio. Snapshoty bez zmian.
+- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. W Studio: Build (AlarmGenerator ustawi nowe Severity) i rzut oka na AlarmGrid.
+  Następne: [help 1.2] `selectedStation`/`stopRequest` per sesja.
+
 ## 2026-10-06 (przebieg dzienny)
 - Zadanie: straty OEE per stacja (Pareto). Nowa klasa Core `OeeLosses` (w `Line`): każda sekunda czasu planowanego napełniarki (stacja OEE)
   przypisana sprawcy — awaria/obsługa = FILL (Dostępność), Brak podaży → w górę linii, Blokada → w dół do pierwszego urządzenia, które nie czeka
@@ -60,13 +68,3 @@ Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
 - Test `LabelRollChangeIsMaintenanceWithEvents` (19/19, 6/6). KPI (30 min, seed 42): OEE 70,6 % (było 71,9), 67,2 butelki/min
   średnio (było 68,8), 8 awarii. Budżet źródeł 66,8k/68k tokenów — blisko limitu.
 - GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: artboard `Alarms` (lista zdarzeń, link z `Line1`).
-
-## 2026-09-30 (przebieg dzienny)
-- Zadanie: cykl uzupełniania zbiornika napełniarki. `Filler.Hold`: bez stałego dopływu; poziom < `lowPct` (20 %) → nowe zdarzenie
-  `SimEventKind.LowTank` + `MaintenanceStarted`, stan `Maintenance` aż do `refillToPct` (95 %) przy `refillLps` 12 L/s → `MaintenanceEnded`.
-  Parametry w factory.json. Przebieg 30 min: jedno uzupełnianie 1115,7–1165,8 s (50 s), linia za napełniarką głodna, podajnik zablokowany.
-- Założenia: uzupełnianie zatrzymuje nalewanie (przestój w Dostępności), `LowTank` to zdarzenie informacyjne, nie alarm Optix
-  (propozycja komunikatu w Later). Snapshot z klatki 570 (t=1140 s) pokazuje FILL · Maintenance. `*.yaml` nietknięte.
-- Test `FillerTankRefillsInBatchesWithLowTankEvent` (18/18, 6/6). KPI (30 min, seed 42): OEE 71,9 % (było 74,6), 68,8 butelki/min
-  średnio (było 71,6), 8 awarii — spadek zgodny z 50 s przestoju na stacji OEE.
-- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: wymiana rolki etykiet (Maintenance etykieciarki).

@@ -149,6 +149,16 @@ public static class AlarmTests
         var sev = Enum.GetValues<AlarmPriority>().Select(AlarmPriorities.Severity).ToList();
         Assert.True(sev.Zip(sev.Skip(1)).All(p => p.First > p.Second) && sev.All(s => s is >= 1 and <= 1000), "Severity must fall 1->4 within 1..1000");
     }
+
+    [Test] public static void SeverityLandsInItsOwnOptixBand()
+    {
+        foreach (var p in Enum.GetValues<AlarmPriority>())
+            Assert.Equal(p, AlarmPriorities.OptixBand(AlarmPriorities.Severity(p)), $"Optix band of {p} (Severity {AlarmPriorities.Severity(p)})");
+        Assert.Equal(AlarmPriority.Medium, AlarmPriorities.OptixBand(500), "500 is the top of Optix Medium");
+        Assert.Equal(AlarmPriority.High, AlarmPriorities.OptixBand(501), "501 starts Optix High");
+        var used = Fixtures.Engine().Hall.Lines.SelectMany(l => l.Equipment).Select(e => AlarmPriorities.OptixBand(AlarmPriorities.Severity(e.AlarmPriority))).Distinct().Count();
+        Assert.Equal(4, used, "the demo line shows all four Optix priorities in AlarmGrid");
+    }
 }
 
 public static class TrendTests

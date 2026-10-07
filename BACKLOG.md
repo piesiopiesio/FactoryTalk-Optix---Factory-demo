@@ -6,7 +6,6 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
 <!-- [help X.Y] = klocek z pomocy Optix; API i pułapki: docs/reference/optix-help-klocki.md; kolejność = plan (dokument planu, zakładka „Klocki z pomocy Optix”) -->
-- [ ] [S] [help 1.1] Pasma Severity 200/400/700/900 (Optix: ≤250 Low, ≤500 Medium, ≤750 High, >750 Urgent) — 4 różne priorytety w AlarmGrid, test
 - [ ] [S] [help 1.2] `selectedStation`, `stopRequest` per sesja: z LineType do ekranu linii, linki względne — dwa klienty web niezależne
 - [ ] [S] [help 1.3] Cel kliknięcia Rectangle: MouseUp + `HitTestVisible = true` — klik w kafel stacji/linii działa w web; potem bez przycisków „Szczegóły”/„Ekran linii”
 - [ ] [S] [help 1.4] Locale: `LocaleId` pl-PL w sesji + `TrendPen.Title` en-US/pl-PL — bez logowania „69,7 %”, legenda „L1 OEE [%]”
@@ -61,10 +60,15 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [M] [agent] Osobny strumień RNG także dla `FaultModel` każdego urządzenia — dziś każda zmiana czasu pracy przetasowuje awarie przy tym samym seedzie (KPI demo skaczą o ±15 pp)
 - [ ] [S] [agent] Pareto strat OEE: podział słupka na Dostępność / Wydajność / Jakość (dane A/P/Q już w trace-summary) i podpowiedź przyczyny
 
+- [ ] [S] [agent] [studio] Po Build sprawdzić w AlarmGrid: kolumna priorytetu pokazuje 4 różne wartości (PAL Urgent, FILL/CAP High, taśmy/PACK/VIS Medium, FEED/LAB Low)
+- [ ] [S] [agent] Wspólne źródło pasm Severity: `AlarmPriority` + `Severity` w layout.json, żeby podgląd (`Alarms`, P1–P4) brał priorytet z Core, nie z własnej tabeli
+
 ## Blocked
 - [ ] [S] [help 4.5] Pokazy > 2 h (emulator zawsze kończy po 2 h): eksport + runtime jako usługa (blocked: decyzja Maćka o licencji)
 
 ## Done
+- [x] 2026-10-07 [help 1.1] Pasma Severity: P1–P4 → 900/700/400/200 (było 300/500 — oba „Medium” w Optix); `AlarmPriorities.OptixBand`
+  (≤250 Low, ≤500 Medium, ≤750 High, >750 Urgent); test: każdy priorytet w swoim paśmie, linia demo używa 4 pasm. W Studio: Build (nowe Severity)
 - [x] 2026-10-06 Straty OEE per stacja (Pareto): `OeeLosses` w Core przypisuje czas planowany stacji OEE sprawcy (awaria/obsługa,
   brak podaży w górę, blokada w dół, mikroprzestój, odrzut wg `DefectBy`); OEE + Σ = 100 %; `oeeLosses` w trace-summary,
   sygnał `OeeLossS` na urządzeniu, panel Pareto w `Line1`; 3 testy

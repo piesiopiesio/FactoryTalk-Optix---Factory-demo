@@ -30,7 +30,7 @@ factory.json ──FactoryLoader──▶ Hall (Core) ──SimEngine.Tick(0.1s)
 
 ## Model domeny (src/Factory.Core)
 - `Equipment` (abstr.): Id, Name, State, FaultModel (MTBF/MTTR), komendy Start/Stop/Reset, czas w stanach,
-  `AlarmPriority` 1–4 (→ Severity alarmu Optix, `AlarmPriorities`).
+  `AlarmPriority` 1–4 (→ Severity 900/700/400/200, po jednym w każdym paśmie Optix; `AlarmPriorities.OptixBand`).
 - `Station : Equipment`: cykl acquire → `Process(item)` → emit; Starved/Blocked; liczniki Processed/Good/Reject.
 - Stacje (`Stations/`, klucz `[StationType]`): feeder, filler, capper, labeler, vision, casepacker, palletizer.
 - `Conveyor : Equipment`: akumulująca taśma (pitch, length, speed), blokuje stację przed sobą.

@@ -7,7 +7,7 @@ Pozycje backlogu `[help X.Y]` odsyłają tutaj. Wszystko, co nie było jeszcze w
 
 ## Etap 1 — poprawki
 - **1.1 Severity.** Pasma Optix: 1–250 Low, 251–500 Medium, 501–750 High, 751–1000 Urgent (Alarms › Alarm details).
-  Nasze 300/500/700/900 dają P3 i P4 jako „Medium” → 200/400/700/900. `AlarmController.Severity` (UInt16) już używane.
+  Nasze 300/500/700/900 dają P3 i P4 jako „Medium” → 200/400/700/900. `AlarmController.Severity` (UInt16) już używane. Zrobione 2026-10-07 (`AlarmPriorities.OptixBand`, test).
 - **1.2 Zmienne per sesja.** Każdy klient web = osobna sesja i osobna instancja okna; zmienne w Model są wspólne dla wszystkich.
   `selectedStation`, `stopRequest` przenieść do ekranu linii (jak `openTab` w HallScreen), przyciski: `Ui.OnClickSet(..., relative: true)`,
   `Visible` przez link do zmiennej ekranu (SetDynamicLink z węzła w tym samym typie liczy ścieżkę względną).
