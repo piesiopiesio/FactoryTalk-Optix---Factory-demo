@@ -115,6 +115,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `src/Factory.Core/Sim/SimEngine.cs` — Runs the hall: fixed-step Tick(dt), commands by path ("L1", "L1/FILL"), event log, node enumeration.
 - `src/Factory.Core/Sim/SimEvent.cs` — Alarm/event record (fault raised/cleared, maintenance, low tank) emitted by the engine.
 - `src/Factory.Core/Sim/SimRandom.cs` — Seeded RNG (deterministic runs) with normal, exponential and chance helpers.
+- `src/Factory.Core/Sim/StepClock.cs` — Wall-clock pacing for the fixed-step engine: steps per call follow measured elapsed time (PeriodicTask period + run time).
 - `src/Factory.Core/Stations/Capper.cs` — Screws caps; torque outside tolerance marks the bottle defective.
 - `src/Factory.Core/Stations/CasePacker.cs` — Collects bottles into cases (unitsPerCase) and emits one case item per full case.
 - `src/Factory.Core/Stations/Feeder.cs` — Source station: creates empty bottles at its cycle rate (infinite supply).
@@ -158,6 +159,7 @@ Kopia repo (gdy brak GitHuba): `project/data/repo.bundle.b64` (`make bundle`).
 - `tests/Factory.Tests/Fixtures.cs` — Test helpers: repo paths, loading the real factory.json, building small ad-hoc lines.
 - `tests/Factory.Tests/MicroStopTests.cs` — Tests for micro stops (< 30 s): no alarm/state change, Performance loss of 2-5 pp on the real line, validation.
 - `tests/Factory.Tests/OeeLossTests.cs` — Tests for the OEE loss Pareto: losses + OEE = 100 %, starved/blocked blamed on the stopped neighbour, rejects on the defect's origin.
+- `tests/Factory.Tests/StepClockTests.cs` — Tests for StepClock: simulated time follows wall time despite late PeriodicTask calls; stalls are dropped.
 - `tests/Factory.Tests/TestRunner.cs` — Minimal test harness: discovers static methods marked [Test], runs them, prints PASS/FAIL, exit code.
 - `tools/check_design.py` — Static lint of the Design canvas: canvas.json <-> artboards, required head line, hole syntax, sizes, data files.
 - `tools/ctx.py` — Context budget guard + file index: `--check` enforces token/line limits, `--write` refreshes the index in CONTEXT.md.

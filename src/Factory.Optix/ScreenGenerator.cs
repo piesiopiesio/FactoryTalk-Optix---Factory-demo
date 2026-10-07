@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UAManagedCore;
+using OpcUa = UAManagedCore.OpcUa;
 using FTOptix.HMIProject;
 using FTOptix.UI;
 #endregion
@@ -34,7 +35,11 @@ public static class ScreenGenerator
         foreach (var spec in manifest.Lines)
         {
             var line = hall.Lines.First(l => l.Id == spec.Id);
-            var screen = NewScreen(screens, N.LineScreenPrefix + spec.Id);
+            var screen = NewScreen(screens, N.LineScreen(spec.Id));
+            // HMI-only state in the screen, not in Model: every web client has its own session and screen instance (Optix help),
+            // so one operator opening a faceplate or the Stop confirmation does not open it for everybody.
+            State(screen, N.StopRequest, OpcUa.DataTypes.Boolean, false);
+            State(screen, N.SelectedStation, OpcUa.DataTypes.Int32, 0);
             LineView.Build(screen, spec, line);
             StationTable.Build(screen, spec);
             LinePanel.Build(screen, spec, line, hall.Id);
@@ -53,6 +58,13 @@ public static class ScreenGenerator
         tabs.Add((titles[FX.NavTabs.Login], login));
 
         WindowGenerator.Build(window, hall, tabs);
+    }
+
+    static void State(IUANode screen, string name, NodeId dataType, UAValue initial)
+    {
+        var v = InformationModel.MakeVariable(name, dataType);
+        v.Value = initial;
+        screen.Add(v);
     }
 
     /// <summary>Removes only generated screens (HallScreen, LineScreen_*); hand-made screens stay.</summary>

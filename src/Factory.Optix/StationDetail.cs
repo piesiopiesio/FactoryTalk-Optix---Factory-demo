@@ -23,9 +23,9 @@ public static class StationDetail
     /// <summary>Invisible click target over a station tile (last child, so on top): selectedStation = k.</summary>
     public static void ClickTarget(IUANode tile, double w, double h, string lineId, int k)
     {
-        // Alpha 1/255, not 0: a fully transparent rectangle is not hit-tested (clicks fall through, checked in the emulator).
+        // Clickable through HitTestVisible + MouseUp (Ui.OnClickSet); the 1/255 alpha fill is a harmless leftover of the first attempt.
         var hit = Ui.Box(tile, "Open", 0, 0, w, h, 0x01FFFFFF, Transparent, 0);
-        Ui.OnClickSet(hit, N.ModelVar(lineId, N.SelectedStation), k);
+        Ui.OnClickSet(hit, Selected(lineId), k, relative: true);
     }
 
     /// <summary>Explicit "Szczegóły" button above the tile (web client does not deliver clicks on a Rectangle).
@@ -34,8 +34,11 @@ public static class StationDetail
     {
         var b = Ui.Button(screen, "Details_" + stationId, "Szczegóły", tileX, tileY - 46, 78, 40);
         b.FontSize = 12;
-        Ui.OnClickSet(b, N.ModelVar(lineId, N.SelectedStation), k);
+        Ui.OnClickSet(b, Selected(lineId), k, relative: true);
     }
+
+    /// <summary>Open faceplate of this session (line screen variable, see ScreenGenerator.State).</summary>
+    static string Selected(string lineId) => N.ScreenVar(N.LineScreen(lineId), N.SelectedStation);
 
     public static void Build(IUANode screen, FX.LineSpec spec, FM.Line line)
     {
@@ -48,10 +51,10 @@ public static class StationDetail
         var path = $"{lineId}/{s.Id}";
         string V(string signal) => N.ModelVar(path, signal);
         var box = Ui.Box(screen, "Detail_" + s.Id, X0, Y0, W, H, N.GroupArgb, N.TitleArgb, 2);
-        Ui.Expression(box.VisibleVariable, "{0} == " + k, N.ModelVar(lineId, N.SelectedStation));
+        Ui.Expression(box.VisibleVariable, "{0} == " + k, Selected(lineId));
         Ui.Text(box, "Title", $"{s.Name} ({s.Id})", 16, 14, 18, N.TitleArgb, bold: true);
         var close = Ui.Button(box, "Close", "Zamknij", W - 136, 8, 120);
-        Ui.OnClickSet(close, N.ModelVar(lineId, N.SelectedStation), 0);
+        Ui.OnClickSet(close, Selected(lineId), 0, relative: true);
 
         // Station frame: fill = equipment state colour (same as the tile), product graphic inside.
         var frame = Ui.Box(box, "Graphic", GX, GY, GW, GH, N.BackgroundArgb, N.LineArgb, 2);

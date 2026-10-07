@@ -59,7 +59,7 @@ public static class HallView
 
         // Level 1 -> level 2: whole tile clickable (last child = on top) + explicit button (web client ignores Rectangle clicks).
         var openTab = $"{N.ScreensFolder}/{N.HallScreen}/{N.OpenTab}";
-        var hit = Ui.Box(tile, "Open", 0, 0, w, h, 0x01FFFFFF, 0x00000000, 0);   // alpha 1/255: alpha 0 is not hit-tested
+        var hit = Ui.Box(tile, "Open", 0, 0, w, h, 0x01FFFFFF, 0x00000000, 0);   // clickable via HitTestVisible + MouseUp (Ui.OnClickSet)
         Ui.OnClickSet(hit, openTab, tabIndex, relative: true);
         var button = Ui.Button(tile, "OpenLine", "Ekran linii", w - 172, 56, 160);   // below the KPI row, above the mini-map
         Ui.OnClickSet(button, openTab, tabIndex, relative: true);

@@ -38,11 +38,6 @@ public static class TypeGenerator
                 type.Add(InformationModel.MakeVariable(OptixNames.StateColorVar, OpcUa.DataTypes.UInt32));
             foreach (var cmd in Commands(t))
                 type.Add(InformationModel.MakeVariable(cmd, OpcUa.DataTypes.Boolean));
-            if (t == typeof(FM.Line))
-            {
-                type.Add(InformationModel.MakeVariable(OptixNames.StopRequest, OpcUa.DataTypes.Boolean));
-                type.Add(InformationModel.MakeVariable(OptixNames.SelectedStation, OpcUa.DataTypes.Int32));
-            }
             if (t == typeof(FM.Hall))
             {
                 var scale = InformationModel.MakeVariable(OptixNames.TimeScale, OpcUa.DataTypes.Int32);

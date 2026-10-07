@@ -51,7 +51,7 @@ public static class LinePanel
         y += 26;
         var commandsY = y;
         Command(panel, "Start", "Start", Pad, y, 146, N.ModelVar(spec.Id, N.CmdStart), true);
-        Command(panel, "Stop", "Stop", Pad + 158, y, 146, N.ModelVar(spec.Id, N.StopRequest), true);   // opens the confirmation
+        Command(panel, "Stop", "Stop", Pad + 158, y, 146, StopRequest(spec), true, relative: true);   // opens the confirmation (this session)
         y += 54;
         Command(panel, "Reset", "Kasuj awarie", Pad, y, 304, N.ModelVar(spec.Id, N.CmdReset), true);
         y += 54;
@@ -73,20 +73,23 @@ public static class LinePanel
     static void StopConfirm(IUANode panel, FX.LineSpec spec, double x, double y)
     {
         var box = Ui.Box(panel, "StopConfirm", x, y, 316, 150, N.WhiteArgb, N.TitleArgb, 2);
-        Ui.Link(box.VisibleVariable, N.ModelVar(spec.Id, N.StopRequest));
+        Ui.Link(box.VisibleVariable, StopRequest(spec));
         Ui.Text(box, "Question", "Zatrzymać linię?", 14, 10, 18, N.TitleArgb, bold: true);
         Ui.Text(box, "Detail", $"{spec.Name}: praca stacji zostanie przerwana.", 14, 40, 13, N.UnitsArgb);
         var yes = Ui.Button(box, "StopConfirmYes", "Zatrzymaj", 14, 90, 140);
         Ui.OnClickSet(yes, N.ModelVar(spec.Id, N.CmdStop), true);
-        Ui.OnClickSet(yes, N.ModelVar(spec.Id, N.StopRequest), false);
+        Ui.OnClickSet(yes, StopRequest(spec), false, relative: true);
         var no = Ui.Button(box, "StopConfirmNo", "Anuluj", 162, 90, 140);
-        Ui.OnClickSet(no, N.ModelVar(spec.Id, N.StopRequest), false);
+        Ui.OnClickSet(no, StopRequest(spec), false, relative: true);
     }
 
-    static void Command(IUANode parent, string name, string text, double x, double y, double w, string variablePath, object value)
+    static string StopRequest(FX.LineSpec spec) => N.ScreenVar(N.LineScreen(spec.Id), N.StopRequest);
+
+    static void Command(IUANode parent, string name, string text, double x, double y, double w, string variablePath, object value,
+        bool relative = false)
     {
         var b = Ui.Button(parent, name, text, x, y, w);
-        Ui.OnClickSet(b, variablePath, value);
+        Ui.OnClickSet(b, variablePath, value, relative);
     }
 
     /// <summary>One row per equipment, visible only while it is faulted (ColumnLayout collapses hidden rows).</summary>

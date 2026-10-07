@@ -40,7 +40,9 @@ Pliki w `NetSolution/Factory` są generowane — edytuj `src/` w repo.
 - Czarne zrzuty ekranu (widać tylko pasek zadań) po starcie PC: Win+Ctrl+Shift+B (restart sterownika grafiki).
 - NetLogic tworzony przez Build (usuwany i tworzony od nowa) dostaje od Studio pusty szablon klasy w miejsce naszego pliku →
   węzły NetLogic tworzyć raz i nie kasować (AccessLogic siedzi w MainWindow, poza `WindowParts`).
-- W podglądzie web kliknięcie w Rectangle nie wywołuje zdarzenia → do otwierania faceplate'u służy przycisk „Szczegóły”.
+- Rectangle/Panel/Image nie mają zdarzenia MouseClick (tylko MouseDown/MouseUp) i domyślnie `HitTestVisible = false` → cel kliknięcia
+  = MouseUp + `HitTestVisible` (`Ui.OnClickSet` robi to sam; pomoc: Events › Objects predefined with events). Przyciski „Szczegóły”/„Ekran linii”
+  zostają, dopóki web tego nie potwierdzi.
 - Przycisk ustawiający zmienną WŁASNEGO ekranu (np. `HallScreen/openTab`): `VariableToModify` jako względny DynamicLink
   `…/openTab@NodeId` (`Ui.OnClickSet(..., relative: true)`). Sam NodeId wskazuje zmienną typu ekranu, a nie instancji w sesji —
   klik nic nie zmieniał (sprawdzone 2026-10-05).

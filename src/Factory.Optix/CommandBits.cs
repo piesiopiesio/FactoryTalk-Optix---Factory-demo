@@ -33,10 +33,6 @@ public sealed class CommandBits
                 Add(modelRoot, eq.Path, OptixNames.CmdReset, FM.Cmd.Reset);
                 Add(modelRoot, eq.Path, OptixNames.CmdFault, FM.Cmd.InjectFault);
             }
-            var stopRequest = modelRoot.GetVariable($"{line.Id}/{OptixNames.StopRequest}");
-            if (stopRequest != null) stopRequest.Value = false;   // no stale Stop confirmation after a restart
-            var selected = modelRoot.GetVariable($"{line.Id}/{OptixNames.SelectedStation}");
-            if (selected != null) selected.Value = 0;             // faceplates closed at start
         }
         Log.Info("CommandBits", $"{bits.Count} command bits watched");
     }

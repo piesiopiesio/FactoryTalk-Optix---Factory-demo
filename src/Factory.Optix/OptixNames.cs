@@ -35,9 +35,9 @@ public static class OptixNames
     public const string CmdStart = "cmdStart", CmdStop = "cmdStop", CmdReset = "cmdReset", TimeScale = "timeScale";
     /// <summary>Device bit: inject a test fault (faceplate button, maintenance only) -> Core Cmd.InjectFault.</summary>
     public const string CmdFault = "cmdFault";
-    /// <summary>Line flag: Stop pressed, confirmation shown (HMI-only state; cleared by Yes/Cancel and at runtime start).</summary>
+    /// <summary>Line screen variable: Stop pressed, confirmation shown (HMI-only state, per session; cleared by Yes/Cancel).</summary>
     public const string StopRequest = "stopRequest";
-    /// <summary>Line: station faceplate shown on the line screen (1..n = station index, 0 = none).</summary>
+    /// <summary>Line screen variable: station faceplate shown (1..n = station index, 0 = none), per session.</summary>
     public const string SelectedStation = "selectedStation";
     /// <summary>HallScreen variable: tab index requested by a line tile (-1 = none); AccessLogic switches MainNav per session.</summary>
     public const string OpenTab = "openTab";
@@ -59,6 +59,11 @@ public static class OptixNames
 
     /// <summary>Project path of a generated model variable: ModelVar("L1/FILL", "Good") = Model/Factory/L1/FILL/good.</summary>
     public static string ModelVar(string nodePath, string signal) => $"Model/{ModelFolder}/{nodePath}/{Var(signal)}";
+    /// <summary>Generated line screen of a manifest line.</summary>
+    public static string LineScreen(string lineId) => LineScreenPrefix + lineId;
+    /// <summary>Project path of a screen's own variable (HMI state). Each session instantiates the screen, so the variable is per
+    /// session (one web client = one session); widgets reach it through relative links (Ui.OnClickSet relative: true).</summary>
+    public static string ScreenVar(string screen, string name) => $"{ScreensFolder}/{screen}/{name}";
 
     public static NodeId DataType(Type t)
     {

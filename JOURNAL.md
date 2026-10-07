@@ -2,6 +2,15 @@
 
 Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
 
+## 2026-10-07 (sesja z Maćkiem: klocki 1.2, 1.3, 1.5)
+- [help 1.2] `stopRequest`/`selectedStation` przeniesione z typu linii (Model, wspólne dla wszystkich klientów) do ekranu linii;
+  przyciski Stop/okna stacji przez `Ui.OnClickSet(..., relative: true)`, widoczność przez link w obrębie ekranu. LineType i CommandBits bez nich.
+- [help 1.3] `Ui.OnClickSet`: Rectangle/Panel nie mają MouseClick → `OnMouseUp` (MouseUpEvent) + `HitTestVisible = true`; Button bez zmian.
+  Przyciski „Szczegóły”/„Ekran linii” zostają do potwierdzenia w web (pozycja 1.3b).
+- [help 1.5] `Factory.Core.Sim.StepClock`: PeriodicTask trwa okres + czas wykonania, więc liczba kroków `Dt` wynika ze zmierzonego czasu
+  (Stopwatch), z limitem 200 kroków na wywołanie (po uśpieniu PC zaległość przepada). Testy 31/31 (2 nowe), checks 6/6. KPI bez zmian.
+- Codzienny przebieg: włączanie kontroli w Studio przeniesione na początek promptu (dotąd po 07:12, więc kontrola omijała dzień).
+
 ## 2026-10-07 (przebieg dzienny)
 - Zadanie: [help 1.1] pasma Severity. Optix pokazuje priorytet z pasm 1–250 Low, 251–500 Medium, 501–750 High, 751–1000 Urgent, więc
   dawne 300 (P4) i 500 (P3) były oba „Medium”. Teraz 900/700/400/200; nowa funkcja `AlarmPriorities.OptixBand(severity)` opisuje pasma Optix.
@@ -60,11 +69,3 @@ Najnowszy wpis na górze. Maks. 7 wpisów; starsze w `docs/archive/`.
   KPI bez zmian (30 min, seed 42): OEE 70,6 %, 67,2 butelki/min średnio (96/min w ostatniej min.). `*.yaml` nietknięte.
 - GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: wstrzykiwanie awarii (`Cmd.InjectFault`).
 
-## 2026-10-02 (przebieg dzienny)
-- Zadanie: wymiana rolki etykiet. `Labeler.Hold` jak w paletyzatorze: pusta rolka → `MaintenanceStarted` („wymiana rolki etykiet”),
-  stan `Maintenance` przez `rollChangeS` (45 s), potem nowa rolka i `MaintenanceEnded`. Usunięty TODO z natychmiastową wymianą.
-- Założenie: `rollLabels` 6000 → 1500 w factory.json, żeby wymiana była widoczna w 30-min demo (przy 6000 nie wystąpiłaby wcale).
-  Przebieg 30 min: wymiana 1405,3–1450,3 s; snapshot klatki 710 pokazuje LAB · Maintenance, CAP zablokowana. `*.yaml` nietknięte.
-- Test `LabelRollChangeIsMaintenanceWithEvents` (19/19, 6/6). KPI (30 min, seed 42): OEE 70,6 % (było 71,9), 67,2 butelki/min
-  średnio (było 68,8), 8 awarii. Budżet źródeł 66,8k/68k tokenów — blisko limitu.
-- GitHub niedostępny (REMOTE=none) → tylko kopia w canvasie. Następne: artboard `Alarms` (lista zdarzeń, link z `Line1`).

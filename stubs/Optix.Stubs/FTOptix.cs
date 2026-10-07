@@ -90,7 +90,7 @@ namespace FTOptix.UI
     public enum VerticalAlignment { Top, Center, Bottom, Stretch }
     public enum FontWeight { Normal, Bold }
 
-    public static class ObjectTypes { public static readonly NodeId MouseClickEvent = new(4, 1); }
+    public static class ObjectTypes { public static readonly NodeId MouseClickEvent = new(4, 1), MouseUpEvent = new(4, 2); }
 
     public interface Item : IUAObject
     {

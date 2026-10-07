@@ -6,10 +6,8 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 ## Next
 <!-- [studio] = wymaga Studio (element z Template Library dodaje się w Studio); robi sesja połączona z komputerem Maćka -->
 <!-- [help X.Y] = klocek z pomocy Optix; API i pułapki: docs/reference/optix-help-klocki.md; kolejność = plan (dokument planu, zakładka „Klocki z pomocy Optix”) -->
-- [ ] [S] [help 1.2] `selectedStation`, `stopRequest` per sesja: z LineType do ekranu linii, linki względne — dwa klienty web niezależne
-- [ ] [S] [help 1.3] Cel kliknięcia Rectangle: MouseUp + `HitTestVisible = true` — klik w kafel stacji/linii działa w web; potem bez przycisków „Szczegóły”/„Ekran linii”
 - [ ] [S] [help 1.4] Locale: `LocaleId` pl-PL w sesji + `TrendPen.Title` en-US/pl-PL — bez logowania „69,7 %”, legenda „L1 OEE [%]”
-- [ ] [S] [help 1.5] Takt wg zegara: mierzony upływ → n kroków stałego `Dt` — 10 min zegara = 10 min symulacji ±1 %
+- [ ] [S] [help 1.3b] [studio] Po potwierdzeniu w web, że klik w kafel stacji i linii działa (MouseUp): usunąć przyciski „Szczegóły” i „Ekran linii”
 - [ ] [S] [help 2.1] Wylogowanie po bezczynności przez UISession (`IdleTimeoutEnabled`, 5 min, `IdleTimeoutEvent` → Logout) — zastępuje IdleTimeoutLogic
 - [ ] [S] [help 2.2] Kafel hali wywołuje `MainNav.ChangePanelByTabIndex` — bez `openTab` i pętli w AccessLogic, przełączenie od razu
 - [ ] [M] [help 2.3] `Enabled` przycisków z grup sesji (zamiast pętli AccessLogic co 0,5 s) — anonim/operator/serwis jak dziś
@@ -67,6 +65,9 @@ Format: `- [ ] [S|M] Tytuł — kryterium akceptacji`. Kolejność w `## Next` =
 - [ ] [S] [help 4.5] Pokazy > 2 h (emulator zawsze kończy po 2 h): eksport + runtime jako usługa (blocked: decyzja Maćka o licencji)
 
 ## Done
+- [x] 2026-10-07 [help 1.2] `stopRequest`, `selectedStation` jako zmienne ekranu linii (per sesja), przyciski przez względne linki;
+  usunięte z LineType i CommandBits. [help 1.3] klik w Rectangle przez MouseUp + `HitTestVisible` (`Ui.OnClickSet`).
+  [help 1.5] `StepClock`: kroki wg zmierzonego czasu, nie wywołań PeriodicTask; 2 testy. Do sprawdzenia w emulatorze (Bramka A)
 - [x] 2026-10-07 [help 1.1] Pasma Severity: P1–P4 → 900/700/400/200 (było 300/500 — oba „Medium” w Optix); `AlarmPriorities.OptixBand`
   (≤250 Low, ≤500 Medium, ≤750 High, >750 Urgent); test: każdy priorytet w swoim paśmie, linia demo używa 4 pasm. W Studio: Build (nowe Severity)
 - [x] 2026-10-06 Straty OEE per stacja (Pareto): `OeeLosses` w Core przypisuje czas planowany stacji OEE sprawcy (awaria/obsługa,

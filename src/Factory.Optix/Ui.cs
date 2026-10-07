@@ -126,7 +126,7 @@ public static class Ui
         return bar;
     }
 
-    /// <summary>MouseClick -> built-in VariableCommands.Set(variable, value): the Studio "Set variable value" action.
+    /// <summary>Click (Button: MouseClick, other widgets: MouseUp) -> built-in VariableCommands.Set(variable, value).
     /// Called again on the same widget it adds another action to the same handler (executed in order).
     /// <paramref name="relative"/>: target lives in the same screen type -> relative dynamic link "…@NodeId", resolved per
     /// screen instance (session); a plain NodeId would point at the type's own variable, not the session's instance.</summary>
@@ -134,12 +134,18 @@ public static class Ui
     {
         var target = Project.Current.GetVariable(variablePath);
         if (target == null) { Log.Warning("Ui", "Missing command variable " + variablePath); return; }
-        var eh = widget.Get("OnMouseClick") as FTOptix.CoreBase.EventHandler;
+        // Button raises MouseClick; Rectangle/Panel/Image only MouseDown/MouseUp and do not take clicks unless HitTestVisible
+        // (default false: the click goes to the object below) — Optix help, Events › Objects predefined with events.
+        var isButton = widget is Button;
+        var handlerName = isButton ? "OnMouseClick" : "OnMouseUp";
+        if (!isButton && widget is Item item) item.HitTestVisible = true;
+        var eh = widget.Get(handlerName) as FTOptix.CoreBase.EventHandler;
         if (eh == null)
         {
-            eh = InformationModel.MakeObject<FTOptix.CoreBase.EventHandler>("OnMouseClick");
+            eh = InformationModel.MakeObject<FTOptix.CoreBase.EventHandler>(handlerName);
             widget.Add(eh);
-            eh.GetOrCreateVariable("ListenEventType").Value = FTOptix.UI.ObjectTypes.MouseClickEvent;
+            eh.GetOrCreateVariable("ListenEventType").Value =
+                isButton ? FTOptix.UI.ObjectTypes.MouseClickEvent : FTOptix.UI.ObjectTypes.MouseUpEvent;
         }
         var existing = eh.Get("MethodsToCall")?.Children.Count() ?? 0;   // MethodsToCall is a placeholder collection (no Children)
         var mc = InformationModel.MakeObject("MethodContainer" + (existing + 1));

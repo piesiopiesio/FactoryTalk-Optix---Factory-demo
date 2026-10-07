@@ -17,12 +17,15 @@ public class SimulationLogic : BaseNetLogic
 {
     const int PeriodMs = 100;
     const double Dt = PeriodMs / 1000.0;
+    const int MaxStepsPerCall = 200;   // 20 s of simulation per call at most; longer stalls are dropped (StepClock)
 
     readonly object sync = new object();
     FS.SimEngine engine;
     OptixBinder binder;
     CommandBits commands;
     PeriodicTask tick;
+    readonly FS.StepClock clock = new FS.StepClock(Dt, MaxStepsPerCall);
+    readonly System.Diagnostics.Stopwatch wall = new System.Diagnostics.Stopwatch();
 
     public override void Start()
     {
@@ -33,6 +36,7 @@ public class SimulationLogic : BaseNetLogic
             var root = Project.Current.Get("Model/" + OptixNames.ModelFolder);
             binder = new OptixBinder(root, engine);
             commands = new CommandBits(root, engine);
+            wall.Restart();
             tick = new PeriodicTask(Step, PeriodMs, LogicObject);
             tick.Start();
             Log.Info("SimulationLogic", $"Started {hall.Lines.Count} line(s), seed {hall.Seed}");
@@ -71,7 +75,10 @@ public class SimulationLogic : BaseNetLogic
             try
             {
                 commands.Execute(engine);
-                var n = commands.TimeScale;
+                // Real period = 100 ms + run time (Optix help, PeriodicTask): steps follow the measured wall time.
+                var elapsed = wall.Elapsed.TotalSeconds;
+                wall.Restart();
+                var n = clock.Steps(elapsed, commands.TimeScale);
                 for (var i = 0; i < n; i++) engine.Tick(Dt);
                 binder.PublishChanged();
             }
