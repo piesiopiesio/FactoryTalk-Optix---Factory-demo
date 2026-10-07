@@ -1,0 +1,19 @@
+{
+  "_summary": "Visual tokens from Rockwell Process HMI Style Guide (PROCES-WP023, ISA-101). states must equal StatePalette.cs (test). See docs/hmi-style.md.",
+  "states": {
+    "Stopped": "#808080",
+    "Running": "#F0F0F0",
+    "Starved": "#93C2E4",
+    "Blocked": "#93C2E4",
+    "Faulted": "#EC8629",
+    "Maintenance": "#93C2E4"
+  },
+  "alarms": { "urgent": "#E22028", "high": "#EC8629", "medium": "#F5E11B", "low": "#916AAD", "fault": "#000000", "warning": "#3F3F3F" },
+  "surface": {
+    "bg": "#E0E0E0", "tab": "#C0C0C0", "group": "#E8E8E8", "separator": "#D8D8D8",
+    "title": "#3F3F3F", "line": "#A0A0A4", "data": "#475CA7", "dataBg": "#D4D4D4", "units": "#767676",
+    "navFill": "#C6C6C6", "navBorder": "#AAAAAA", "input": "#FFFFFF"
+  },
+  "font": { "family": "Arial, Helvetica, sans-serif" },
+  "touch": { "button": 40, "nav": 35, "gap": 10 }
+}

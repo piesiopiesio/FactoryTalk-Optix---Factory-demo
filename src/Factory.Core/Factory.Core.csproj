@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- @summary: Pure C# domain + simulation. No FTOptix references allowed. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!-- C# 10 = what an Optix NetSolution (net6.0 on older Studio) accepts; do not raise without checking Studio. -->
+    <LangVersion>10</LangVersion>
+    <RootNamespace>Factory.Core</RootNamespace>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

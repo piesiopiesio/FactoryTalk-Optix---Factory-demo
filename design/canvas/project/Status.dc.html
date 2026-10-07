@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Stan projektu — poziom 4</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#E0E0E0;font-family:Arial,Helvetica,sans-serif;color:#3F3F3F}
+a{color:#3F3F3F}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 1000px; height: 900px; box-sizing: border-box; background: #E0E0E0; color: #3F3F3F; font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<div style="height: 64px; flex-shrink: 0; box-sizing: border-box; padding: 0 20px; background: #C0C0C0; border-bottom: 1px solid #A0A0A4; display: flex; gap: 20px; align-items: center">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="font-size: 24px; font-weight: 700">Stan projektu</div>
+<div style="font-size: 12px">Poziom 4 · diagnostyka agenta · {{st.updated}}</div>
+</div>
+<div style="margin-left: auto; display: flex; gap: 2px">
+<a href="Main.dc.html" style="min-width: 100px; height: 40px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; background: #C6C6C6; border: 1px solid #AAAAAA; font-size: 14px; text-decoration: none">Hala</a>
+<a href="Line1.dc.html" style="min-width: 100px; height: 40px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; background: #C6C6C6; border: 1px solid #AAAAAA; font-size: 14px; text-decoration: none">Linia 1</a>
+</div>
+</div>
+
+<div style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="font-size: 13px">Gałąź {{st.branch}} · commit {{st.commit}} · źródło: {{st.source}}</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{tiles}}" as="k" hint-placeholder-count="4">
+<div style="padding: 8px 12px; background: #E8E8E8; border: 1px solid #D8D8D8; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px">{{k.label}}</span>
+<span style="display: flex; gap: 8px; align-items: center; justify-content: flex-end">
+<span style="font-size: 12px; font-weight: 700">{{k.flag}}</span>
+<b style="font-size: 20px; color: #475CA7">{{k.value}}</b>
+</span>
+</div>
+</sc-for>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; flex-grow: 1; min-height: 0">
+<div style="padding: 10px 12px; background: #E8E8E8; border: 1px solid #D8D8D8; display: flex; flex-direction: column; gap: 6px; overflow: hidden">
+<div style="font-size: 13px; font-weight: 700">Autotest (symulacja 30 min)</div>
+<sc-for list="{{checks}}" as="c" hint-placeholder-count="6">
+<div style="display: flex; gap: 8px; align-items: flex-start; font-size: 13px">
+<span style="min-width: 44px; height: 20px; display: flex; align-items: center; justify-content: center; background: {{c.fill}}; border: 1px solid #A0A0A4; font-size: 11px; font-weight: 700; color: #000000">{{c.mark}}</span>
+<span>{{c.name}}</span>
+</div>
+</sc-for>
+</div>
+<div style="padding: 10px 12px; background: #E8E8E8; border: 1px solid #D8D8D8; display: flex; flex-direction: column; gap: 6px; overflow: hidden">
+<div style="font-size: 13px; font-weight: 700">Następne zadania z backlogu</div>
+<sc-for list="{{backlog}}" as="b" hint-placeholder-count="5">
+<div style="font-size: 13px; line-height: 1.4">{{b.text}}</div>
+</sc-for>
+</div>
+</div>
+
+<div style="height: 230px; flex-shrink: 0; box-sizing: border-box; padding: 10px 12px; background: #E8E8E8; border: 1px solid #D8D8D8; display: flex; flex-direction: column; gap: 8px; overflow: hidden">
+<div style="font-size: 13px; font-weight: 700">Dziennik agenta</div>
+<sc-for list="{{journal}}" as="j" hint-placeholder-count="3">
+<div style="display: flex; gap: 12px; font-size: 13px; line-height: 1.4">
+<span style="width: 84px; flex-shrink: 0">{{j.date}}</span>
+<span style="white-space: pre-line">{{j.text}}</span>
+</div>
+</sc-for>
+</div>
+
+<div style="display: flex; gap: 20px; font-size: 13px; align-items: center">
+<a href="data/repo.bundle.b64">Kopia repozytorium (git bundle w base64)</a>
+<span>Styl HMI: Rockwell Process HMI Style Guide (ISA-101)</span>
+<sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+<span>{{loadingText}}</span>
+</sc-if>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1000,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { d: null, err: '' };
+  }
+
+  componentDidMount() {
+    fetch('data/status.json')
+      .then(r => r.json())
+      .then(d => this.setState({ d: d }))
+      .catch(e => this.setState({ err: String(e) }));
+  }
+
+  renderVals() {
+    const d = this.state.d;
+    if (!d) {
+      return { loading: true, loadingText: this.state.err ? 'Brak danych: ' + this.state.err : 'Ładowanie…', st: {}, tiles: [], checks: [], backlog: [], journal: [] };
+    }
+    const passed = d.checks.filter(c => c.ok).length;
+    const flag = ok => (ok ? 'OK' : 'BŁĄD');
+    return {
+      loading: false, loadingText: '',
+      st: { updated: d.updated, branch: d.branch, commit: d.commit, source: d.source },
+      tiles: [
+        { label: 'Testy jednostkowe', value: d.tests.passed + '/' + d.tests.total, flag: flag(d.tests.passed === d.tests.total && d.tests.total > 0) },
+        { label: 'Kontrole symulacji', value: passed + '/' + d.checks.length, flag: flag(passed === d.checks.length) },
+        { label: 'OEE linii 1', value: d.kpi.oee.toFixed(1) + ' %', flag: '' },
+        { label: 'Kontekst agenta', value: d.context.coreTokens + ' tok.', flag: flag(d.context.ok) },
+      ],
+      checks: d.checks.map(c => ({ name: c.name + ' — ' + c.detail, mark: c.ok ? 'OK' : 'BŁĄD', fill: c.ok ? '#E0E0E0' : '#EC8629' })),
+      backlog: d.backlog.map((b, i) => ({ text: (i + 1) + '. ' + b })),
+      journal: d.journal.map(j => ({ date: j.date, text: j.text })),
+    };
+  }
+}
+</script>
+</body>
+</html>

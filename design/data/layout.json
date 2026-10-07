@@ -1,0 +1,255 @@
+{
+  "canvas": [
+    1600,
+    900
+  ],
+  "hall": {
+    "id": "Hall",
+    "name": "Demo Factory",
+    "size": [
+      1600,
+      900
+    ],
+    "zones": [
+      {
+        "id": "Production",
+        "name": "Produkcja",
+        "rect": [
+          40,
+          170,
+          1080,
+          470
+        ],
+        "planned": false
+      },
+      {
+        "id": "Warehouse",
+        "name": "Magazyn",
+        "rect": [
+          1160,
+          170,
+          400,
+          470
+        ],
+        "planned": true
+      },
+      {
+        "id": "Utilities",
+        "name": "Media",
+        "rect": [
+          40,
+          660,
+          1520,
+          120
+        ],
+        "planned": true
+      }
+    ],
+    "lines": [
+      {
+        "id": "L1",
+        "name": "Linia pakująca 1",
+        "zone": "Production",
+        "rect": [
+          70,
+          210,
+          1020,
+          410
+        ]
+      }
+    ]
+  },
+  "lines": {
+    "L1": {
+      "name": "Linia pakująca 1",
+      "oeeStation": "FILL",
+      "product": {
+        "sku": "BTL-050",
+        "name": "Woda 0,5 L",
+        "unitsPerCase": 12,
+        "casesPerPallet": 40
+      },
+      "kpiTargets": {
+        "oee": [
+          0.55,
+          0.92
+        ],
+        "throughputPerMin": [
+          60,
+          110
+        ]
+      },
+      "stations": [
+        {
+          "id": "FEED",
+          "name": "Podajnik butelek",
+          "type": "feeder",
+          "rect": [
+            60,
+            230,
+            150,
+            110
+          ]
+        },
+        {
+          "id": "FILL",
+          "name": "Napełniarka",
+          "type": "filler",
+          "rect": [
+            420,
+            230,
+            150,
+            110
+          ]
+        },
+        {
+          "id": "CAP",
+          "name": "Zakręcarka",
+          "type": "capper",
+          "rect": [
+            780,
+            230,
+            150,
+            110
+          ]
+        },
+        {
+          "id": "LAB",
+          "name": "Etykieciarka",
+          "type": "labeler",
+          "rect": [
+            1140,
+            230,
+            150,
+            110
+          ]
+        },
+        {
+          "id": "VIS",
+          "name": "Kontrola wizyjna",
+          "type": "vision",
+          "rect": [
+            1140,
+            560,
+            150,
+            110
+          ]
+        },
+        {
+          "id": "PACK",
+          "name": "Kartoniarka",
+          "type": "casepacker",
+          "rect": [
+            780,
+            560,
+            150,
+            110
+          ]
+        },
+        {
+          "id": "PAL",
+          "name": "Paletyzator",
+          "type": "palletizer",
+          "rect": [
+            420,
+            560,
+            150,
+            110
+          ]
+        }
+      ],
+      "conveyors": [
+        {
+          "id": "C1",
+          "from": "FEED",
+          "to": "FILL",
+          "lengthM": 3,
+          "pitchM": 0.08,
+          "speedMps": 0.4,
+          "rect": [
+            210,
+            275,
+            210,
+            20
+          ],
+          "dir": "right"
+        },
+        {
+          "id": "C2",
+          "from": "FILL",
+          "to": "CAP",
+          "lengthM": 2,
+          "pitchM": 0.08,
+          "speedMps": 0.4,
+          "rect": [
+            570,
+            275,
+            210,
+            20
+          ],
+          "dir": "right"
+        },
+        {
+          "id": "C3",
+          "from": "CAP",
+          "to": "LAB",
+          "lengthM": 2.5,
+          "pitchM": 0.08,
+          "speedMps": 0.4,
+          "rect": [
+            930,
+            275,
+            210,
+            20
+          ],
+          "dir": "right"
+        },
+        {
+          "id": "C4",
+          "from": "LAB",
+          "to": "VIS",
+          "lengthM": 3,
+          "pitchM": 0.08,
+          "speedMps": 0.45,
+          "rect": [
+            1205,
+            340,
+            20,
+            220
+          ],
+          "dir": "down"
+        },
+        {
+          "id": "C5",
+          "from": "VIS",
+          "to": "PACK",
+          "lengthM": 4,
+          "pitchM": 0.08,
+          "speedMps": 0.45,
+          "rect": [
+            930,
+            605,
+            210,
+            20
+          ],
+          "dir": "left"
+        },
+        {
+          "id": "C6",
+          "from": "PACK",
+          "to": "PAL",
+          "lengthM": 5,
+          "pitchM": 0.45,
+          "speedMps": 0.3,
+          "rect": [
+            570,
+            605,
+            210,
+            20
+          ],
+          "dir": "left"
+        }
+      ]
+    }
+  }
+}

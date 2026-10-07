@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- @summary: Cloud compile check of the NetLogic layer against stubs. In Studio these .cs files are linked into NetSolution instead. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>10</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../Factory.Core/**/*.cs" Exclude="../Factory.Core/obj/**;../Factory.Core/bin/**" LinkBase="Core" />
+    <ProjectReference Include="../../stubs/Optix.Stubs/Optix.Stubs.csproj" />
+  </ItemGroup>
+</Project>

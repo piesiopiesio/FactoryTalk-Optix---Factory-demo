@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "hall": {
+    "id": "Hall", "name": "Demo Factory", "size": [1600, 900], "seed": 42,
+    "zones": [
+      { "id": "Production", "name": "Produkcja", "rect": [40, 170, 1080, 470] },
+      { "id": "Warehouse", "name": "Magazyn", "rect": [1160, 170, 400, 470], "planned": true },
+      { "id": "Utilities", "name": "Media", "rect": [40, 660, 1520, 120], "planned": true }
+    ]
+  },
+  "lines": [
+    {
+      "id": "L1", "name": "Linia pakująca 1", "zone": "Production", "rect": [70, 210, 1020, 410],
+      "autoStart": true, "oeeStation": "FILL",
+      "product": { "sku": "BTL-050", "name": "Woda 0,5 L", "unitsPerCase": 12, "casesPerPallet": 40 },
+      "kpiTargets": { "oee": [0.55, 0.92], "throughputPerMin": [60, 110] },
+      "stations": [
+        { "id": "FEED", "type": "feeder",    "name": "Podajnik butelek", "pos": [60, 230],   "cycleS": 0.50, "fault": { "mtbfS": 2400, "mttrS": 30 } },
+        { "id": "FILL", "type": "filler",    "name": "Napełniarka",      "pos": [420, 230],  "cycleS": 0.60, "fault": { "mtbfS": 900,  "mttrS": 60 }, "microStop": { "mtbsS": 240, "meanS": 4 },
+          "params": { "fillMl": 500, "fillSigmaMl": 3, "fillTolMl": 8, "tankL": 800, "lowPct": 20, "refillLps": 12, "refillToPct": 95 } },
+        { "id": "CAP",  "type": "capper",    "name": "Zakręcarka",       "pos": [780, 230],  "cycleS": 0.52, "fault": { "mtbfS": 1200, "mttrS": 45 }, "microStop": { "mtbsS": 360, "meanS": 4 },
+          "params": { "torqueNm": 2.2, "torqueSigma": 0.08, "torqueTol": 0.3 } },
+        { "id": "LAB",  "type": "labeler",   "name": "Etykieciarka",     "pos": [1140, 230], "cycleS": 0.50, "fault": { "mtbfS": 1500, "mttrS": 90 },
+          "params": { "missRate": 0.004, "rollLabels": 1500, "rollChangeS": 45 } },
+        { "id": "VIS",  "type": "vision",    "name": "Kontrola wizyjna", "pos": [1140, 560], "cycleS": 0.45, "fault": { "mtbfS": 3600, "mttrS": 30 } },
+        { "id": "PACK", "type": "casepacker","name": "Kartoniarka",      "pos": [780, 560],  "cycleS": 0.40, "fault": { "mtbfS": 1000, "mttrS": 120 } },
+        { "id": "PAL",  "type": "palletizer","name": "Paletyzator",      "pos": [420, 560],  "cycleS": 5.0,  "fault": { "mtbfS": 1800, "mttrS": 60 },
+          "params": { "palletChangeS": 20 } }
+      ],
+      "conveyors": [
+        { "id": "C1", "from": "FEED", "to": "FILL", "lengthM": 3.0, "speedMps": 0.40, "pitchM": 0.08 },
+        { "id": "C2", "from": "FILL", "to": "CAP",  "lengthM": 2.0, "speedMps": 0.40, "pitchM": 0.08 },
+        { "id": "C3", "from": "CAP",  "to": "LAB",  "lengthM": 2.5, "speedMps": 0.40, "pitchM": 0.08 },
+        { "id": "C4", "from": "LAB",  "to": "VIS",  "lengthM": 3.0, "speedMps": 0.45, "pitchM": 0.08, "fault": { "mtbfS": 3000, "mttrS": 20 } },
+        { "id": "C5", "from": "VIS",  "to": "PACK", "lengthM": 4.0, "speedMps": 0.45, "pitchM": 0.08 },
+        { "id": "C6", "from": "PACK", "to": "PAL",  "lengthM": 5.0, "speedMps": 0.30, "pitchM": 0.45 }
+      ]
+    }
+  ]
+}

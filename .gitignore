@@ -1,0 +1,15 @@
+bin/
+obj/
+design/snapshots/
+design/data/trace.json
+design/data/tests.txt
+design/data/context.json
+design/canvas/project/data/preview.json
+design/canvas/project/data/status.json
+design/canvas/project/data/repo.bundle.b64
+optix/**/ProjectFiles/NetSolution/bin/
+optix/**/ProjectFiles/NetSolution/obj/
+*.user
+.vs/
+dist/
+__pycache__/

@@ -1,0 +1,279 @@
+{
+  "simMinutes": 30,
+  "seed": 42,
+  "lines": [
+    {
+      "id": "L1",
+      "name": "Linia pakująca 1",
+      "kpi": {
+        "State": 4,
+        "StateText": "Awaria",
+        "Oee": 67,
+        "Availability": 85.3,
+        "Performance": 79.6,
+        "Quality": 98.7,
+        "ThroughputPerMin": 72,
+        "GoodUnits": 2004,
+        "RejectUnits": 26,
+        "ActiveFaults": 1
+      },
+      "oeeLosses": [
+        {
+          "id": "FILL",
+          "name": "Napełniarka",
+          "pp": 18.75,
+          "s": 337.5,
+          "availabilityS": 264.1,
+          "performanceS": 64.4,
+          "qualityS": 9
+        },
+        {
+          "id": "CAP",
+          "name": "Zakręcarka",
+          "pp": 7.29,
+          "s": 131.3,
+          "availabilityS": 0,
+          "performanceS": 131.3,
+          "qualityS": 0
+        },
+        {
+          "id": "LAB",
+          "name": "Etykieciarka",
+          "pp": 4.24,
+          "s": 76.4,
+          "availabilityS": 0,
+          "performanceS": 69.8,
+          "qualityS": 6.6
+        },
+        {
+          "id": "FEED",
+          "name": "Podajnik butelek",
+          "pp": 2.65,
+          "s": 47.7,
+          "availabilityS": 0,
+          "performanceS": 47.7,
+          "qualityS": 0
+        },
+        {
+          "id": "INNE",
+          "name": "Inne (niepełny cykl, rozruch)",
+          "pp": 0.03,
+          "s": 0.5,
+          "availabilityS": 0,
+          "performanceS": 0.5,
+          "qualityS": 0
+        }
+      ],
+      "stations": [
+        {
+          "id": "FEED",
+          "typeKey": "feeder",
+          "timePct": {
+            "Running": 57.7,
+            "Blocked": 38.1,
+            "Faulted": 4.2
+          },
+          "counts": {
+            "processed": 2076,
+            "good": 2075,
+            "reject": 0,
+            "microStops": 0,
+            "microStopS": 0
+          }
+        },
+        {
+          "id": "FILL",
+          "typeKey": "filler",
+          "timePct": {
+            "Running": 71.5,
+            "Starved": 2.7,
+            "Blocked": 11.2,
+            "Faulted": 11.9,
+            "Maintenance": 2.8
+          },
+          "counts": {
+            "processed": 2037,
+            "good": 2037,
+            "reject": 0,
+            "microStops": 9,
+            "microStopS": 63.8
+          }
+        },
+        {
+          "id": "CAP",
+          "typeKey": "capper",
+          "timePct": {
+            "Running": 69.5,
+            "Starved": 17.3,
+            "Blocked": 5.8,
+            "Faulted": 7.4
+          },
+          "counts": {
+            "processed": 2037,
+            "good": 2037,
+            "reject": 0,
+            "microStops": 5,
+            "microStopS": 28.9
+          }
+        },
+        {
+          "id": "LAB",
+          "typeKey": "labeler",
+          "timePct": {
+            "Running": 56.6,
+            "Starved": 36.3,
+            "Faulted": 4.7,
+            "Maintenance": 2.5
+          },
+          "counts": {
+            "processed": 2037,
+            "good": 2037,
+            "reject": 0,
+            "microStops": 0,
+            "microStopS": 0
+          }
+        },
+        {
+          "id": "VIS",
+          "typeKey": "vision",
+          "timePct": {
+            "Running": 56.6,
+            "Starved": 43,
+            "Blocked": 0.4
+          },
+          "counts": {
+            "processed": 2037,
+            "good": 2011,
+            "reject": 26,
+            "microStops": 0,
+            "microStopS": 0
+          }
+        },
+        {
+          "id": "PACK",
+          "typeKey": "casepacker",
+          "timePct": {
+            "Running": 44.7,
+            "Starved": 53.7,
+            "Faulted": 1.6
+          },
+          "counts": {
+            "processed": 2011,
+            "good": 167,
+            "reject": 0,
+            "microStops": 0,
+            "microStopS": 0
+          }
+        },
+        {
+          "id": "PAL",
+          "typeKey": "palletizer",
+          "timePct": {
+            "Running": 46.4,
+            "Starved": 49.2,
+            "Maintenance": 4.4
+          },
+          "counts": {
+            "processed": 167,
+            "good": 167,
+            "reject": 0,
+            "microStops": 0,
+            "microStopS": 0
+          }
+        },
+        {
+          "id": "C1",
+          "typeKey": "conveyor",
+          "timePct": {
+            "Running": 24.1,
+            "Blocked": 75.9
+          },
+          "counts": null
+        },
+        {
+          "id": "C2",
+          "typeKey": "conveyor",
+          "timePct": {
+            "Running": 75.9,
+            "Blocked": 24.1
+          },
+          "counts": null
+        },
+        {
+          "id": "C3",
+          "typeKey": "conveyor",
+          "timePct": {
+            "Running": 93.9,
+            "Blocked": 6.1
+          },
+          "counts": null
+        },
+        {
+          "id": "C4",
+          "typeKey": "conveyor",
+          "timePct": {
+            "Running": 100
+          },
+          "counts": null
+        },
+        {
+          "id": "C5",
+          "typeKey": "conveyor",
+          "timePct": {
+            "Running": 99.5,
+            "Blocked": 0.5
+          },
+          "counts": null
+        },
+        {
+          "id": "C6",
+          "typeKey": "conveyor",
+          "timePct": {
+            "Running": 100
+          },
+          "counts": null
+        }
+      ]
+    }
+  ],
+  "faults": {
+    "L1/FILL": 5,
+    "L1/LAB": 1,
+    "L1/CAP": 4,
+    "L1/FEED": 2,
+    "L1/PACK": 1
+  },
+  "checks": [
+    {
+      "name": "layout lint",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "L1: OEE in target",
+      "ok": true,
+      "detail": "67.0 % vs [55 %, 92 %]"
+    },
+    {
+      "name": "L1: throughput in target",
+      "ok": true,
+      "detail": "66.8/min avg"
+    },
+    {
+      "name": "L1: faults happen and recover",
+      "ok": true,
+      "detail": "13 raised, 12 cleared"
+    },
+    {
+      "name": "L1: every station runs",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "L1: bottle balance",
+      "ok": true,
+      "detail": "fed 2075 = good 2004 + reject 26 + wip 45"
+    }
+  ],
+  "ok": true
+}
