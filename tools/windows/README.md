@@ -27,3 +27,7 @@ Poranny przebieg w chmurze (06:47) komputera nie potrzebuje; PC jest potrzebny t
 - Restart po aktualizacji Windows zostawia ekran logowania → pobudka nic nie da, dopóki Maciek się nie zaloguje
   (ew. automatyczne logowanie, Sysinternals Autologon - świadomie, bo obniża bezpieczeństwo).
 - Modern Standby (S0) zamiast S3: budzenie zwykle działa, ale test z kroku 3 jest obowiązkowy.
+
+## Wypchnięcie na GitHub z PC
+`wypchnij-na-github.cmd` + `repo.bundle` (kopia z podglądu) w jednym folderze → dwuklik. Wysyła tylko gałąź `claude/dev`
+(nigdy `main`, bez force) poświadczeniami gita z tego komputera. Potrzebny Git for Windows.
